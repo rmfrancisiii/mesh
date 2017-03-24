@@ -1,0 +1,10 @@
+/*
+----------------------
+- Class: MeshHostList
+----------------------
+
+*/
+
+MeshHostList : IdentityDictionary {
+
+}
