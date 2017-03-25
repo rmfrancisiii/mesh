@@ -31,20 +31,22 @@ Beacon {
 
 	var oscPath, <pollPeriod, broadcastAddr, beaconKeeper, inDefName, outDefName;
 
-	*new {|mesh| ^ super.new.init(mesh) }
+	*new {|mesh, me| ^ super.new.init(mesh, me) }
 
 	//////////////////////////
 	// Instance Methods
 	//////////////////////////
 
-	init {|mesh|
+	init {|mesh, me|
+
+		var name = mesh.meshName;
 		// Mesh.me.postln;
 
-		inDefName = (mesh.meshName ++ "BeaconIn").asSymbol;
-		outDefName = (mesh.meshName  ++ "BeaconOut").asSymbol;
+		inDefName = ( name ++ "BeaconIn").asSymbol;
+		outDefName = (name ++ "BeaconOut").asSymbol;
 
 		// make an OSC Path from the mesh name
-		oscPath = ("/" ++ mesh.meshName ++ "Beacon").asSymbol;
+		oscPath = ("/" ++ name ++ "Beacon").asSymbol;
 
 		// Make the OSC responder definitions.
 		// these are OSC Defs, so they can be managed
@@ -65,8 +67,9 @@ Beacon {
 		// Start a function that periodically checks whether hosts are still online.
 		// This continues running, even after Cmd+Period
 		beaconKeeper = SkipJack({
-			broadcastAddr.sendMsg(oscPath, Mesh.me.name);
-			this.checkOnline; //hostManager
+			// oscPath.postln; me.name.postln;
+			broadcastAddr.sendMsg(oscPath, me.name);
+			mesh.hostManager.checkTimeouts;
 			}, pollPeriod, false);
 	}
 
@@ -75,17 +78,17 @@ Beacon {
 		var replyPath = (oscPath ++ "-reply").asSymbol;
 
 		OSCdef(inDefName, {|msg, time, addr, recvPort|
-			var newHost= msg[1].asString.asSymbol;
-			this.updateHost(newHost, addr, time);
+			var newHost = msg[1].asString.asSymbol;
+			mesh.hostManager.updateHostList(newHost, addr, time);
 			// (newHost ++ ", " ++ addr ++ ", " ++ time ).postln;
-		}, replyPath, recvPort: mesh.me.addr.port);
+		}, replyPath, recvPort: Mesh.me.addr.port);
 
 		OSCdef(outDefName, {|msg, time, addr, recvPort|
 			var newHost= msg[1].asString.asSymbol;
-			this.updateHost(newHost, addr, time);
+			mesh.hostManager.updateHostList(newHost, addr, time);
 			// (newHost ++ ", " ++ addr ++ ", " ++ time ).postln;
-			addr.sendMsg(replyPath, mesh.me.name);
-		}, oscPath, recvPort: mesh.me.addr.port);
+			addr.sendMsg(replyPath, Mesh.me.name);
+		}, oscPath, recvPort: Mesh.me.addr.port);
 	}
 
 	start {
@@ -93,11 +96,10 @@ Beacon {
 	}
 
 	stop {
-		// TODO: This
+		beaconKeeper.stop;
 	}
 
 	free {
-		this.stop;
 		OSCdef(inDefName).free;
 		OSCdef(outDefName).free;
 

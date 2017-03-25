@@ -25,9 +25,6 @@ MeshHost {
 
 		"not a meshHost".postln;
 		item = item ?? { this.getHostName };
-
-
-
 		^this.new(item, NetAddr.localAddr)
 	}
 

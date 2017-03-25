@@ -36,7 +36,7 @@
 
 Mesh {
 	classvar meshList, meshStack, <me;
-	var <meshName, env, hostManager;
+	var <meshName, env, <hostManager;
 
 	// Class Methods
 	*initClass {
@@ -100,7 +100,7 @@ Mesh {
 		meshName = name.asSymbol;
 
 		// make a new host manager for this mesh
-		hostManager = MeshHostManager.new(this);
+		hostManager = MeshHostManager.new(this, me);
 
 		// populate some initial environment variables
 		// make a new environment encapsulated in this Mesh
@@ -123,11 +123,12 @@ Mesh {
 
 	}
 
-	printOn { |stream| stream << this.class.name << "(" << [meshName, hostManager] << ")" } //using env creates a recursion...
+	printOn { |stream| stream << this.class.name << "(" << [meshName, hostManager] << ")" }
+	//using env creates a recursion...
 
 
 	// When creating a new Mesh, set the name and add it to the list
-	addMesh {// should this be a Mesh?
+	addMesh {
 		meshList.put(this.meshName, this);
 	}
 
@@ -154,12 +155,10 @@ Mesh {
 			("Leaving Mesh: " ++ meshName).inform; // post a confirmation,
 			env.pop;
 			meshStack.pop;
-			// post a confirmation,
 		}
 
 		{
 			(meshName ++ "is not the current Mesh.").warn;
-			// post a confirmation,
 		}
 	}
 
@@ -170,10 +169,10 @@ Mesh {
 		if (currentEnvironment === env)
 		{("Cannot remove current mesh").warn} // post a warning
 		{
-			hostManager.destroy;
+			hostManager.free;
 
 			// list.atFail(this.name) {("No Such Mesh").warn};
-			meshList.removeAt(this.name);
+			meshList.removeAt(this.meshName);
 			("removed mesh").warn;
 		}
 	}

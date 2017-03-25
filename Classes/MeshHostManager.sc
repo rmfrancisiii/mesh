@@ -25,25 +25,18 @@
 */
 
 MeshHostManager {
-	var hostList, timeoutList, beacon;
+	var <hostList, timeoutList, beacon;
 
-	*new {|mesh| ^ super.new.init(mesh) }
+	*new {|mesh, me| ^ super.new.init(mesh, me) }
 
-	// Instance Methods
-
-	init {|mesh|
-		hostList = MeshHostList.new;
+	init {|mesh, me|
+		hostList = IdentityDictionary.new;
 		timeoutList = IdentityDictionary.new;
-		beacon = Beacon.new(mesh);
-
-		// add this host to the hosts dictionary
-		this.addHost(Mesh.me); //Mesh.me;
+		beacon = Beacon.new(mesh, me);
+		this.addHost(me);
 	}
 
-
-	free {
-		// TODO: this.
-	}
+	at {|name| ^ this.hostList.at(name)}
 
 	checkTimeouts {
 		var now;
@@ -59,15 +52,14 @@ MeshHostManager {
 	addHost {|host|
 		host = host.as(MeshHost);
 		hostList[host.name] = host;
-		host.addDependant(this);
-		host.changed(\addedHost, host.name);
-		host.addr.postln
+		// host.addDependant(this);
+		// host.changed(\addedHost, host.name);
+		// host.addr.postln
 	}
 
 	hostNames {^hostList.keys.asArray}
 
-	hosts {|stream|
-		// ^hosts;
+	hosts {
 		"Available hosts:".postln;
 		hostList.keysValuesDo {|key, value|
 			value.postln;
@@ -109,6 +101,11 @@ MeshHostManager {
 				timeoutList[name] = time;
 			};
 		}
+	}
+
+	free {
+		beacon.stop;
+		beacon.free;
 	}
 
 
