@@ -1,3 +1,5 @@
+Mesh.test;
+
 // create a mesh,
 //  other hosts should use the same mesh name.
 Mesh(\mesh1);
