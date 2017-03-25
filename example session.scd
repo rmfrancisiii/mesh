@@ -35,6 +35,33 @@ Mesh.pop;
 ~me.postln;
 ~hosts[\rose].online.postln;
 
+Vertex(\Vname, \VType, [arguments])
+// eg:
+
+Vertex(\stereoOut, \AudioOut, [\hostname, \serverName, \numberChannels])
+
+// AND:
+
+Vertex(\sinSynth, \Instrument, [\fm, \stereoOut])
+
+// or:
+Vertex(\sinSynth, \Instrument, [\fm, \stereoOut, freq=440, carPartial = 1, modPartial = 1, index = 3, dur=1.0, amp=0.25, pan=0, att=0.15, mod1=0.001, mod2=0.001])
+
+// or:
+Vertex(\sinSynth, \Instrument, [
+	{var mod = SinOsc.ar(freq * modPartial, 0,
+    freq * index * LFNoise1.kr(5.reciprocal).abs);
+	var car = SinOsc.ar((freq * carPartial) + mod, 0, amp);
+	var env = Env([0.001, 0.9, 0.001], [att, 1.0-att], [\sin, \sin]);
+	var envGen = EnvGen.kr(env, doneAction: 2, timeScale: dur);
+	Out.ar(outBus, Pan2.ar(car * envGen, pan))},
+	\stereoOut, freq=440, carPartial = 1, modPartial = 1, index = 3, dur=1.0,
+	amp=0.25, pan=0, att=0.15, mod1=0.001, mod2=0.001])
+
+// AND:
+
+Vertex(\sinPattern, \PVert, [trunk: \sinSynth])
+
 
 
 
