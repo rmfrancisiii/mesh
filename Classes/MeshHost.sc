@@ -20,10 +20,7 @@ MeshHost {
 	}
 
 	*newFrom { |item|
-		"newfrom".postln;
 		if(item.isKindOf(this)) { ^item };
-
-		"not a meshHost".postln;
 		item = item ?? { this.getHostName };
 		^this.new(item, NetAddr.localAddr)
 	}

@@ -24,30 +24,35 @@
 -		new : name : Mesh
 -		If there is not a mesh with the given name, create a new mesh, with that name.
 -		If there IS a mesh with that name just return it.
-
+-		Side Effect: Creates/Starts Mesh's Beacon
+-		Side Effect: Creates/Starts Mesh's OSCdefs
+-
 -		newFrom : name or  : Mesh
 -		If there is not a mesh with the given name, create a new mesh, with that name.
 -		If there IS a mesh with that name just return it.
 -
 -		activeMesh : - : symbol
--		Key of the top mesh on the stack
+-		Returns key of the top mesh on the stack
 -		if there is no Active Mesh, Warns and returns Nil.
 -
 -		list : - : Array
 -		Returns an array of available (created) meshes
 -
 -		stack : - : Array
+-		Returns an array of meshes in the order they have been pushed onto the stack
 -
 -		me : - : MeshHost
+-		Returns this Computer as a host
 -
 -		peek : - : Mesh
 -		Returns the top mesh on the stack
 -
 -		pop : - : IdentityDictionary
 -		Removes the top mesh from the stack
+-		Side Effect: Environment Changes
 -
 -		freeAll : - : -
--
+-		Frees all of the current meshes
 -
 ----------------------
 - 	Instance Variables : Type : Description
@@ -60,19 +65,34 @@
 -
 -	Instance Methods : Args : Return Type
 -
--		init :  :
+-		meshName :  : symbol
+-		name :  : symbol
+-		Returns the name of this Mesh as a Symbol
 -
--		free : Mesh : -
+-		hostManager :  :
+-		Returns the hostmanager for this Mesh
 -
--		addMesh :  :
--
--		push : mesh : -
+-		push : mesh : Mesh
+-		Pushes this mesh onto the meshStack
+-		Side Effect: Environment Changes
 -
 -		pop : - : -
+-		Removes this mesh from the top of the stack
+-		IF it is the current mesh. otherwise returns nil
+-		Side Effect: Environment Changes
 -
--		peek : - : -
+-		free : Mesh : -
+-		Frees a created Mesh.
+-		Side Effect: Stops Mesh's Beacon
+-		Side Effect: Frees Mesh's OSCdefs
 -
+-	Private Methods
 -
+-		init : name : Mesh
+-
+-		printOn :  :
+-
+-		addMesh : mesh : Mesh
 ----------------------
 */
 
@@ -106,19 +126,12 @@ Mesh {
 
 	*list {^meshList.keys.asArray}
 
-	// return an array with the mesh stack
-	*stack {
-		^meshStack.collect({ arg item; item.meshName})
-	}
+	*stack { ^meshStack.collect({ arg item; item.meshName}) }
 
-	*me {
-		^me
-	}
+	*me { ^me }
 
 	// return the last (top) mesh from the stack
-	*peek {
-		^meshStack[(meshStack.size-1)]
-	}
+	*peek { ^meshStack[(meshStack.size-1)] }
 
 	// remove the current mesh from the stack,
 	// so the previous mesh is active
@@ -138,12 +151,6 @@ Mesh {
 		meshName = name.asSymbol;
 		hostManager = MeshHostManager.new(this, me);
 		env = Environment.make {};
-
-		// add a shortcut to the Mesh environment so that:
-		// ~meshName is equivalent to Mesh[\meshname]
-		// this is only in the new Mesh
-		// DECIDE: do we want to make these shortcuts available from other meshes?
-
 		env.put(meshName.asSymbol, this);
 
 		env.use({
@@ -156,26 +163,15 @@ Mesh {
 
 	}
 
-	printOn { |stream| stream << this.class.name << "(" << [meshName, hostManager] << ")" }
-	//using env creates a recursion...
+	printOn { |stream| stream << this.class.name << "(" << meshName << ")" }
 
+	addMesh { meshList.put(this.meshName, this) }
 
-	// When creating a new Mesh, set the name and add it to the list
-	addMesh {
-		meshList.put(this.meshName, this);
-	}
+	meshName { ^meshName }
 
-	meshName {
-		^meshName
-	}
+	name { ^meshName }
 
-	name {
-		^meshName
-	}
-
-	hostManager {
-		^hostManager
-	}
+	hostManager { ^hostManager }
 
 	push {
 		// activates this Mesh and pushes its environment onto the stack.
@@ -203,6 +199,7 @@ Mesh {
 
 		{
 			(meshName ++ "is not the current Mesh.").warn;
+			^nil
 		}
 	}
 
@@ -211,7 +208,7 @@ Mesh {
 		// FIXME: Shouldn't be able to remove a mesh on the stack.
 
 		if (currentEnvironment === env)
-		{("Cannot remove current mesh").warn} // post a warning
+		{("Cannot remove current mesh").warn; ^nil} // post a warning
 		{
 			hostManager.free;
 

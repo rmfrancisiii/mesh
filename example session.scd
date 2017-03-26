@@ -1,13 +1,10 @@
+UnitTest.gui
+
+Quarks.gui
 // create a mesh,
 //  other hosts should use the same mesh name.
 Mesh(\mesh1);
 
-Mesh(\mesh1).push;
-
-Mesh.pop;
-
-Mesh(\mesh1).free;
-// make it active:
 
 // create another mesh and push it onto the stack:
 Mesh(\mesh2).push;
@@ -34,14 +31,9 @@ Mesh(\mesh1).hostNames;
 // pop the top mesh off of the stack:
 Mesh.pop;
 
-
-
 UnitTest.gui;
 
-
 ////// STOP HERE //////////
-
-
 
 Vertex Syntax:
 -----------
