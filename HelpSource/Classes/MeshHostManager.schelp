@@ -9,7 +9,7 @@ MeshHostManager is the interface class for MeshHosts.
 CLASSMETHODS::
 
 METHOD:: new
-Create a new Hail.
+Create a new MeshHostManager.
 
 ARGUMENT:: addrBook
 An optional link::Classes/AddrBook:: which this instance will use to store discovered link::Classes/Peer::s. Users can pass this to other Utopia objects, and know that it will be updated as appropriate. If nil, one will be automatically created.

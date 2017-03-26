@@ -1,5 +1,5 @@
 TITLE:: Mesh Guide
-categories:: Mesh, Live Coding
+categories:: Mesh, Live Coding, Networking
 summary:: Simple framework for creating network-based collaborative performance environment.
 related:: Guides/OSC_Communication
 
@@ -9,71 +9,25 @@ An initial guide to creating a collaborative live-coding network environment.
 
 SECTION:: Introduction
 
-Mesh is a framework for the creation of networked music applications, and builds upon the work of the Utopia Quark, which in turn credits the Republic Quark and other existing network systems in SuperCollider.
+The Mesh is a framework for the creation of realtime network performance environments, and this SC implementation builds upon the work of the Utopia Quark, to whom many thanks are owed.
+
+A STRONG::Mesh:: should be conceived of as a shared performance environment,  composed of STRONG::Vertexes::, each vertex having one or more STRONG::Ports::, which may be connected to other ports via STRONG::Patches::.
+In this way it can be compared to a modular synthesizer, but one which is extensible to include a wide range of different types of Vertexes, providing a vast number of custom inputs, outputs, and processing functions.
+
+Although the current implementation is primarily Supercollider, the Mesh is being imagined as an abstract messaging protocol and nameSpace for connecting a wide variety of devices, hardware controllers, IOT, etc.
+
+
 
 image::image1.png::
 
 SECTION:: Basic Building Blocks
 
-The central class of Utopia is link::Classes/Mesh::. The Class provides an interface to create and access a stack of link::Classes/Mesh:: instances, which represent shared environments, each containing a collection of Classes/Vertex es
+The central class of Mesh is link::Classes/Mesh::.
+The Class provides an interface to create and access a stack of link::Classes/Mesh:: instances, which represent shared environments, each containing a collection of Classes/Vertex es
 
 SECTION:: Creating a Mesh
 
 definitionlist::
-     ## Mesh
-     || The link::Classes/Hail:: class allows for Peers to automatically discover each other on a network.
-     ## Host
-     || The link::Classes/Registrar::/link::Classes/Registrant:: classes allow for centralised discovery. Peers register with a central node, which announces any changes in membership to all Peers. This could for instance be running on a machine not being used for sound production to allow for stability in the event of a Peer crashing.
-     ## Vertex
-     || One can also manually populate an AddrBook, which can be useful in cases when IP addresses and/or participants are fixed and known.
+     ## Create a Mesh
+     || Call the Mesh class, and give it a name: code::Mesh(\mesh1)::
 ::
-
-SECTION:: Citizen Communication
-
-Utopia provides a variety of classes for communicating different sorts of information between Peers:image::Tradtelefon.png#The Trådtelefon: A popular form of communication::
-
-definitionlist::
-     ## link::Classes/Chatter::
-     || A class for text chat between Peers.
-     ## link::Classes/CodeRelay::
-     || Shares all code executed by a Peer with all other Peers in an AddrBook.
-     ## link::Classes/SynthDescRelay::
-     || Shares link::Classes/SynthDesc::s between Peers. (SynthDef sharing between multiple link::Classes/Server::s can be accomplished using link::Classes/SynthDescLib::.)
-     ## link::Classes/OSCDataSpace::
-     || A shared data space in the form of a dictionary of Open Sound Control data types (floats, ints, symbols).
-     ## link::Classes/OSCObjectSpace::
-     || A shared data space in the form of a dictionary of SC objects. Only archivable objects can be exchanged in this way, and there is no automatic syncing of changed state. Use with caution.
-     ## link::Classes/ConductorClock::/link::Classes/FollowerClock::
-     || A centralised approach to a shared time base. Each ConductorClock can have multiple followers.
-     ## link::Classes/BeaconClock::
-     || An experimental attempt at a clock using Reference Broadcast Synchronisation. Decentralised and flexible, this approach should adapt to changing membership.
-::
-
-
-
-SECTION:: Guarding the walls
-
-The discovery classes described above can take an authenticator object as an argument, to test whether joining Peers have permission to join an AddrBook. Currently Utopia supplies two types:
-
-definitionlist::
-     ## link::Classes/ChallengeAuthenticator::
-     || This uses a collection known to all participants as a challenge test. This could be something like the full text of War and Peace.
-     ## link::Classes/GroupPasswordAuthenticator::
-     || This uses a shared password to authenticate Peers attempting to join an AddrBook.
-::
-
-image::nonsuch.png#Some such palace or other...::GroupPasswordAuthenticator takes an encryptor as an argument, to prevent passwords being sent in plaintext. Encryptors can also be used by Utopia's chat, code-sharing, and data-sharing classes. There are currently two types:
-
-definitionlist::
-     ## link::Classes/NonEncryptor::
-     || This is a no-op class which is used in cases where no encryption is needed.
-     ## link::Classes/OpenSSLSymEncryptor::
-     || This uses OpenSSL's symmetric key abilities to encrypt data using a shared password. This requires that you have OpenSSL installed in your path. (See link::http://www.openssl.org/::. OpenSSL comes standard on some operating systems.) The default cipher used is aes-128-cbc.
-::
-
-
-SECTION:: Expanding our borders
-
-Utopia is currently an alpha release. It is an open source project and welcomes contibutions or suggestions. It is hosted at link::https://github.com/muellmusik/Utopia::. Please file any requests or issues there.
-
-image::clt7166.png#Yet Another Utopia…::

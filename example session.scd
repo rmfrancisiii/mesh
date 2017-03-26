@@ -1,11 +1,13 @@
-Mesh.test;
-
 // create a mesh,
 //  other hosts should use the same mesh name.
 Mesh(\mesh1);
 
-// make it active:
 Mesh(\mesh1).push;
+
+Mesh.pop;
+
+Mesh(\mesh1).free;
+// make it active:
 
 // create another mesh and push it onto the stack:
 Mesh(\mesh2).push;
@@ -18,10 +20,10 @@ Mesh.activeMesh;
 Mesh.stack;
 
 // find out what hosts are available in the current mesh:
-Mesh(\mesh2).hosts;
+Mesh(\mesh1).hosts;
 
 // or do the same thing using a shortcut:
-~mesh2.hostNames;
+~mesh1.hostNames;
 
 // you can also find out info for a different mesh than the current one
 Mesh(\mesh1).hostNames;
@@ -32,15 +34,30 @@ Mesh(\mesh1).hostNames;
 // pop the top mesh off of the stack:
 Mesh.pop;
 
-// shortcuts should work for the current mesh
-~mesh1.hostNames;
-~me.postln;
-~hosts[\rose].online.postln;
+
+
+UnitTest.gui;
+
+
+////// STOP HERE //////////
+
+
+
+Vertex Syntax:
+-----------
 
 Vertex(\Vname, \VType, [arguments])
 // eg:
 
-Vertex(\stereoOut, \AudioOut, [\hostname, \serverName, \numberChannels])
+
+Create a new Vertex:
+Vertex.new(\stereoOut, \AudioOut)
+
+
+
+
+Vertex(\stereoOut).setServer(\hostAddr);
+
 
 // AND:
 

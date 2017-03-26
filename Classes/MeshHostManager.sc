@@ -52,8 +52,8 @@ MeshHostManager {
 	addHost {|host|
 		host = host.as(MeshHost);
 		hostList[host.name] = host;
-		// host.addDependant(this);
-		// host.changed(\addedHost, host.name);
+		host.addDependant(this);
+		host.changed(\addedHost, host.name);
 		// host.addr.postln
 	}
 

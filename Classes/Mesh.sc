@@ -2,56 +2,92 @@
 ----------------------
 - Class: Mesh
 ----------------------
--   Class Variables : Type : Description
-- 		meshList : IdentityDictionary : Dictionary of created meshes
--		meshStack : Array : references to the meshes
--		me : MeshHost : This machine as a host (should be the same in every mesh, i.e. same IP address)
+-   Class Variables : Type
 -
+- 		meshList : IdentityDictionary
+-		Dictionary of created meshes
+-
+-		meshStack : Array
+-		A Stack of references to the meshes
+-
+-		me : MeshHost
+-		This machine as a host (should be the same in every mesh, i.e. same Hostname/Port/IP address)
 -
 -	Class Methods : Args : Return Type
--		initClass : - : Class
--		at : key : Mesh : returns the Mesh by name from the meshList
+-
+-		initClass	:	:	Class
+-		Initializes the Class Variables
+-
+-		at : key : Mesh
+-		returns the Mesh by name from the meshList
+-
 -		new : name : Mesh
+-		If there is not a mesh with the given name, create a new mesh, with that name.
+-		If there IS a mesh with that name just return it.
+
+-		newFrom : name or  : Mesh
+-		If there is not a mesh with the given name, create a new mesh, with that name.
+-		If there IS a mesh with that name just return it.
+-
+-		activeMesh : - : symbol
+-		Key of the top mesh on the stack
+-		if there is no Active Mesh, Warns and returns Nil.
+-
+-		list : - : Array
+-		Returns an array of available (created) meshes
+-
+-		stack : - : Array
+-
+-		me : - : MeshHost
+-
+-		peek : - : Mesh
+-		Returns the top mesh on the stack
+-
+-		pop : - : IdentityDictionary
+-		Removes the top mesh from the stack
+-
 -		freeAll : - : -
--		peek : - : Mesh : Top mesh on the stack
--		activeMesh : - : symbol : Key of the top mesh on the stack
--		pop : - : IdentityDictionary : Top mesh on the stack
 -
 -
 ----------------------
 - 	Instance Variables : Type : Description
+-
 -		meshName : Symbol : key for the mesh
+-
 -		env : Environment : A place to put things, esp. patterns, etc.
+-
 -		hostManager : MeshHostManager : This contains the host list, timeout list, beacon
 -
 -	Instance Methods : Args : Return Type
+-
 -		init :  :
+-
 -		free : Mesh : -
+-
 -		addMesh :  :
+-
 -		push : mesh : -
+-
 -		pop : - : -
+-
 -		peek : - : -
+-
+-
 ----------------------
 */
 
 Mesh {
-	classvar meshList, meshStack, <me;
-	var <meshName, env, <hostManager;
+	classvar meshList, meshStack, me;
+	var meshName, env, hostManager;
 
-	// Class Methods
 	*initClass {
-		meshStack = nil;
+		meshStack = [];
 		meshList = IdentityDictionary.new;
 		me = me.as(MeshHost);
 	}
 
 	*at {|name| ^ this.meshList.at(name)}
 
-	// If there is not a mesh with the given name,
-	//  create a new mesh, with that name,
-	//  add it to the mesh list,
-	//  but, if there is a mesh with that name
-	//  just return it.
 
 	*new {|name|
 		^ meshList.at(name) ?? {^ super.new.init(name).addMesh};
@@ -62,19 +98,21 @@ Mesh {
 		^this.new(mesh);
 	}
 
-	// return the name of the current mesh
 	*activeMesh {
 		if (meshStack.notNil and: { meshStack.notEmpty })
 		{^this.peek.meshName}
-		{("No active mesh").warn}
+		{("No active mesh").warn; ^nil}
 	}
 
-	// return the names of the available Meshes
-	*list {^meshList.keys}
+	*list {^meshList.keys.asArray}
 
 	// return an array with the mesh stack
 	*stack {
 		^meshStack.collect({ arg item; item.meshName})
+	}
+
+	*me {
+		^me
 	}
 
 	// return the last (top) mesh from the stack
@@ -98,12 +136,7 @@ Mesh {
 	init {|name|
 
 		meshName = name.asSymbol;
-
-		// make a new host manager for this mesh
 		hostManager = MeshHostManager.new(this, me);
-
-		// populate some initial environment variables
-		// make a new environment encapsulated in this Mesh
 		env = Environment.make {};
 
 		// add a shortcut to the Mesh environment so that:
@@ -132,6 +165,18 @@ Mesh {
 		meshList.put(this.meshName, this);
 	}
 
+	meshName {
+		^meshName
+	}
+
+	name {
+		^meshName
+	}
+
+	hostManager {
+		^hostManager
+	}
+
 	push {
 		// activates this Mesh and pushes its environment onto the stack.
 		if (currentEnvironment === env) {
@@ -147,9 +192,8 @@ Mesh {
 	}
 
 	pop {
-		// deactivates the current Mesh and removes its environment from the Environment Stack.
-		// CONSIDER: might want to deactivate oscDefs for this mesh
-
+		// deactivates the current Mesh by name, and removes its environment from the Environment Stack.
+		// generally i would use Mesh.pop instead
 		if (currentEnvironment === env)
 		{
 			("Leaving Mesh: " ++ meshName).inform; // post a confirmation,
