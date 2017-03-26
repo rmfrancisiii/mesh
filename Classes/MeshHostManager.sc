@@ -43,8 +43,10 @@ MeshHostManager {
 		now = Main.elapsedTime;
 		timeoutList.keysValuesDo({|name, lastHeardFrom|
 			if((now - lastHeardFrom) > (beacon.pollPeriod * 2), {
+				if (hostList[name].online == true)
+					{"Host % seems to be offline\n".postf(name)};
 				hostList[name].online = false;
-				// "Host % seems to be offline\n".postf(name);
+
 			});
 		});
 	}
@@ -60,9 +62,11 @@ MeshHostManager {
 	hostNames {^hostList.keys.asArray}
 
 	hosts {
+		var online = "Online";
 		"Available hosts:".postln;
 		hostList.keysValuesDo {|key, value|
-			value.postln;
+			if (value.online==false) { online = "Offline" };
+			(key ++ " : " ++ online).postln;
 		}
 	}
 
@@ -97,6 +101,7 @@ MeshHostManager {
 			}
 
 			{   // host is in the list and the address matches, eveything is OK!
+				if (host.online == false) {"Host % rejoined the mesh\n".postf(name)};
 				host.online = true;
 				timeoutList[name] = time;
 			};

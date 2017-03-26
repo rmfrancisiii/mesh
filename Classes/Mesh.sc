@@ -173,6 +173,8 @@ Mesh {
 
 	hostManager { ^hostManager }
 
+	hosts { ^hostManager.hosts }
+
 	push {
 		// activates this Mesh and pushes its environment onto the stack.
 		if (currentEnvironment === env) {

@@ -1,9 +1,12 @@
 UnitTest.gui
+Mesh.test;
 
 Quarks.gui
 // create a mesh,
 //  other hosts should use the same mesh name.
-Mesh(\mesh1);
+Mesh(\mesh1).push;
+~mesh1.hosts;
+
 
 
 // create another mesh and push it onto the stack:
