@@ -1,4 +1,5 @@
 Mesh(\mesh1).push;
+~testview = MeshView(Mesh(\mesh1).hostManager.hostList);
 Mesh(\mesh1).ping;
 
 Mesh(\mesh1).hostManager.addHost(\testHost);

@@ -27,6 +27,6 @@ MeshView {
 		window.onClose_({ model.removeDependant(this)});
 	}
 
-	update { |obj, what, val| this.setListView(obj) }
+	update { |obj, what, val| {this.setListView(obj)}.defer }
 
 }

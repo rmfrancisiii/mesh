@@ -175,9 +175,7 @@ Mesh {
 
 	hosts { ^hostManager.hosts }
 
-	ping {
-		^hostManager.beacon.ping(me);
-	}
+	ping { ^hostManager.beacon.ping(me) }
 
 	push {
 		// activates this Mesh and pushes its environment onto the stack.

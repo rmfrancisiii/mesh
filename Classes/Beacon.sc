@@ -102,9 +102,7 @@ Beacon {
 
 	}
 
-	ping {|me|
-		broadcastAddr.sendMsg("/ping", me.name);
-	}
+	ping { |me| broadcastAddr.sendMsg("/ping", me.name) }
 
 	start {
 		// TODO: This
