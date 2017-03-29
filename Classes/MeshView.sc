@@ -27,12 +27,6 @@ MeshView {
 		window.onClose_({ model.removeDependant(this)});
 	}
 
-	update { |obj, what, val|
-		this.setListView(obj);
-
-
-		"refreshed MeshView".postln;
-
-	}
+	update { |obj, what, val| this.setListView(obj) }
 
 }

@@ -1,27 +1,40 @@
 /* Development notes
+/////////////////////////
 
-Ok, I think this phase is nearing completion,
+next steps:
+///////////
 
-Goal is: No Vertexes yet, but stable meshes.
-
-For Classes:
-. Mesh
-. MeshManager
-. MeshHost
-. Beacon
-. MeshHostAddr
-
-1. Quark Install Working
-2. Making and unmaking Meshes
-3. Pushing, Popping them
-4. Monitoring other Hosts in a gui
-5. Basic (stub) help files for all classes,
-6. Basic (stub) Inline Documentation
-7. Unit Tests for all classes/methods
-8. Basic Readme and Guide files
+Fix gui bug (look at defer)
 
 
+
+///////////
+Completed:
+///////////
+
+3/28/17:
+
+Better ping.
+  Mesh(\mesh1).ping;
+  I want everyone to see a line in the post window that says "codedoval pinged the mesh"
+
+3/27/17:
+  Quark Install Working (w/dependency on UnitTesting)
+  Making and unmaking Meshes
+  Pushing, Popping them
+  Monitoring other Hosts (online/offline) in a gui
+  Basic (stub) help files for all classes,
+  Basic (stub) Inline Documentation
+  Unit Tests (stub) for all classes/methods
+  Basic Readme and Guide files
+
+
+
+
+//////////////////
 Conceptual Note:
+//////////////////
+
 Mesh should emulate as closely as possible a broader method of communication protocol.
 While this is currently based on SC, I'd like to try to keep it abstract enough to use
 for IOT devices, etc. down the road, where no SC is even in the graph.

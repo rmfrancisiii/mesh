@@ -1,5 +1,5 @@
 Mesh(\mesh1).push;
-Mesh(\mesh1).ping
+Mesh(\mesh1).ping;
 
 Mesh(\mesh1).hostManager.addHost(\testHost);
 

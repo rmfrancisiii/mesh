@@ -61,11 +61,9 @@ MeshHostManager {
 	hostNames {^hostList.keys.asArray}
 
 	hosts {
-		var online = "Online";
 		"Available hosts:".postln;
 		hostList.keysValuesDo {|key, value|
-			if (value.online==false) { online = "Offline" };
-			(key ++ " : " ++ online).postln;
+			(key ++ " : " ++ if(value.online, "online", "offline")).postln;
 		}
 	}
 
@@ -89,12 +87,16 @@ MeshHostManager {
 				// this probably means the peer recompiled and has a different port
 				host.addr_(addr);
 				host.online = true;
+				hostList.changed(\rejoinedHost, hostList[name]);
 				timeoutList[name] = time;
 				"Host % rejoined the mesh\n".postf(name);
 			}
 
 			{   // host is in the list and the address matches, eveything is OK!
-				if (host.online == false) {"Host % rejoined the mesh\n".postf(name)};
+				if (host.online == false) {
+					"Host % rejoined the mesh\n".postf(name);
+					hostList.changed(\offlineHost, hostList[name]);
+				};
 				host.online = true;
 				timeoutList[name] = time;
 			};
@@ -105,10 +107,5 @@ MeshHostManager {
 		beacon.stop;
 		beacon.free;
 	}
-
-
-
-
-
 
 }

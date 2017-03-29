@@ -176,9 +176,7 @@ Mesh {
 	hosts { ^hostManager.hosts }
 
 	ping {
-		hostManager.beacon.broadcastAddr.sendMsg("/ping", me.name);
-		me.name.postln;
-
+		^hostManager.beacon.ping(me);
 	}
 
 	push {

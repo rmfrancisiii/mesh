@@ -51,7 +51,7 @@ Beacon {
 		// Make the OSC responder definitions.
 		// these are OSC Defs, so they can be managed
 		// globally, eg after creating a mesh, try: OSCdef.all;
-		this.makeOSCdefs(mesh);
+		this.makeOSCdefs(mesh, me);
 
 		// Set a broadcast address.
 		// Use the IP address 255.255.255.255 to send a message to
@@ -72,27 +72,38 @@ Beacon {
 			}, pollPeriod, false);
 	}
 
-	makeOSCdefs {|mesh|
+	makeOSCdefs {|mesh, me|
 
 		var replyPath = (oscPath ++ "-reply").asSymbol;
 
-		OSCdef(inDefName, {|msg, time, addr, recvPort|
-			var newHost = msg[1].asString.asSymbol;
-			mesh.hostManager.updateHostList(newHost, addr, time);
-		}, replyPath, recvPort: Mesh.me.addr.port);
-
-		OSCdef(\ping, {|msg, time, addr, recvPort|
-			"hello!!!".postln;
-			msg.postln;
-			time.postln;
-			addr.postln;
-		}, '/ping', recvPort: Mesh.me.addr.port);
-
+		// This OSC Def Receives a msg from the Beacon
+		// updates the host list, AND replies to the Beacon
 		OSCdef(outDefName, {|msg, time, addr, recvPort|
 			var newHost= msg[1].asString.asSymbol;
 			mesh.hostManager.updateHostList(newHost, addr, time);
-			addr.sendMsg(replyPath, Mesh.me.name);
-		}, oscPath, recvPort: Mesh.me.addr.port);
+			addr.sendMsg(replyPath, me.name);
+		}, oscPath, recvPort: me.addr.port);
+
+		// This OSC Def receives the reply
+		// and updates the host list.
+		OSCdef(inDefName, {|msg, time, addr, recvPort|
+			var newHost = msg[1].asString.asSymbol;
+			mesh.hostManager.updateHostList(newHost, addr, time);
+		}, replyPath, recvPort: me.addr.port);
+
+		OSCdef(\ping, {|msg, time, addr, recvPort|
+			(msg[1] ++ " pinged on " ++ mesh.name).postln;
+			broadcastAddr.sendMsg("/pingReply", me.name);
+		}, '/ping', recvPort: me.addr.port);
+
+		OSCdef(\pingReply, {|msg, time, addr, recvPort|
+			(msg[1] ++ " replied to your ping on: " ++ mesh.name).postln;
+		}, '/pingReply', recvPort: me.addr.port);
+
+	}
+
+	ping {|me|
+		broadcastAddr.sendMsg("/ping", me.name);
 	}
 
 	start {
