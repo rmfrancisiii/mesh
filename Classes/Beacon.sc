@@ -29,7 +29,7 @@
 
 Beacon {
 
-	var oscPath, <pollPeriod, broadcastAddr, beaconKeeper, inDefName, outDefName;
+	var oscPath, <pollPeriod, <broadcastAddr, beaconKeeper, inDefName, outDefName;
 
 	*new {|mesh, me| ^ super.new.init(mesh, me) }
 
@@ -67,7 +67,6 @@ Beacon {
 		// Start a function that periodically checks whether hosts are still online.
 		// This continues running, even after Cmd+Period
 		beaconKeeper = SkipJack({
-			// oscPath.postln; me.name.postln;
 			broadcastAddr.sendMsg(oscPath, me.name);
 			mesh.hostManager.checkTimeouts;
 			}, pollPeriod, false);
@@ -80,13 +79,18 @@ Beacon {
 		OSCdef(inDefName, {|msg, time, addr, recvPort|
 			var newHost = msg[1].asString.asSymbol;
 			mesh.hostManager.updateHostList(newHost, addr, time);
-			// (newHost ++ ", " ++ addr ++ ", " ++ time ).postln;
 		}, replyPath, recvPort: Mesh.me.addr.port);
+
+		OSCdef(\ping, {|msg, time, addr, recvPort|
+			"hello!!!".postln;
+			msg.postln;
+			time.postln;
+			addr.postln;
+		}, '/ping', recvPort: Mesh.me.addr.port);
 
 		OSCdef(outDefName, {|msg, time, addr, recvPort|
 			var newHost= msg[1].asString.asSymbol;
 			mesh.hostManager.updateHostList(newHost, addr, time);
-			// (newHost ++ ", " ++ addr ++ ", " ++ time ).postln;
 			addr.sendMsg(replyPath, Mesh.me.name);
 		}, oscPath, recvPort: Mesh.me.addr.port);
 	}

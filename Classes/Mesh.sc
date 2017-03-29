@@ -175,6 +175,12 @@ Mesh {
 
 	hosts { ^hostManager.hosts }
 
+	ping {
+		hostManager.beacon.broadcastAddr.sendMsg("/ping", me.name);
+		me.name.postln;
+
+	}
+
 	push {
 		// activates this Mesh and pushes its environment onto the stack.
 		if (currentEnvironment === env) {

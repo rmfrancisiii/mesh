@@ -25,7 +25,7 @@
 */
 
 MeshHostManager {
-	var <hostList, <>hostview, timeoutList, beacon;
+	var <hostList, <>hostview, <>timeoutList, <>beacon;
 
 	*new {|mesh, me| ^ super.new.init(mesh, me) }
 
