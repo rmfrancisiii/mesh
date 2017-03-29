@@ -59,7 +59,7 @@ Beacon {
 		broadcastAddr = MeshHostAddr("255.255.255.255", 57120 + (0..7));
 
 		// set the broadcast flag (whether or not broadcast messages can be sent)
-		NetAddr.broadcastFlag = true;
+		MeshHostAddr.broadcastFlag = true;
 
 		// set the frequency of testing to see if hosts are online
 		pollPeriod = 1.0;

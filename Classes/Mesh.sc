@@ -175,6 +175,8 @@ Mesh {
 
 	hosts { ^hostManager.hosts }
 
+	at {|name| ^ hostManager.at(name)}
+
 	ping { ^hostManager.beacon.ping(me) }
 
 	push {

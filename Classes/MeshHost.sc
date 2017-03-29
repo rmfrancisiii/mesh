@@ -22,7 +22,7 @@ MeshHost {
 	*newFrom { |item|
 		if(item.isKindOf(this)) { ^item };
 		item = item ?? { this.getHostName };
-		^this.new(item, NetAddr.localAddr)
+		^this.new(item, MeshHostAddr.localAddr)
 	}
 
 	*getHostName {
