@@ -25,7 +25,7 @@
 */
 
 MeshHostManager {
-	var <hostList, timeoutList, beacon;
+	var <hostList, <>hostview, timeoutList, beacon;
 
 	*new {|mesh, me| ^ super.new.init(mesh, me) }
 
@@ -34,6 +34,7 @@ MeshHostManager {
 		timeoutList = IdentityDictionary.new;
 		beacon = Beacon.new(mesh, me);
 		this.addHost(me);
+		hostview = MeshView(hostList);
 	}
 
 	at {|name| ^ this.hostList.at(name)}
@@ -46,7 +47,7 @@ MeshHostManager {
 				if (hostList[name].online == true)
 					{"Host % seems to be offline\n".postf(name)};
 				hostList[name].online = false;
-
+				hostList.changed(\offlineHost, hostList[name]);
 			});
 		});
 	}
@@ -54,9 +55,7 @@ MeshHostManager {
 	addHost {|host|
 		host = host.as(MeshHost);
 		hostList[host.name] = host;
-		host.addDependant(this);
-		host.changed(\addedHost, host.name);
-		// host.addr.postln
+		hostList.changed(\addedHost, host);
 	}
 
 	hostNames {^hostList.keys.asArray}
@@ -70,21 +69,15 @@ MeshHostManager {
 		}
 	}
 
-	update { |obj, what, val|
-		if(what == \addedHost, {
-			"added host dependant!".postln;
-		});
-	}
-
 	updateHostList {|name, addr, time|
 
 		var host = this[name];
 
+		// new host!
 		if (host.isNil)
 		{
 			addr.postln;
 			"Host % has joined the mesh!!\n ".postf(name);
-			// new host!
 			host = MeshHost(name, addr);
 			this.addHost(host);
 			timeoutList[name] = time;
@@ -112,6 +105,10 @@ MeshHostManager {
 		beacon.stop;
 		beacon.free;
 	}
+
+
+
+
 
 
 }

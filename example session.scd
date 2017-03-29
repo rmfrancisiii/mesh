@@ -1,12 +1,23 @@
-UnitTest.gui
-Mesh.test;
+Mesh(\mesh1).push;
+
+Mesh(\mesh1).hostManager.addHost(\testHost);
+
+Mesh(\mesh1).hostManager.addHost(\testHost2);
+
+Mesh(\mesh1).hostManager.addHost(\testHost3);
+
+Mesh(\mesh1).hosts;
 
 Quarks.gui
 // create a mesh,
 //  other hosts should use the same mesh name.
-Mesh(\mesh1).push;
-~mesh1.hosts;
 
+Mesh(\mesh1).hosts;
+~mesh1.free;
+
+Mesh.pop;
+
+Mesh(\mesh1).free;
 
 
 // create another mesh and push it onto the stack:

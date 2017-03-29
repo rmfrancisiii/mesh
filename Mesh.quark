@@ -4,7 +4,7 @@
 	\summary:		"framework for collaborative live coding",
 	\version:		"0.0",
 	\schelp:        "Guides/Mesh"
-	\dependencies   "UnitTesting"
+	\dependencies   ["UnitTesting"]
 	\author: 		"Mesh Collaborative",
 	\country: 		"USA",
 	\since: 		"2016",
