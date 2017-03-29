@@ -9,26 +9,27 @@ MeshView {
 	init { |mdl|
 		model = mdl;
 		model.addDependant(this);
-		listView = ListView().items_(model.getPairs);
-
-		listView = ListView().items_(model.collectAs({
-			|obj| obj.name ++ " | " ++ if(obj.online, "online", "offline")}, Array)
-
-	);
-
-
+		listView = ListView();
+		this.setListView(mdl);
 		this.makeGui;
 	}
+
+	setListView {|obj|
+		listView.items_(obj.collectAs({
+			|obj| obj.name ++ " | " ++ if(obj.online, "online", "offline")}, Array));
+	}
+
 
 	makeGui {
 		window = Window(\window).front;
 		window.layout = VLayout.new.add(listView);
+		window.alwaysOnTop = true;
 		window.onClose_({ model.removeDependant(this)});
 	}
 
 	update { |obj, what, val|
-		listView.items_(obj.collectAs({
-			|obj| obj.name ++ " | " ++ if(obj.online, "online", "offline")}, Array));
+		this.setListView(obj);
+
 
 		"refreshed MeshView".postln;
 
