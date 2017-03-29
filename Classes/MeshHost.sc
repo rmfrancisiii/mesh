@@ -37,6 +37,12 @@ MeshHost {
 	isOnline {
 		}
 
+	ping {|msg| this.addr.sendMsg('/ping') }
+
+	chat {|msg| this.addr.sendMsg('/chat', msg) }
+
+	sendMsg {|msg| this.addr.sendMsg(msg) }
+
 	printOn { |stream| stream << this.class.name << "(" << [name, addr, online] << ")" }
 
 }

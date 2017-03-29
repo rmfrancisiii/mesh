@@ -1,8 +1,10 @@
 // create a mesh,
 //  other hosts should use the same mesh name.
 Mesh(\mesh1).push;
-Mesh.me.addr.class.postln;
-Mesh(\mesh1)[\rose].addr.postln; //sndMsg('/ping');
+Mesh(\mesh1)[\river].sendMsg('/ping');
+Mesh(\mesh1)[\river].ping;
+Mesh(\mesh1)[\river].chat("....LULULULUULUULU!!!!!" );
+
 Mesh(\mesh1)[\river].addr.postln; //sndMsg('/ping');
 Mesh(\mesh1).ping;
 Mesh(\mesh1).hosts;
