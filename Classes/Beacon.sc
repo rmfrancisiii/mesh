@@ -80,6 +80,7 @@ Beacon {
 		// updates the host list, AND replies to the Beacon
 		OSCdef(outDefName, {|msg, time, addr, recvPort|
 			var newHost= msg[1].asString.asSymbol;
+			addr = addr.as(MeshHostAddr);
 			mesh.hostManager.updateHostList(newHost, addr, time);
 			addr.sendMsg(replyPath, me.name);
 		}, oscPath, recvPort: me.addr.port);
@@ -88,6 +89,7 @@ Beacon {
 		// and updates the host list.
 		OSCdef(inDefName, {|msg, time, addr, recvPort|
 			var newHost = msg[1].asString.asSymbol;
+			addr = addr.as(MeshHostAddr);
 			mesh.hostManager.updateHostList(newHost, addr, time);
 		}, replyPath, recvPort: me.addr.port);
 

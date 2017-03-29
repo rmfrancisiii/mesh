@@ -27,6 +27,15 @@ MeshHostAddr : NetAddr {
 		^super.new(hostname, ports.first).ports_(ports)
 	}
 
+	*newFrom { |item|
+
+		if(item.isKindOf(this)) { ^item };
+		if(item.isKindOf(NetAddr)) {
+			^this.new(item.ip, item.port)};
+		^ "I dont know what to do!".postln;
+		// ^this.new(item, MeshHostAddr.localAddr)
+	}
+
 	sendRaw{ arg rawArray;
 		ports.do{ |it|
 			this.port_( it );

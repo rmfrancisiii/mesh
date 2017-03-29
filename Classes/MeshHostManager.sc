@@ -74,7 +74,6 @@ MeshHostManager {
 		// new host!
 		if (host.isNil)
 		{
-			addr.postln;
 			"Host % has joined the mesh!!\n ".postf(name);
 			host = MeshHost(name, addr);
 			this.addHost(host);
