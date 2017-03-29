@@ -214,7 +214,7 @@ Mesh {
 		if (currentEnvironment === env)
 		{("Cannot remove current mesh").warn; ^nil} // post a warning
 		{
-			hostManager.free;
+			hostManager.free(me);
 
 			// list.atFail(this.name) {("No Such Mesh").warn};
 			meshList.removeAt(this.meshName);

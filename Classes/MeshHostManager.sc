@@ -104,6 +104,10 @@ MeshHostManager {
 	}
 
 	free {
+		|me|
+		"freee: ".post;
+		this[me.name].online = false;
+		hostList.changed(\offlineHost, hostList[me.name]);
 		beacon.stop;
 		beacon.free;
 	}
