@@ -54,8 +54,8 @@ Vertex(\vertexOne, \type1);
 
 Vertex(\vertexTwo, \type3);
 
-~vl[\vertexOne].synthdef.postln;
-~vl[\vertexTwo].synthdef.postln;
+~vl[\vertexOne].obj.postln;
+~vl[\vertexTwo].obj.postln;
 
 // eg:
 
