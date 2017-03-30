@@ -49,6 +49,13 @@ New:
 
 Mesh(\mesh1).push;
 
+~win.deactivate;
+
+Vertex(\serverOne, \server, \passArg1, \passArg2);
+
+Vertex(\serverOne).status;
+
+
 Vertex(\vertexOne, \type1);
 
 Vertex(\vertexTwo, \type3);
@@ -58,6 +65,13 @@ Vertex(\vertexTwo);
 Vertex(\vertexTwo).free;
 
 Vertex(\vertexTwo).joinMesh;
+
+Vertex(\stereoOut, \type1);
+
+
+
+
+
 
 ~vl[\vertexOne];
 ~vl[\vertexTwo].class; //.textString.postln;

@@ -1,0 +1,1 @@
+DebugMon { *new {|msg| if (Mesh.debug){("DEBUG:  " ++ msg).inform}} }

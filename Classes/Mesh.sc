@@ -97,10 +97,11 @@
 */
 
 Mesh {
-	classvar meshList, meshStack, me;
+	classvar meshList, meshStack, me, <>debug;
 	var meshName, env, hostManager, <>vertexList, <>meshView;
 
 	*initClass {
+		debug = true;
 		meshStack = [];
 		meshList = IdentityDictionary.new;
 		me = me.as(MeshHost);
