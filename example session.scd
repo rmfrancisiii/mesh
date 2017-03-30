@@ -46,14 +46,29 @@ UnitTest.gui;
 Vertex Syntax:
 -----------
 New:
+(
 
+DebugMon.on;
+MeshCommandParser.on;
 Mesh(\mesh1).push;
-
 ~win.deactivate;
+Mesh(\mesh1).hosts;
+//**
 
-Vertex(\serverOne, \server, \passArg1, \passArg2);
-
+Vertex(\serverOne, \server, Mesh.me, Server.local);
 Vertex(\serverOne).status;
+Vertex(\serverOne).boot;
+Vertex(\serverOne).devices;
+
+)
+
+a = [ ]; // store all the code evaluated in a
+this.codeDump = { |code| a = a.add(code) };
+1 + 3;
+f = { "hallo" };
+a.postcs;
+codeDump = nil; // reset to nil.
+
 
 
 Vertex(\vertexOne, \type1);

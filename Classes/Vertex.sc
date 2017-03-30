@@ -36,27 +36,22 @@ VertexAbstract {
 VertexServer : VertexAbstract {
 	var <>host, <>server;
 
-	*new { |myHost, myServer|
-		^ super.new.init(myHost, myServer)}
+	*new { |myHost, myServer| ^ super.new.init(myHost, myServer) }
 
 	init { |myHost, myServer|
 		host = myHost;
 		server = myServer;
 	}
 
-	status {
-		DebugMon(host);
-		DebugMon(server);
-	}
+	status { ^ server.status }
 
+	boot { ^ server.boot }
+
+	devices { ^ ServerOptions.devices }
 }
 
 VertexAudioOut : VertexAbstract {
-	var myServer;
-
-	plarp {
-	}
-
+	var myServer, numChannels;
 }
 
 VertexTypeOne : VertexAbstract  {
