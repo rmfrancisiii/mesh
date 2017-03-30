@@ -1,18 +1,12 @@
 // create a mesh,
 //  other hosts should use the same mesh name.
 Mesh(\mesh1).push;
-Mesh(\mesh1)[\river].sendMsg('/ping');
-Mesh(\mesh1)[\river].ping;
-Mesh(\mesh1)[\river].chat("....LULULULUULUULU!!!!!" );
-
-Mesh(\mesh1)[\river].addr.postln; //sndMsg('/ping');
-Mesh(\mesh1).ping;
-Mesh(\mesh1).hosts;
-Mesh.pop;
-Mesh(\mesh1).free;
 
 // create another mesh and push it onto the stack:
 Mesh(\mesh2).push;
+
+// create a third mesh without pushing it onto the stack:
+Mesh(\mesh3);
 
 // find out what mesh is active:
 Mesh.activeMesh;
@@ -21,17 +15,23 @@ Mesh.activeMesh;
 // the last one is the latest (we could reverse this)
 Mesh.stack;
 
+//pop it off the stack:
+Mesh.pop;
+
+// free it
+Mesh(\mesh2).free;
+
 // find out what hosts are available in the current mesh:
 Mesh(\mesh1).hosts;
 
 // or do the same thing using a shortcut:
-~mesh1.hostNames;
+~mesh1.hosts;
 
 // you can also find out info for a different mesh than the current one
-Mesh(\mesh1).hostNames;
+Mesh(\mesh3).hostNames;
 
 // but shortcuts only work for the current mesh
-~mesh1.hostNames;
+~mesh3.hostNames;
 
 // pop the top mesh off of the stack:
 Mesh.pop;

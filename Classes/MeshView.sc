@@ -2,16 +2,17 @@ MeshView {
 
 	var <>model, <>window, <>listView;
 
-	*new { |model|
-		^super.newCopyArgs(model).init(model);
+	*new { |mesh|
+		^super.newCopyArgs(mesh).init(mesh);
 	}
 
-	init { |mdl|
-		model = mdl;
-		model.addDependant(this);
+	init { |mesh|
+		var name = mesh.meshName.asSymbol;
+		var hostList = mesh.hostManager.hostList;
+		hostList.addDependant(this);
 		listView = ListView();
-		this.setListView(mdl);
-		this.makeGui;
+		this.setListView(hostList);
+		this.makeGui(name);
 	}
 
 	setListView {|obj|
@@ -20,8 +21,8 @@ MeshView {
 	}
 
 
-	makeGui {
-		window = Window(\window).front;
+	makeGui {|name|
+		window = Window(name).front;
 		window.layout = VLayout.new.add(listView);
 		window.alwaysOnTop = true;
 		window.onClose_({ model.removeDependant(this)});

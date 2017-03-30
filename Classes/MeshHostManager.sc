@@ -25,7 +25,7 @@
 */
 
 MeshHostManager {
-	var <hostList, <>hostview, <>timeoutList, <>beacon;
+	var <hostList, <>timeoutList, <>beacon;
 
 	*new {|mesh, me| ^ super.new.init(mesh, me) }
 
@@ -34,7 +34,6 @@ MeshHostManager {
 		timeoutList = IdentityDictionary.new;
 		beacon = Beacon.new(mesh, me);
 		this.addHost(me);
-		hostview = MeshView(hostList);
 	}
 
 	at {|name| ^ this.hostList.at(name)}

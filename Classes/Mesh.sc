@@ -98,7 +98,7 @@
 
 Mesh {
 	classvar meshList, meshStack, me;
-	var meshName, env, hostManager;
+	var meshName, env, hostManager, meshView;
 
 	*initClass {
 		meshStack = [];
@@ -158,6 +158,7 @@ Mesh {
 			~me = me;
 		});
 
+		meshView = MeshView(this);
 		// post a confirmation,
 		postf("New Mesh Created: % \n", meshName);
 
