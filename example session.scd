@@ -11,6 +11,7 @@ Mesh(\mesh3).free;
 Mesh(\mesh3);
 
 Mesh.list;
+Mesh.peek;
 
 // find out what mesh is active:
 Mesh.activeMesh;
@@ -23,7 +24,7 @@ Mesh.stack;
 Mesh.pop;
 
 // free it
-Mesh(\mesh3).free;
+Mesh(\mesh1).free;
 
 // find out what hosts are available in the current mesh:
 Mesh(\mesh1).hosts;
@@ -42,8 +43,6 @@ Mesh.pop;
 
 UnitTest.gui;
 
-////// STOP HERE //////////
-
 Vertex Syntax:
 -----------
 New:
@@ -54,16 +53,30 @@ Vertex(\vertexOne, \type1);
 
 Vertex(\vertexTwo, \type3);
 
-~vl[\vertexOne];
-~vl[\vertexOne].obj; //.textString.postln;
-~vl[\vertexOne].plarp;
+Vertex(\vertexTwo);
 
+Vertex(\vertexTwo).free;
+
+Vertex(\vertexTwo).joinMesh;
+
+~vl[\vertexOne];
+~vl[\vertexTwo].class; //.textString.postln;
+~vl[\vertexOne].plarp;
 ~vl[\vertexTwo].int.postln;
 
-// eg:
+
+////// STOP HERE //////////
 
 
-Create a new Vertex:
+
+
+
+
+
+
+
+
+Create a new Audio Server Vertex:
 Vertex.new(\stereoOut, \AudioOut)
 
 

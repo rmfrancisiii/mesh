@@ -9,32 +9,38 @@ Vertex {
 	}
 
 	*new {|name, type|
-
-		//this probably breaks some kind of rules? but makes nice syntax
-		var vertexList = Mesh.peek.vertexList;
-
-		^ vertexList[name] ?? {^ super.new.init(name, type, vertexList) }
+		var vertexList;
+		if (Mesh.peek.isNil){"Sorry, no active Mesh".error};
+		vertexList = Mesh.peek.vertexList
+		^ vertexList[name] ?? {^ super.new.init(name, type, vertexList)}
 	}
 
 	init {|myName, myType, myVertexList|
-		"initializing vertex".postln;
+		if (myType.isNil){^ "Vertex Does Not Exist. To create a Vertex, you must supply a type.".error};
 
+		"initializing vertex".postln;
 		name = myName.asSymbol;
 		type = myType.asSymbol;
 		obj = vertexTypeList[type].new;
-
 		myVertexList.add(name -> this);
 
 	}
 
-	free {
-		Mesh.peek.vertexList.removeAt[name]
+}
+
+VertexAbstract {
+
+	joinMesh {
+		"joining".postln;
 	}
 
+	free {
+		"Free This Now!".postln;
+	}
 
 }
 
-VertexTypeOne {
+VertexTypeOne : VertexAbstract {
 	var <>textString = "test number one";
 
 	plarp {
@@ -43,13 +49,13 @@ VertexTypeOne {
 
 }
 
-VertexTypeTwo {
+VertexTypeTwo : VertexAbstract  {
 	var <>symbol = \testSymbol;
 
 
 }
 
-VertexTypeThree {
+VertexTypeThree : VertexAbstract  {
 	var <>int = 54321;
 
 }
