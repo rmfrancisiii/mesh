@@ -46,8 +46,17 @@ UnitTest.gui;
 
 Vertex Syntax:
 -----------
+New:
 
-Vertex(\Vname, \VType, [arguments])
+Mesh(\mesh1).push;
+
+Vertex(\vertexOne, \type1);
+
+Vertex(\vertexTwo, \type3);
+
+~vl[\vertexOne].synthdef.postln;
+~vl[\vertexTwo].synthdef.postln;
+
 // eg:
 
 

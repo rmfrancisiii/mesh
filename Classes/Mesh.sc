@@ -98,7 +98,7 @@
 
 Mesh {
 	classvar meshList, meshStack, me;
-	var meshName, env, hostManager, <>meshView;
+	var meshName, env, hostManager, <>vertexList, <>meshView;
 
 	*initClass {
 		meshStack = [];
@@ -149,15 +149,17 @@ Mesh {
 
 		meshName = name.asSymbol;
 		hostManager = MeshHostManager.new(this, me);
+		vertexList = IdentityDictionary.new;
+		meshView = MeshView(this);
 		env = Environment.make {};
 		env.put(meshName.asSymbol, this);
 
 		env.use({
 			~mesh = meshName;
 			~me = me;
+			~vl = vertexList;
+			~win = meshView;
 		});
-
-		meshView = MeshView(this);
 		postf("New Mesh Created: % \n", meshName);
 
 	}
