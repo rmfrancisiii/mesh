@@ -149,7 +149,7 @@ Mesh {
 
 		meshName = name.asSymbol;
 		hostManager = MeshHostManager.new(this, me);
-		vertexList = IdentityDictionary.new;
+		vertexList = VertexList.new;
 		meshView = MeshView(this);
 		env = Environment.make {};
 		env.put(meshName.asSymbol, this);

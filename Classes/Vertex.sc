@@ -27,18 +27,29 @@ Vertex {
 
 	}
 
+	free {
+		Mesh.peek.vertexList.removeAt[name]
+	}
+
 
 }
 
 VertexTypeOne {
-	var textString = "test number one";
+	var <>textString = "test number one";
+
+	plarp {
+		"blahblah".postln;
+	}
+
 }
 
 VertexTypeTwo {
-	var symbol = \testSymbol;
+	var <>symbol = \testSymbol;
+
+
 }
 
 VertexTypeThree {
-	var int = 54321;
+	var <>int = 54321;
 
 }

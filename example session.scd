@@ -54,8 +54,11 @@ Vertex(\vertexOne, \type1);
 
 Vertex(\vertexTwo, \type3);
 
-~vl[\vertexOne].obj.postln;
-~vl[\vertexTwo].obj.postln;
+~vl[\vertexOne];
+~vl[\vertexOne].obj; //.textString.postln;
+~vl[\vertexOne].plarp;
+
+~vl[\vertexTwo].int.postln;
 
 // eg:
 
