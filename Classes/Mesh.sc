@@ -98,7 +98,7 @@
 
 Mesh {
 	classvar meshList, meshStack, me;
-	var meshName, env, hostManager, meshView;
+	var meshName, env, hostManager, <>meshView;
 
 	*initClass {
 		meshStack = [];
@@ -145,7 +145,6 @@ Mesh {
 		// TODO: this.
 	}
 
-	// Instance Methods
 	init {|name|
 
 		meshName = name.asSymbol;
@@ -159,7 +158,6 @@ Mesh {
 		});
 
 		meshView = MeshView(this);
-		// post a confirmation,
 		postf("New Mesh Created: % \n", meshName);
 
 	}
@@ -181,7 +179,8 @@ Mesh {
 	ping { ^hostManager.beacon.ping(me) }
 
 	push {
-		// activates this Mesh and pushes its environment onto the stack.
+
+		// pushes this mesh onto the stack and activates its environment.
 		if (currentEnvironment === env) {
 			// if this Mesh's Environment is already the current Environment,
 			"Mesh Already Current Environment!".warn; // warn the user
@@ -189,19 +188,28 @@ Mesh {
 		};
 
 		// otherwise:
+		if (meshStack.notNil and: { meshStack.notEmpty })
+		   {Mesh.peek.meshView.deactivate}; //.meshView.postln; //deactivate;
+
 		meshStack = meshStack.add(this);
 		env.push; // push this Mesh's Environment onto the Environment Stack
 		("Entering Mesh: " ++ meshName).inform; // post a confirmation,
+		meshView.activate;
 	}
 
 	pop {
-		// deactivates the current Mesh by name, and removes its environment from the Environment Stack.
+		// pops this mesh off of the stack and removes its environment from the Environment Stack.
 		// generally i would use Mesh.pop instead
+
+		// DECIDE: should this remove it from the stack entirely?
 		if (currentEnvironment === env)
 		{
+			meshView.deactivate;
 			("Leaving Mesh: " ++ meshName).inform; // post a confirmation,
 			env.pop;
 			meshStack.pop;
+			if (meshStack.notNil and: { meshStack.notEmpty })
+			  {Mesh.peek.meshView.activate};
 		}
 
 		{
@@ -221,6 +229,7 @@ Mesh {
 
 			// list.atFail(this.name) {("No Such Mesh").warn};
 			meshList.removeAt(this.meshName);
+			meshView.free;
 			("removed mesh").warn;
 		}
 	}

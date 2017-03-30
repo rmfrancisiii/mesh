@@ -22,11 +22,24 @@ MeshView {
 
 
 	makeGui {|name|
-		window = Window(name).front;
+		window = Window(name).visible_(false);
 		window.layout = VLayout.new.add(listView);
 		window.alwaysOnTop = true;
 		window.onClose_({ model.removeDependant(this)});
 	}
+
+	deactivate {
+		window.visible_(false);
+	}
+
+	activate {
+		window.visible_(true);
+	}
+
+	free {
+		window.close;
+	}
+
 
 	update { |obj, what, val| {this.setListView(obj)}.defer }
 

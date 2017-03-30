@@ -3,10 +3,14 @@
 Mesh(\mesh1).push;
 
 // create another mesh and push it onto the stack:
-Mesh(\mesh2).push;
+Mesh(\mesh3).push;
+
+Mesh(\mesh3).free;
 
 // create a third mesh without pushing it onto the stack:
 Mesh(\mesh3);
+
+Mesh.list;
 
 // find out what mesh is active:
 Mesh.activeMesh;
@@ -19,7 +23,7 @@ Mesh.stack;
 Mesh.pop;
 
 // free it
-Mesh(\mesh2).free;
+Mesh(\mesh3).free;
 
 // find out what hosts are available in the current mesh:
 Mesh(\mesh1).hosts;
