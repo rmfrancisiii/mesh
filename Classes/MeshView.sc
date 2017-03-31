@@ -17,7 +17,7 @@ MeshView {
 
 	setListView {|obj|
 		listView.items_(obj.collectAs({
-			|obj| obj.name ++ " | " ++ if(obj.online, "online", "offline")}, Array));
+			|obj| obj.name ++ " | " ++ if(obj.online, "online", "offline") ++ " | " ++ obj.ip}, Array));
 	}
 
 

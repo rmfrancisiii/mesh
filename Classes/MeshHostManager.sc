@@ -62,7 +62,7 @@ MeshHostManager {
 	hosts {
 		"Available hosts:".postln;
 		hostList.keysValuesDo {|key, value|
-			(key ++ " : " ++ if(value.online, "online", "offline")).postln;
+			(key ++ " : " ++ if(value.online, "online", "offline") ++ " : " ++ value.ip).postln;
 		}
 	}
 

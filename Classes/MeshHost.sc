@@ -37,6 +37,8 @@ MeshHost {
 	isOnline {
 		}
 
+	ip { ^ this.addr.ip}
+
 	ping {|msg| this.addr.sendMsg('/ping') }
 
 	chat {|msg| this.addr.sendMsg('/chat', msg) }

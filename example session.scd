@@ -43,32 +43,78 @@ Mesh.pop;
 
 UnitTest.gui;
 
+
+
+
+// Get the local server's options
+
+o = ServerOptions.new;
+o.protocol_(\tcp);
+o.maxLogins_(8)
+
+t = Server(\Local2, NetAddr("127.0.0.1", 57111), o);
+
+t.makeWindow;
+s.makeWindow;
+t.boot;
+t.quit;
+
+~win.deactivate;
+
 Vertex Syntax:
 -----------
 New:
-(
 
 DebugMon.on;
 MeshCommandParser.on;
 Mesh(\mesh1).push;
-~win.deactivate;
+
 Mesh(\mesh1).hosts;
 //**
 
-Vertex(\serverOne, \server, Mesh.me, Server.local);
+s = Server.local(\Local, NetAddr.localAddr);
+s.options.protocol_(\tcp);
+s.options.maxLogins_(8);
+
+s.reboot
+
+s.makeWindow;
+s.addr.connect;
+s.ping;
+
+r = Server.remote(\river, NetAddr(Mesh(\mesh1)[\river].addr.ip, 57110));
+r.options.protocol_(\tcp);
+r.options.maxLogins_(8);
+
+r.makeWindow;
+r.addr.connect;
+r.ping;
+
+r.addr;
+
+
+
+Vertex(\serverOne, \server, Mesh.me, s);
+
+Vertex(\serverTwo, \server, Mesh.me, r);
+
+
 Vertex(\serverOne).status;
+Vertex(\serverTwo).status;
+
 Vertex(\serverOne).boot;
+
+Vertex(\serverOne).connect
 Vertex(\serverOne).devices;
+Vertex(\serverOne).ping;
+Vertex(\serverOne).server;
+Vertex(\serverOne).addr;
 
-)
-
-a = [ ]; // store all the code evaluated in a
-this.codeDump = { |code| a = a.add(code) };
-1 + 3;
-f = { "hallo" };
-a.postcs;
-codeDump = nil; // reset to nil.
-
+Vertex(\serverTwo).connect
+Vertex(\serverTwo).devices;
+Vertex(\serverTwo).ping;
+Vertex(\serverTwo).server;
+Vertex(\serverTwo).addr;
 
 
 Vertex(\vertexOne, \type1);
