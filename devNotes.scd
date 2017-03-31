@@ -1,22 +1,90 @@
 /* Development notes
-/////////////////////////
 
-next steps:
+
+///////////
+Currently:
 ///////////
 
-Fix gui bug (look at defer)
+Working on VertexServer:
+
+  VertexServer should allow:
+    Creating a server object with either:
+
+       s = Server.local(\Local, NetAddr.localAddr);
+       Vertex(\serverOne, \server, Mesh.me, s);
+
+          - or something like (maybe could simplify this):
+
+       r = Server.remote(\river, NetAddr(Mesh(\mesh1)[\river].addr.ip, 57110));
+       Vertex(\serverTwo, \server, Mesh(\mesh1)[\river], r);
+
+    once created on one machine on the Mesh it should be passed
+    around to the other participants via the network, who should "handle"
+    identifying local/remote, setting server options, etc, and making it available.
+
 
 
 
 ///////////
 Completed:
 ///////////
+3/31/17:
+  Trying to use doesNotUnderstand to pass unknown method calls
+  up the chain of command, not by Object Inheritance,
+  but by the definitions of our own occult system. e.g.
+
+     Vertex(\serverOne).protocol;
+
+  should pass through to
+
+     VertexServer.server.protocol;
+
+  NOT AbstractServer.proocol. I think IdentityDictionary does something similar but my
+  Aramaic is rusty. maybe:
+
+    tryPerform YES!!!!
+
+3/30/17:
+  added MeshDebugMon
+    allows adding Debug(something) calls anywhere in the code and
+    when MeshDebugMon.on it outputs something to the post window
+    these should be removed from performance code where latency might matter
+
+    needs:
+       * Documentation
+       * Help File
+       * Unit Test
+
+  added MeshCommandParser
+    when MeshCommandParser.on, this runs in the interpreter
+    and preprocesses executed code, checking for a matching expression
+    this will allow shortcuts to pretty much anything, of the type:
+      //** -> Mesh.peek.ping
+    this could add a little latency (one extra conditional per shortcut checked)
+
+    needs:
+       * maybe a better/more legible init class,
+       * a way to map shortcuts on the fly?
+       * Documentation
+       * Help File
+       * Unit Test
+
+  Created initial VertexServer vertex type
+    intended to provide access to SC Servers on local and remote machines on the mesh
+
+
+3/29/17:
+  Basic Vertex functionality,
+  Class Vertex serves as a factory and a registry
+  VertexAbstract is abstract superclass for the classes located in Classes/VertexTypes
 
 3/28/17:
 
-Better ping.
-  Mesh(\mesh1).ping;
-  I want everyone to see a line in the post window that says "codedoval pinged the mesh"
+  Fixed gui bug (look at defer)
+
+  Better ping for Jeff:
+    Mesh(\mesh1).ping;
+    I want everyone to see a line in the post window that says "codedoval pinged the mesh"
 
 3/27/17:
   Quark Install Working (w/dependency on UnitTesting)

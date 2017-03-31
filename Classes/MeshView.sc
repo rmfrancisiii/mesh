@@ -23,10 +23,15 @@ MeshView {
 
 	makeGui {|name|
 		window = Window(name).visible_(false);
+		window.bounds = Rect(1271, 5, 169, 873);
 		window.layout = VLayout.new.add(listView);
 		window.alwaysOnTop = true;
 		window.onClose_({ model.removeDependant(this)});
 	}
+
+	bounds {^ window.bounds}
+
+	bounds_{|rect| window.bounds_(rect)}
 
 	deactivate {
 		window.visible_(false);

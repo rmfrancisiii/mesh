@@ -5,7 +5,12 @@ Vertex {
 
 	*initClass {
 		// obv this should come from a list of vertex types somewhere
-		vertexTypeList = IdentityDictionary.with(*[\server -> VertexServer, \type1 -> VertexTypeOne, \type2-> VertexTypeOne, \type3-> VertexTypeThree]);
+		vertexTypeList = IdentityDictionary.with(*[
+			\server -> VertexServer,
+			\type1 -> VertexTypeOne,
+			\type2-> VertexTypeOne,
+			\type3-> VertexTypeThree
+		]);
 	}
 
 	*new {|name, type ... passArgs|

@@ -1,4 +1,4 @@
-DebugMon {
+MeshDebugMon {
 	classvar debug = true;
 
 	*new {

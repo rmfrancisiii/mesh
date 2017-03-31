@@ -43,78 +43,44 @@ Mesh.pop;
 
 UnitTest.gui;
 
+Mesh(\mesh1).hosts;
 
 
 
-// Get the local server's options
-
-o = ServerOptions.new;
-o.protocol_(\tcp);
-o.maxLogins_(8)
-
-t = Server(\Local2, NetAddr("127.0.0.1", 57111), o);
-
-t.makeWindow;
-s.makeWindow;
-t.boot;
-t.quit;
-
-~win.deactivate;
 
 Vertex Syntax:
 -----------
 New:
 
-DebugMon.on;
+MeshDebugMon.on;
 MeshCommandParser.on;
+
 Mesh(\mesh1).push;
 
-Mesh(\mesh1).hosts;
-//**
-
 s = Server.local(\Local, NetAddr.localAddr);
-s.options.protocol_(\tcp);
-s.options.maxLogins_(8);
-
-s.reboot
-
-s.makeWindow;
-s.addr.connect;
-s.ping;
-
-r = Server.remote(\river, NetAddr(Mesh(\mesh1)[\river].addr.ip, 57110));
-r.options.protocol_(\tcp);
-r.options.maxLogins_(8);
-
-r.makeWindow;
-r.addr.connect;
-r.ping;
-
-r.addr;
-
-
-
 Vertex(\serverOne, \server, Mesh.me, s);
 
+Vertex(\serverOne).boot;
+Vertex(\serverOne).server.options.protocol;
+Vertex(\serverOne).protocol;
+Vertex(\serverOne).maxLogins_(8);
+Vertex(\serverOne).maxLogins;
+Vertex(\serverOne).status;
+Vertex(\serverOne).addr;
+Vertex(\serverOne).makeWindow;
+Vertex(\serverOne).connect;
+Vertex(\serverOne).ping;
+
+r = Server.remote(\river, NetAddr(Mesh(\mesh1)[\river].addr.ip, 57110));
 Vertex(\serverTwo, \server, Mesh.me, r);
 
-
-Vertex(\serverOne).status;
+Vertex(\serverTwo).protocol;
+Vertex(\serverTwo).maxLogins;
 Vertex(\serverTwo).status;
-
-Vertex(\serverOne).boot;
-
-Vertex(\serverOne).connect
-Vertex(\serverOne).devices;
-Vertex(\serverOne).ping;
-Vertex(\serverOne).server;
-Vertex(\serverOne).addr;
-
-Vertex(\serverTwo).connect
-Vertex(\serverTwo).devices;
-Vertex(\serverTwo).ping;
-Vertex(\serverTwo).server;
 Vertex(\serverTwo).addr;
+Vertex(\serverTwo).makeWindow;
+Vertex(\serverTwo).connect;
+Vertex(\serverTwo).ping;
 
 
 Vertex(\vertexOne, \type1);
@@ -189,3 +155,39 @@ TestDepClassVar(\test1, "test 1");
 TestDepClassVar(\test2, "test 2");
 TestDepClassVar(\test1, "test changed");
 
+
+
+/*
+
+// Get the local server's options
+
+o = ServerOptions.new;
+o.protocol_(\tcp);
+o.maxLogins_(8)
+
+t = Server(\Local2, NetAddr("127.0.0.1", 57111), o);
+
+t.makeWindow;
+s.makeWindow;
+t.boot;
+t.quit;
+
+~win.deactivate;
+
+
+		s.makeWindow;
+		s.addr.connect;
+		s.ping;
+
+		r.options.protocol_(\tcp);
+		r.options.maxLogins_(8);
+
+		r.makeWindow;
+		r.addr.connect;
+		r.ping;
+
+		r.addr;
+
+		// FIXME: add filter to prevent or pass boot messages over network?
+		^ server.boot
+*/

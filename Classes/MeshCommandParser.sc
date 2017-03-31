@@ -8,7 +8,7 @@ MeshCommandParser{
 
 	*on { thisProcess.interpreter.codeDump = pingFunc }
 
-	*off { thisProcess.interpreter.codeDump.removeFunc(pingFunc) }
+	*off { thisProcess.interpreter.codeDump = nil }
 
 	*status { if (active) {^"on"}{^"off"} }
 }
