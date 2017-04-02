@@ -57,6 +57,9 @@ Working on VertexServer:
 Completed:
 ///////////
 4/1/17:
+  fixed dynamic Vertex Type List to include all subclasses of VertexAbstract, and to initialize OSCdefs if possible
+  added doesNotUnderstand to MeshHost to pass method requests to the MeshHostAddr
+
 
 
 

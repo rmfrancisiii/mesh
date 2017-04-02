@@ -6,17 +6,16 @@ Vertex {
 	classvar vertexTypeList;
 	var <>obj;
 
-	*initClass {
-		vertexTypeList = this.getVertexTypeList;
-	}
+	*initVertexTypeList { // called by Mesh.initClass
+		vertexTypeList = VertexAbstract.subclasses.collectAs({|item|
+			var key = item.name.asString.drop(6);
+			key[0] = key.first.toLower;
+			key.asSymbol -> item;
+		}, IdentityDictionary);
 
-	*getVertexTypeList {
-		// TODO: this should be abstracted
-		^ IdentityDictionary.with(*[
-			\server -> VertexServer,
-			\audioOut -> VertexAudioOut,
-			\audioIn -> VertexAudioIn
-		]);
+		// For all vertex types, try initializing their OSCdefs:
+		vertexTypeList.keysValuesDo({|key, value| value.tryPerform(\makeOSCDefs)});
+
 	}
 
 	*new {|name, type ... passArgs|

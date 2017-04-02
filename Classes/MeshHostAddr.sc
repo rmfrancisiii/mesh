@@ -28,11 +28,10 @@ MeshHostAddr : NetAddr {
 	}
 
 	*newFrom { |item|
-
 		if(item.isKindOf(this)) { ^item };
 		if(item.isKindOf(NetAddr)) {
 			^this.new(item.ip, item.port)};
-		^ "I dont know what to do with this!".postln;
+		^ "I dont know what to do with this!".error;
 	}
 
 	sendRaw{ arg rawArray;

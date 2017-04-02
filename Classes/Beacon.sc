@@ -102,7 +102,6 @@ Beacon {
 			(msg[1]).postln;
 		}, '/chat', recvPort: me.addr.port);
 
-
 		OSCdef(\pingReply, {|msg, time, addr, recvPort|
 			(msg[1] ++ " replied to your ping on: " ++ mesh.name).postln;
 		}, '/pingReply', recvPort: me.addr.port);

@@ -104,6 +104,7 @@ Mesh {
 		meshStack = [];
 		meshList = IdentityDictionary.new;
 		me = me.as(MeshHost);
+		Vertex.initVertexTypeList;
 	}
 
 	*at {|name| ^ this.meshList.at(name)}

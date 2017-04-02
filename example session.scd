@@ -44,7 +44,7 @@ Mesh.pop;
 UnitTest.gui;
 
 Mesh(\mesh1).hosts;
-
+Mesh(\mesh1).ping;
 
 
 
@@ -55,15 +55,22 @@ New:
 MeshDebugMon.on;
 MeshCommandParser.on;
 
+VertexServer.makeOSCDefs;
+		"Make VertexServer OSC Defs".postln;
+
+
 Mesh(\mesh1).push;
 
 s = Server.local(\Local, NetAddr.localAddr);
 Vertex(\serverOne, \server, Mesh.me, s);
 
-Vertex(\serverOne).boot;
+Mesh.me.sendMsg("/VertexServer/spawn");
+
+Vertex(\serverOne).host;
+Vertex(\serverOne).reboot;
 Vertex(\serverOne).protocol;
 Vertex(\serverOne).maxLogins;
-Vertex(\serverOne).maxLogins_(4);
+Vertex(\serverOne).maxLogins_(8);
 Vertex(\serverOne).maxLogins;
 Vertex(\serverOne).status;
 Vertex(\serverOne).addr;
@@ -71,13 +78,12 @@ Vertex(\serverOne).makeWindow;
 Vertex(\serverOne).connect;
 Vertex(\serverOne).ping;
 
-
 Mesh(\mesh1).vertexList;
 
-
 r = Server.remote(\river, NetAddr(Mesh(\mesh1)[\river].addr.ip, 57110));
-Vertex(\serverTwo, \server, Mesh.me, r);
+Vertex(\serverTwo, \server, Mesh(\mesh1)[\river], r);
 
+Vertex(\serverTwo).host.name;
 Vertex(\serverTwo).protocol;
 Vertex(\serverTwo).maxLogins;
 Vertex(\serverTwo).status;
@@ -85,6 +91,14 @@ Vertex(\serverTwo).addr;
 Vertex(\serverTwo).makeWindow;
 Vertex(\serverTwo).connect;
 Vertex(\serverTwo).ping;
+
+OSCdef.all;
+
+
+
+
+
+
 
 
 Vertex(\vertexOne, \type1);

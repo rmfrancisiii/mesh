@@ -2,16 +2,43 @@ VertexServer : VertexAbstract {
 	var <>host, <>server;
 
 	*initClass {
-
 	}
 
 	*new { |myHost, myServer| ^ super.new.init(myHost, myServer) }
 
+
 	init { |myHost, myServer|
-		host = myHost;
-		server = myServer;
-		this.setParams;
+
+		// TODO: Check to be sure the following are for a local server.
+
+
+		if (myHost == Mesh.me)
+		{ // if its being added to THIS machine:
+
+			"Local Server".postln;
+			host = myHost;
+			server = myServer;
+			this.setParams;
+			this.boot;
+			this.notifyMesh;
+
+		}
+
+		{ // What if it's on a remote server?
+
+			"Creating A Remote Server!!!".postln;
+			host = myHost;
+			server = myServer;
+			this.setParams;
+			// this.reboot;
+		}
+
 	}
+
+	*makeOSCDefs { // Called by Vertex.initVertexTypeList
+		OSCdef(\VertexServer, {|msg, time, addr, recvPort| "Spawn a vertex Server".postln}, '/VertexServer/spawn', Mesh.me.addr);
+	}
+
 
 	doesNotUnderstand {|selector ... args|
 		// TODO: need to check order?
@@ -26,23 +53,8 @@ VertexServer : VertexAbstract {
 		server.options.maxLogins_(8);
 	}
 
-	// status { ^ server.status }
-
-	// TODO: Check to be sure the following are for a local server.
-	// MAYBE: add remote method calls?
-
-	boot {
-		server.reboot
+	notifyMesh {
+		"Spread the word!!".postln;
 	}
 
-	devices {
-		^ ServerOptions.devices
-	}
-
-	// protocol{^ server.options.protocol}
-	// maxLogins{^ server.options.maxLogins}
-	// ping { ^ server.ping }
-	// addr {^ server.addr }
-	// connect {^ server.addr.connect}
-	// makeWindow {^ server.makeWindow}
 }

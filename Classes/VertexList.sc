@@ -8,8 +8,8 @@ VertexList : IdentityDictionary {
 
 		// But I'm returning something different:
 		// if the key's not there, I still want to return nil, because nil.obj will throw an exception
-		// and i'm using that nil in Vertex.new to create a new vertex. OR modify an existing Vertex
-		// BUT: if it's a valid entry in the dictionary, I want to return the internal object i.e.
+		// and i'm using that nil in Vertex.new to decide whether it creates a new vertex or returns an existing Vertex
+		// so, if it's a valid entry in the dictionary, I want to return the internal object i.e.
 		// vertex.obj instead of just vertex.
 
 		^ me !? {^ me.obj};
