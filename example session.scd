@@ -61,15 +61,19 @@ s = Server.local(\Local, NetAddr.localAddr);
 Vertex(\serverOne, \server, Mesh.me, s);
 
 Vertex(\serverOne).boot;
-Vertex(\serverOne).server.options.protocol;
 Vertex(\serverOne).protocol;
-Vertex(\serverOne).maxLogins_(8);
+Vertex(\serverOne).maxLogins;
+Vertex(\serverOne).maxLogins_(4);
 Vertex(\serverOne).maxLogins;
 Vertex(\serverOne).status;
 Vertex(\serverOne).addr;
 Vertex(\serverOne).makeWindow;
 Vertex(\serverOne).connect;
 Vertex(\serverOne).ping;
+
+
+Mesh(\mesh1).vertexList;
+
 
 r = Server.remote(\river, NetAddr(Mesh(\mesh1)[\river].addr.ip, 57110));
 Vertex(\serverTwo, \server, Mesh.me, r);

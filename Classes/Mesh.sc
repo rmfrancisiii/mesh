@@ -154,6 +154,7 @@ Mesh {
 		env = Environment.make {};
 		env.put(meshName.asSymbol, this);
 
+		// TODO: consider expanding these, to what? vertexes? hosts? etc.
 		env.use({
 			~mesh = meshName;
 			~me = me;

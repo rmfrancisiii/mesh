@@ -20,14 +20,46 @@ Working on VertexServer:
 
     once created on one machine on the Mesh it should be passed
     around to the other participants via the network, who should "handle"
-    identifying local/remote, setting server options, etc, and making it available.
+    identifying local/remote, setting server options, etc,
+    and making it available in the mesh vertex list.
+
+  at least for version 0.0, the Server will be at the end of a signal path,
+  so essentially it determines the location of running synth nodes.
+  when any other node is created, in order for it to be played,
+  a server node with an audio out device should be connected
+
+  Process:
+  1. Server created on \HostOne.
+  2. HostOne sends Announcement message on BroadcastAddr
+       Announcement: (HostA, \newServer, OSC Addr, IP Addr, Port Number, number of audioOut channels, running?)
+  3. HostTwo and HostThree parse Announcement
 
 
+  Necessary OSC Commands:
+  * serverAdded
+  * serverRemoved
 
+  Useful OSC Commands:
+  * serverBoot
+  * serverReboot
+  * serverSendMsg
+  * serverOutputBus
+  * serverQueryAllNodes
+  * serverMute
+
+  Ideas:
+  * look into persistent Node Trees for bringing back State if the Server has to be rebooted.
+  * meters? Scope? plotting?
+  * Recording? Number of Channels?
+  * Buffers?
 
 ///////////
 Completed:
 ///////////
+4/1/17:
+
+
+
 3/31/17:
   Trying to use doesNotUnderstand to pass unknown method calls
   up the chain of command, not by Object Inheritance,
@@ -42,7 +74,7 @@ Completed:
   NOT AbstractServer.proocol. I think IdentityDictionary does something similar but my
   Aramaic is rusty. maybe:
 
-    tryPerform YES!!!!
+    tryPerform... YES!!!!
 
 3/30/17:
   added MeshDebugMon

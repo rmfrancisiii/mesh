@@ -14,7 +14,7 @@ VertexServer : VertexAbstract {
 	}
 
 	doesNotUnderstand {|selector ... args|
-		// var options = server.options;
+		// TODO: need to check order?
 		var result = nil;
 		(result = server.tryPerform(selector, *args)) !? { ^ result };
 		(result = server.options.tryPerform(selector, *args)) !? { ^ result };
@@ -28,22 +28,21 @@ VertexServer : VertexAbstract {
 
 	// status { ^ server.status }
 
-	boot { server.reboot }
+	// TODO: Check to be sure the following are for a local server.
+	// MAYBE: add remote method calls?
 
-	//protocol{^ server.options.protocol}
+	boot {
+		server.reboot
+	}
 
-	maxLogins{^ server.options.maxLogins}
+	devices {
+		^ ServerOptions.devices
+	}
 
-
-
-
-	devices { ^ ServerOptions.devices }
-
+	// protocol{^ server.options.protocol}
+	// maxLogins{^ server.options.maxLogins}
 	// ping { ^ server.ping }
-
 	// addr {^ server.addr }
-
 	// connect {^ server.addr.connect}
-
 	// makeWindow {^ server.makeWindow}
 }

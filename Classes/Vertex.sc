@@ -1,22 +1,28 @@
 Vertex {
+
+	// This is the interface for creating and controlling vertexes,
+	// any method calls get passed to the vertex
+
 	classvar vertexTypeList;
 	var <>obj;
 
-
 	*initClass {
-		// obv this should come from a list of vertex types somewhere
-		vertexTypeList = IdentityDictionary.with(*[
+		vertexTypeList = this.getVertexTypeList;
+	}
+
+	*getVertexTypeList {
+		// TODO: this should be abstracted
+		^ IdentityDictionary.with(*[
 			\server -> VertexServer,
-			\type1 -> VertexTypeOne,
-			\type2-> VertexTypeOne,
-			\type3-> VertexTypeThree
+			\audioOut -> VertexAudioOut,
+			\audioIn -> VertexAudioIn
 		]);
 	}
 
 	*new {|name, type ... passArgs|
 		var vertexList;
 		if (Mesh.peek.isNil){"Sorry, no active Mesh".error};
-		vertexList = Mesh.peek.vertexList
+		vertexList = Mesh.peek.vertexList;
 		^ vertexList[name] ?? {^ super.new.init(name, type, vertexList, passArgs)}
 	}
 
@@ -28,35 +34,8 @@ Vertex {
 
 }
 
-VertexAbstract {
-
-	joinMesh {
-	}
-
-	free {
-	}
-
-}
 
 
 
-VertexAudioOut : VertexAbstract {
-	var myServer, numChannels;
-}
-
-VertexTypeOne : VertexAbstract  {
-	var <>symbol = \testSymbol;
 
 
-}
-
-VertexTypeTwo : VertexAbstract  {
-	var <>symbol = \testSymbol;
-
-
-}
-
-VertexTypeThree : VertexAbstract  {
-	var <>int = 54321;
-
-}
