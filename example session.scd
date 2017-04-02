@@ -54,6 +54,7 @@ New:
 
 MeshDebugMon.on;
 MeshCommandParser.on;
+~win.deactivate;
 
 
 
@@ -99,10 +100,6 @@ OSCdef.all;
 
 Mesh(\mesh1)[\river].sendMsg("/VertexServer/spawn");
 
-
-
-
-
 ////// STOP HERE //////////
 
 Vertex(\stereoOut, \audioOut);
@@ -114,63 +111,33 @@ Vertex(\fmSynth).setOut(\stereoOut);
 
 
 // or:
-Vertex(\sinSynth, \Instrument, [\fm, \stereoOut, freq=440, carPartial = 1, modPartial = 1, index = 3, dur=1.0, amp=0.25, pan=0, att=0.15, mod1=0.001, mod2=0.001])
+Vertex(\fmSynth, \Instrument, \fm, \stereoOut,
+	[
+		freq=440,
+		carPartial = 1,
+		modPartial = 1,
+		index = 3,
+		dur=1.0,
+		amp=0.25,
+		pan=0,
+		att=0.15,
+		mod1=0.001,
+		mod2=0.001
+	]
+)
 
 // or:
-Vertex(\sinSynth, \Instrument, [
+Vertex(\sinSynth, \Instrument,
 	{var mod = SinOsc.ar(freq * modPartial, 0,
-    freq * index * LFNoise1.kr(5.reciprocal).abs);
-	var car = SinOsc.ar((freq * carPartial) + mod, 0, amp);
-	var env = Env([0.001, 0.9, 0.001], [att, 1.0-att], [\sin, \sin]);
-	var envGen = EnvGen.kr(env, doneAction: 2, timeScale: dur);
-	Out.ar(outBus, Pan2.ar(car * envGen, pan))},
-	\stereoOut, freq=440, carPartial = 1, modPartial = 1, index = 3, dur=1.0,
-	amp=0.25, pan=0, att=0.15, mod1=0.001, mod2=0.001])
+		 freq * index * LFNoise1.kr(5.reciprocal).abs);
+	 var car = SinOsc.ar((freq * carPartial) + mod, 0, amp);
+	 var env = Env([0.001, 0.9, 0.001], [att, 1.0-att], [\sin, \sin]);
+	 var envGen = EnvGen.kr(env, doneAction: 2, timeScale: dur);
+	Out.ar(outBus, Pan2.ar(car * envGen, pan))})
 
 // AND:
 
-Vertex(\sinPattern, \PVert, [trunk: \sinSynth])
+Vertex(\sinPattern, \PVert, trunk: \sinSynth)
 
 
 
-
-TestDepClassVar(\test1, "test 1");
-TestDepClassVar(\test2, "test 2");
-TestDepClassVar(\test1, "test changed");
-
-
-
-/*
-
-// Get the local server's options
-
-o = ServerOptions.new;
-o.protocol_(\tcp);
-o.maxLogins_(8)
-
-t = Server(\Local2, NetAddr("127.0.0.1", 57111), o);
-
-t.makeWindow;
-s.makeWindow;
-t.boot;
-t.quit;
-
-~win.deactivate;
-
-
-		s.makeWindow;
-		s.addr.connect;
-		s.ping;
-
-		r.options.protocol_(\tcp);
-		r.options.maxLogins_(8);
-
-		r.makeWindow;
-		r.addr.connect;
-		r.ping;
-
-		r.addr;
-
-		// FIXME: add filter to prevent or pass boot messages over network?
-		^ server.boot
-*/
