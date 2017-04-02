@@ -35,6 +35,10 @@ VertexServer : VertexAbstract {
 
 	}
 
+	spawn {
+
+	}
+
 	*makeOSCDefs { // Called by Vertex.initVertexTypeList
 		OSCdef(\VertexServer, {|msg, time, addr, recvPort| "Spawn a vertex Server".postln}, '/VertexServer/spawn', Mesh.me.addr);
 	}

@@ -55,13 +55,15 @@ New:
 MeshDebugMon.on;
 MeshCommandParser.on;
 
-VertexServer.makeOSCDefs;
-		"Make VertexServer OSC Defs".postln;
 
 
 Mesh(\mesh1).push;
 
-s = Server.local(\Local, NetAddr.localAddr);
+s = Server.local(\Local, Mesh.me);
+
+// Vertex(\vertexName, \vertexType, \arg1 ...args);
+// this is the same as Vertex(\vertexName).new(\vertexType, \arg1 ...args);
+
 Vertex(\serverOne, \server, Mesh.me, s);
 
 Mesh.me.sendMsg("/VertexServer/spawn");
@@ -80,6 +82,7 @@ Vertex(\serverOne).ping;
 
 Mesh(\mesh1).vertexList;
 
+
 r = Server.remote(\river, NetAddr(Mesh(\mesh1)[\river].addr.ip, 57110));
 Vertex(\serverTwo, \server, Mesh(\mesh1)[\river], r);
 
@@ -94,59 +97,21 @@ Vertex(\serverTwo).ping;
 
 OSCdef.all;
 
+Mesh(\mesh1)[\river].sendMsg("/VertexServer/spawn");
 
 
 
-
-
-
-
-Vertex(\vertexOne, \type1);
-
-Vertex(\vertexTwo, \type3);
-
-Vertex(\vertexTwo);
-
-Vertex(\vertexTwo).free;
-
-Vertex(\vertexTwo).joinMesh;
-
-Vertex(\stereoOut, \type1);
-
-
-
-
-
-
-~vl[\vertexOne];
-~vl[\vertexTwo].class; //.textString.postln;
-~vl[\vertexOne].plarp;
-~vl[\vertexTwo].int.postln;
 
 
 ////// STOP HERE //////////
 
-
-
-
-
-
-
-
-
-
-Create a new Audio Server Vertex:
-Vertex.new(\stereoOut, \AudioOut)
-
-
-
-
+Vertex(\stereoOut, \audioOut);
 Vertex(\stereoOut).setServer(\hostAddr);
+Vertex(\sinSynth, \instrument, \sin);
+Vertex(\fmSynth, \instrument, \fm);
+Vertex(\fmSynth).setOut(\stereoOut);
 
 
-// AND:
-
-Vertex(\sinSynth, \Instrument, [\fm, \stereoOut])
 
 // or:
 Vertex(\sinSynth, \Instrument, [\fm, \stereoOut, freq=440, carPartial = 1, modPartial = 1, index = 3, dur=1.0, amp=0.25, pan=0, att=0.15, mod1=0.001, mod2=0.001])
