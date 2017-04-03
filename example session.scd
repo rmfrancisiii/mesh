@@ -55,51 +55,27 @@ New:
 MeshDebugMon.on;
 MeshCommandParser.on;
 ~win.deactivate;
-
+//**
 
 
 Mesh(\mesh1).push;
 
 s = Server.local(\Local, Mesh.me);
-
-// Vertex(\vertexName, \vertexType, \arg1 ...args);
-// this is the same as Vertex(\vertexName).new(\vertexType, \arg1 ...args);
-
 Vertex(\serverOne, \server, Mesh.me, s);
-
-Mesh.me.sendMsg("/VertexServer/spawn");
-
-Vertex(\serverOne).host;
 Vertex(\serverOne).reboot;
-Vertex(\serverOne).protocol;
-Vertex(\serverOne).maxLogins;
-Vertex(\serverOne).maxLogins_(8);
-Vertex(\serverOne).maxLogins;
-Vertex(\serverOne).status;
-Vertex(\serverOne).addr;
-Vertex(\serverOne).makeWindow;
 Vertex(\serverOne).connect;
 Vertex(\serverOne).ping;
-
 Mesh(\mesh1).vertexList;
-
+Mesh.me.sendMsg("/VertexServer/spawn");
 
 r = Server.remote(\river, NetAddr(Mesh(\mesh1)[\river].addr.ip, 57110));
 Vertex(\serverTwo, \server, Mesh(\mesh1)[\river], r);
-
-Vertex(\serverTwo).host.name;
-Vertex(\serverTwo).protocol;
-Vertex(\serverTwo).maxLogins;
-Vertex(\serverTwo).status;
-Vertex(\serverTwo).addr;
-Vertex(\serverTwo).makeWindow;
 Vertex(\serverTwo).connect;
 Vertex(\serverTwo).ping;
 
 OSCdef.all;
 
 Mesh(\mesh1)[\river].sendMsg("/VertexServer/spawn");
-
 ////// STOP HERE //////////
 
 Vertex(\stereoOut, \audioOut);

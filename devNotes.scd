@@ -5,37 +5,18 @@
 Currently:
 ///////////
 
-Working on VertexServer:
-
-  VertexServer should allow:
-    Creating a server object with either:
-
-       s = Server.local(\Local, NetAddr.localAddr);
-       Vertex(\serverOne, \server, Mesh.me, s);
-
-          - or something like (maybe could simplify this):
-
-       r = Server.remote(\river, NetAddr(Mesh(\mesh1)[\river].addr.ip, 57110));
-       Vertex(\serverTwo, \server, Mesh(\mesh1)[\river], r);
-
-    once created on one machine on the Mesh it should be passed
-    around to the other participants via the network, who should "handle"
-    identifying local/remote, setting server options, etc,
-    and making it available in the mesh vertex list.
-
+VertexServer: A Vertex that represents a Supercollider server node.
   at least for version 0.0, the Server will be at the end of a signal path,
   so essentially it determines the location of running synth nodes.
   when any other node is created, in order for it to be played,
   a server node with an audio out device should be connected
 
-  Process:
-  1. Server created on \HostOne.
-  2. HostOne sends Announcement message on BroadcastAddr
-       Announcement: (HostA, \newServer, OSC Addr, IP Addr, Port Number, number of audioOut channels, running?)
-  3. HostTwo and HostThree parse Announcement
+	Instance Variables:
+		Host : A MeshHostAddr
+		Server: a Server (may be local OR remote)
 
 
-  Necessary OSC Commands:
+ Necessary OSC Commands:
   * serverAdded
   * serverRemoved
 
@@ -53,15 +34,74 @@ Working on VertexServer:
   * Recording? Number of Channels?
   * Buffers?
 
+
+
+Pseudocode:
+////////////////
+1. NEW(host, server, [options])
+	If Local:
+		set Host = Mesh.me
+		set Params = *[options]
+		set Server = Server.local(\Local, Mesh.me);
+		send SPAWN_SIGNAL
+		Reboot Server;
+		Wait for boot;
+		server.connect;
+		send SPAWN_REPLY;
+
+	If Remote:
+		set Host = Mesh(\mesh1)[\river]
+		set Params = *[options]
+		set Server = Server.remote(\river, NetAddr(Mesh(\mesh1)[\river].addr.ip, 57110))
+		send SPAWN_SIGNAL
+		wait for SPAWN_REPLY;
+		server.connect
+
+2. SPAWN_SIGNAL():
+	BroadcastAddr:
+		'/VertexServer/spawn'
+		(Host, Server, OSC Addr, IP Addr, Port Number, Options:[eg. maxLogins, sampleRate])
+
+3. SPAWN_REPLY():
+	BroadcastAddr:
+		'/VertexServer/spawnReply'
+
+////////////////////
+*/// Example Code:
+////////////////////
+
+s = Server.local(\Local, Mesh.me);
+Vertex(\serverOne, \server, Mesh.me, s);
+Vertex(\serverOne).connect;
+
+// or
+
+r = Server.remote(\river, NetAddr(Mesh(\mesh1)[\river].addr.ip, 57110));
+Vertex(\serverTwo, \server, Mesh(\mesh1)[\river], r);
+Vertex(\serverTwo).connect;
+
+
+
+
+
+
+
+
+
+
+
+
+////////////
+/* Completed:
 ///////////
-Completed:
-///////////
+
+4/2/17:
+  Merged Vertex branch back into master,
+  started VertexServer Branch
+
 4/1/17:
   fixed dynamic Vertex Type List to include all subclasses of VertexAbstract, and to initialize OSCdefs if possible
   added doesNotUnderstand to MeshHost to pass method requests to the MeshHostAddr
-
-
-
 
 3/31/17:
   Trying to use doesNotUnderstand to pass unknown method calls
