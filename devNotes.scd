@@ -15,27 +15,6 @@ VertexServer: A Vertex that represents a Supercollider server node.
 		Host : A MeshHostAddr
 		Server: a Server (may be local OR remote)
 
-
- Necessary OSC Commands:
-  * serverAdded
-  * serverRemoved
-
-  Useful OSC Commands:
-  * serverBoot
-  * serverReboot
-  * serverSendMsg
-  * serverOutputBus
-  * serverQueryAllNodes
-  * serverMute
-
-  Ideas:
-  * look into persistent Node Trees for bringing back State if the Server has to be rebooted.
-  * meters? Scope? plotting?
-  * Recording? Number of Channels?
-  * Buffers?
-
-
-
 Pseudocode:
 ////////////////
 1. NEW(host, server, [options])

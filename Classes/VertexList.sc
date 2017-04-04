@@ -14,4 +14,18 @@ VertexList : IdentityDictionary {
 
 		^ me !? {^ me.obj};
 	}
+
+	printItemsOn { arg stream, itemsPerLine = 5;
+		var itemsPerLinem1 = itemsPerLine - 1;
+		var last = this.size - 1;
+		this.keysValuesDo({ arg key, value, i;
+			key.printOn(stream);
+			"  ->  ".printOn(stream);
+			value.obj.printOn(stream);
+			if (i < last, { stream.comma.space;
+				if (i % itemsPerLine == itemsPerLinem1, { stream.nl.space.space });
+			});
+		});
+	}
+
 }
