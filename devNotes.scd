@@ -1,5 +1,19 @@
 /* Development notes
 
+Ideas:
+
+Use Preprocessor for command confirmation request?
+Create a 'Confirm' class. pass a fn into it, and only execute it
+if/when //**confirm or similar is executed.
+
+Use ServerTree to set up ordered groups for VertexTypes
+
+CmdPeriod to remove host from mesh?
+
+add confirmation to cmd period? "you have N vertexes hosted on your
+machine. are you sure you want to kill the server?"
+
+
 
 ///////////
 Currently:
@@ -25,8 +39,8 @@ Pseudocode:
 		send SPAWN_SIGNAL
 		Reboot Server;
 		Wait for boot;
-		server.connect;
 		send SPAWN_REPLY;
+		server.connect;
 
 	If Remote:
 		set Host = Mesh(\mesh1)[\river]
@@ -37,13 +51,21 @@ Pseudocode:
 		server.connect
 
 2. SPAWN_SIGNAL():
+	ServerBoot ()
 	BroadcastAddr:
 		'/VertexServer/spawn'
 		(Host, Server, OSC Addr, IP Addr, Port Number, Options:[eg. maxLogins, sampleRate])
 
 3. SPAWN_REPLY():
+	ServerQuit ()
 	BroadcastAddr:
 		'/VertexServer/spawnReply'
+		hostname, "Server Running"
+
+4. SERVER_REBOOT():
+	Host confirms?
+	//force?
+
 
 ////////////////////
 */// Example Code:
@@ -55,7 +77,7 @@ Vertex(\serverOne).connect;
 
 // or
 
-r = Server.remote(\river, NetAddr(Mesh(\mesh1)[\river].addr.ip, 57110));
+r = Server.remote(\river, NetAddr(Mesh(\mesh1)[\river].addr.ip, 57110)); // note port is for server, not Lang.
 Vertex(\serverTwo, \server, Mesh(\mesh1)[\river], r);
 Vertex(\serverTwo).connect;
 

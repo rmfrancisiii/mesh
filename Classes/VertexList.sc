@@ -15,6 +15,7 @@ VertexList : IdentityDictionary {
 		^ me !? {^ me.obj};
 	}
 
+	// this outputs the vertex type instead of just "A Vertex"
 	printItemsOn { arg stream, itemsPerLine = 5;
 		var itemsPerLinem1 = itemsPerLine - 1;
 		var last = this.size - 1;

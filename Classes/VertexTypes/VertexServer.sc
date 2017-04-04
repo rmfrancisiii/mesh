@@ -7,13 +7,25 @@ VertexServer : VertexAbstract {
 	*new { |myHost, myServer| ^ super.new.init(myHost, myServer) }
 
 
-	init { |myHost, myServer|
+	init {
+		arg myHost = Mesh.me, myServer = Server.local;
 
 		// TODO: Check to be sure the following are for a local server.
 
 
 		if (myHost == Mesh.me)
-		{ // if its being added to THIS machine:
+
+		{
+		// if its being added to THIS machine:
+		// If Local:
+		// set Host = Mesh.me
+		// set Params = *[options]
+		// set Server = Server.local(\Local, Mesh.me);
+		// send SPAWN_SIGNAL
+		// Reboot Server;
+		// Wait for boot;
+		// send SPAWN_REPLY;
+		// server.connect;
 
 			"Local Server".postln;
 			host = myHost;
@@ -26,6 +38,14 @@ VertexServer : VertexAbstract {
 
 		{ // What if it's on a remote server?
 
+		// If Remote:
+		// set Host = Mesh(\mesh1)[\river]
+		// set Params = *[options]
+		// set Server = Server.remote(\river, NetAddr(Mesh(\mesh1)[\river].addr.ip, 57110))
+		// send SPAWN_SIGNAL
+		// wait for SPAWN_REPLY;
+		// server.connect
+
 			"Creating A Remote Server!!!".postln;
 			host = myHost;
 			server = myServer;
@@ -35,12 +55,21 @@ VertexServer : VertexAbstract {
 
 	}
 
-	spawn {
+	spawn {|msg, time, addr, recvPort|
+		"Create a Server from this message".postln;
 
 	}
 
+	spawnReply {|msg, time, addr, recvPort|
+		"server is created and booted".postln;
+
+	}
+
+
 	*makeOSCDefs { // Called by Vertex.initVertexTypeList
-		OSCdef(\VertexServer, {|msg, time, addr, recvPort| "Spawn a vertex Server".postln}, '/VertexServer/spawn');
+		OSCdef(\VertexServer, {|msg, time, addr, recvPort| this.spawn(msg, time, addr, recvPort)}, '/VertexServer/spawn');
+		OSCdef(\VertexServer, {|msg, time, addr, recvPort| this.spawnReply(msg, time, addr, recvPort)}, '/VertexServer/spawnReply');
+
 	}
 
 
