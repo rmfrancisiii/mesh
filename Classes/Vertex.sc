@@ -1,10 +1,8 @@
 Vertex {
-
-	// This is the interface for creating and controlling vertexes,
-	// any method calls get passed to the vertex
-
 	classvar vertexTypeList;
-	var <>obj;
+
+	// This is the interface for creating and controlling vertexes and vertexTypes,
+	// any method calls get passed to the vertex type OR vertex Proxy object in the vertexList
 
 	*initVertexTypeList { // called by Mesh.initClass
 		vertexTypeList = VertexAbstract.subclasses.collectAs({|item|
@@ -15,22 +13,15 @@ Vertex {
 
 		// For all vertex types, try initializing their OSCdefs:
 		vertexTypeList.keysValuesDo({|key, value| value.tryPerform(\makeOSCDefs)});
-
 	}
 
-	*new {|name, type ... passArgs|
-		var vertexList;
-		if (Mesh.peek.isNil){"Sorry, no active Mesh".error};
-		vertexList = Mesh.peek.vertexList;
-		^ vertexList[name] ?? {^ super.new.init(name, type, vertexList, passArgs)}
+	*new {| vertexName, vertexType, vertexHost = (Mesh.me), vertexMesh = (Mesh.peek) ... passArgs|
+		if (vertexMesh.isNil) {"nil Mesh".error; ^ Error};
+		^ vertexMesh.vertexList[vertexName] ?? {
+			// vertex does not exist? send a request to the VertexType Requestor
+			vertexTypeList[vertexType.asSymbol].requestor( vertexName, vertexHost, vertexMesh.name, *passArgs)
+		}
 	}
-
-	init {|myName, myType, myVertexList, passArgs|
-		if (myType.isNil){^ "Vertex Does Not Exist. To create a Vertex, you must supply a type.".error};
-		obj = vertexTypeList[myType.asSymbol].new(*passArgs);
-		myVertexList.add(myName.asSymbol -> this);
-	}
-
 }
 
 

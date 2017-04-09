@@ -60,9 +60,16 @@ MeshCommandParser.on;
 
 Mesh(\mesh1).push;
 
+Vertex(\serverOne, \server, Mesh.me, Mesh.peek, \arg1, \arg2, 5, 10);
+Vertex(\serverTwo, \server, Mesh.me, Mesh.peek, \arg2);
+
+Vertex(\serverOne).postln;
+Vertex(\serverOne).test;
+Vertex(\serverTwo).test;
+
+Mesh(\mesh1).vertexList.postln;
 s = Server.local;
-Vertex(\serverOne, \server, Mesh.me, s);
-Vertex(\serverTwo, \server)
+
 Vertex(\serverOne).reboot;
 Vertex(\serverOne).connect;
 Vertex(\serverOne).ping;
