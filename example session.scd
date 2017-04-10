@@ -60,14 +60,27 @@ MeshCommandParser.on;
 
 Mesh(\mesh1).push;
 
-Vertex(\serverOne, \server, Mesh.me, Mesh.peek, \arg1, \arg2, 5, 10);
-Vertex(\serverTwo, \server, Mesh.me, Mesh.peek, \arg2);
+Vertex(\serverOne, \server, \rose, \mesh1, \arg1);
+Vertex(\serverTwo, \server, \rose, \mesh2, \arg2);
 
 Vertex(\serverOne).postln;
 Vertex(\serverOne).test;
+Vertex(\serverTwo, meshName: \mesh2).test;
+
+Mesh(\mesh2).push;
 Vertex(\serverTwo).test;
 
-Mesh(\mesh1).vertexList.postln;
+
+Mesh(\mesh1).vertexList;
+Mesh(\mesh2).vertexList;
+
+Mesh.peek;
+
+Mesh.pop;
+
+Mesh.peek;
+
+
 s = Server.local;
 
 Vertex(\serverOne).reboot;

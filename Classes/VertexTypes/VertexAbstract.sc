@@ -2,9 +2,9 @@ VertexAbstract {
 
 	// All the vertex types inherit from here, providing any common variables or methods that all vertex types might have.
 
-	*requestor { |vertexName, vertexHost, vertexMesh ...passArgs|
+	*requestor { |vertexName, vertexHost, mesh ...passArgs|
 		var requestor = ("/" ++ this.asSymbol ++ "/requestNew");
-		vertexHost.sendMsg(requestor, vertexName, vertexMesh, *passArgs);
+		vertexHost.sendMsg(requestor, vertexName, mesh.name, *passArgs);
 	}
 
 	*requestNewHandler {|msg, time, addr, recvPort|

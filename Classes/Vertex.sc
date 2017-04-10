@@ -15,11 +15,15 @@ Vertex {
 		vertexTypeList.keysValuesDo({|key, value| value.tryPerform(\makeOSCDefs)});
 	}
 
-	*new {| vertexName, vertexType, vertexHost = (Mesh.me), vertexMesh = (Mesh.peek) ... passArgs|
-		if (vertexMesh.isNil) {"nil Mesh".error; ^ Error};
-		^ vertexMesh.vertexList[vertexName] ?? {
-			// vertex does not exist? send a request to the VertexType Requestor
-			vertexTypeList[vertexType.asSymbol].requestor( vertexName, vertexHost, vertexMesh.name, *passArgs)
+	*new {| name, type, hostName, meshName ... passArgs|
+
+		//need to look at this bit closer, if arg has an unknown Mesh, it just creates it.
+
+		if (meshName.isNil) {meshName = Mesh.peek.meshName};
+		if (meshName.isNil) {"nil Mesh".error; ^ Error};
+
+		^ Mesh(meshName).vertexList[name] ?? {
+			vertexTypeList[type.asSymbol].requestor( name, Mesh(meshName)[hostName], Mesh(meshName), *passArgs)
 		}
 	}
 }

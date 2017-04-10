@@ -30,6 +30,30 @@ VertexServer: A Vertex that represents a Supercollider server node.
 		Server: a Server (may be local OR remote)
 
 Pseudocode:
+1. issue: Vertex(\vertexName, \vertexType, \hostName, \meshName);
+
+2. Vertex.new() -> VertexType.requestor -> VertexAbstract.requestor -)> OSC
+
+   - Machine Boundary (maybe) -
+
+3. OSC -(> VertexAbstract.requestNewHandler -> VertexType.init
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ////////////////
 1. NEW(host, server, [options])
 	If Local:
@@ -95,6 +119,9 @@ Vertex(\serverTwo).connect;
 ////////////
 /* Completed:
 ///////////
+
+4/9/17:
+  Set up initial requestor, OSCdef, requestHandler
 
 4/2/17:
   Merged Vertex branch back into master,
