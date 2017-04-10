@@ -5,8 +5,16 @@ VertexServer : VertexAbstract {
 
 		OSCdef(\VertexServerRequestNew, {|msg, time, addr, recvPort|
 			"OSC Requestor".postln;
-			this.requestNewHandler(msg, time, addr, recvPort);
-		}, '/VertexServer/requestNew');
+			// Handle any additional msg processing here, but put arguments in an array
+			this.vertexRequestHandler(msg);
+		}, '/VertexServer/request/new');
+
+		OSCdef(\VertexServerProxyRequestNew, {|msg, time, addr, recvPort|
+			"OSC Requestor".postln;
+			// Handle any additional msg processing here, but put arguments in an array
+			this.vertexRequestHandler(msg);
+		}, '/VertexServer/request/proxy');
+
 
 	}
 

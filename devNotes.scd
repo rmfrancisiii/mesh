@@ -29,92 +29,57 @@ VertexServer: A Vertex that represents a Supercollider server node.
 		Host : A MeshHostAddr
 		Server: a Server (may be local OR remote)
 
-Pseudocode:
-1. issue: Vertex(\vertexName, \vertexType, \hostName, \meshName);
++++++++++++
 
-2. Vertex.new() -> VertexType.requestor -> VertexAbstract.requestor -)> OSC
+Generic Object creation pseudocode:
 
-   - Machine Boundary (maybe) -
+1. Artist issues Vertex(\vertexName, \vertexType, \hostName, \meshName);
 
-3. OSC -(> VertexAbstract.requestNewHandler -> VertexType.init
+2. Vertex checks to be sure the mesh exists, then checks \meshName.vertexList
+   2a. if it exists (currently returns the Vertex)
+       Might want to extend functionality for updating in this syntax.
 
+   2b. if it does NOT exist, checks for vertexType in vertexTypeList.
 
+3. Messages vertexType.vertexRequestor, and passes:
+    a. ref to Mesh object,
+    b. ref to Host object from hostList,
+    c. any other Args as an array.
 
+4. VertexRequestor class method generates an OSC message and sends it to the named Host.
 
+       To:   Host Address
+       Path: /VertexType/request/new
+       Msg:  (vertexName, mesh.name, ...arguments);
 
+   A generic vertexRequestor method is inherited from VertexAbstract,
+   but could be overloaded by VertexType depending on specific needs.
 
+----------------------------
+- Machine/Process Boundary -
+----------------------------
 
+5a. OSCdef receives request and marshalls its arguments
+5b. Handles any preprocessing, eg. supplying default arguments,
+5c. Passes request off to VertexType.vertexRequestHandler
 
+6. vertexRequestHandler class method calls super.new.init and passes an unpacked array of arguments.
+   This step is necessary because the instance isn't created yet.
 
+   A generic vertexRequestHandler class method is inherited from VertexAbstract,
+   but could be overloaded by VertexType depending on specific needs.
 
+7. The VertexType.init method:
+   7a. sets the initial state of the VertexType object.
+   7b. adds the Vertex to the Mesh.vertexList
+ ----- stopped here -----
+   7c. tests the Success of adding the object,
+   7d. returns success status to vertexRequestHandler
 
+8a. If Creation succeeded, vertexRequestHandler calls VertexType.vertexProxyRequestor
+8b. If Creation failed, vertexRequestHandler returns an OSC Message to the invoking client
 
-
-
-
-
-
-////////////////
-1. NEW(host, server, [options])
-	If Local:
-		set Host = Mesh.me
-		set Params = *[options]
-		set Server = Server.local(\Local, Mesh.me);
-		send SPAWN_SIGNAL
-		Reboot Server;
-		Wait for boot;
-		send SPAWN_REPLY;
-		server.connect;
-
-	If Remote:
-		set Host = Mesh(\mesh1)[\river]
-		set Params = *[options]
-		set Server = Server.remote(\river, NetAddr(Mesh(\mesh1)[\river].addr.ip, 57110))
-		send SPAWN_SIGNAL
-		wait for SPAWN_REPLY;
-		server.connect
-
-2. SPAWN_SIGNAL():
-	ServerBoot ()
-	BroadcastAddr:
-		'/VertexServer/spawn'
-		(Host, Server, OSC Addr, IP Addr, Port Number, Options:[eg. maxLogins, sampleRate])
-
-3. SPAWN_REPLY():
-	ServerQuit ()
-	BroadcastAddr:
-		'/VertexServer/spawnReply'
-		hostname, "Server Running"
-
-4. SERVER_REBOOT():
-	Host confirms?
-	//force?
-
-
-////////////////////
-*/// Example Code:
-////////////////////
-
-s = Server.local(\Local, Mesh.me);
-Vertex(\serverOne, \server, Mesh.me, s);
-Vertex(\serverOne).connect;
-
-// or
-
-r = Server.remote(\river, NetAddr(Mesh(\mesh1)[\river].addr.ip, 57110)); // note port is for server, not Lang.
-Vertex(\serverTwo, \server, Mesh(\mesh1)[\river], r);
-Vertex(\serverTwo).connect;
-
-
-
-
-
-
-
-
-
-
-
+9. vertexProxyRequestor
 
 ////////////
 /* Completed:
@@ -281,9 +246,10 @@ eg Digital Music Orchestra
 
 
 
-/*
+Code scratchpad (ignore):
+/////////////////////////
 
-// TODO: Check to be sure the following are for a local server.
+TODO: Check to be sure the following are for a local server.
 
 
 		if (myHost == Mesh.me)
@@ -357,8 +323,5 @@ eg Digital Music Orchestra
 	notifyMesh {
 		"Spread the word!!".postln;
 	}
-
-*/
-
 
 */

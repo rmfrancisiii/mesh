@@ -22,8 +22,11 @@ Vertex {
 		if (meshName.isNil) {meshName = Mesh.peek.meshName};
 		if (meshName.isNil) {"nil Mesh".error; ^ Error};
 
+
+		// TODO: Handle nil or wrong VertexType
 		^ Mesh(meshName).vertexList[name] ?? {
-			vertexTypeList[type.asSymbol].requestor( name, Mesh(meshName)[hostName], Mesh(meshName), *passArgs)
+			vertexTypeList[type.asSymbol].vertexRequestor( name, Mesh(meshName)[hostName], Mesh(meshName), *passArgs);
+			^ "New Vertex Requested".inform
 		}
 	}
 }
