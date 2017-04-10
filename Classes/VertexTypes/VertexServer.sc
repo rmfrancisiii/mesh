@@ -10,18 +10,28 @@ VertexServer : VertexAbstract {
 
 	}
 
+
+	/// working on this:
 	init {|requestor, vertexName, meshName, thisHost, thisServer|
+		host = Mesh.me;
+		server = Server.local;
 
-		("osc path: " ++ requestor).postln;
+		Mesh(meshName).vertexList.add(vertexName -> this);
 
-		host = thisHost;
-		server = thisServer;
+		//TODO: test success
+		server.boot;
 
-
-		Mesh(meshName).vertexList.add(vertexName -> this);		//test success
-
-		if (true) {^true} {^false}
+		if (this.test) {^true} {^false}
 	}
 
-	test { (host ++ " : Success!!").postln; }
+	test { ^true }
+
+	doesNotUnderstand {|selector ... args|
+		// TODO: need to check order?
+		var result = nil;
+		(result = server.tryPerform(selector, *args)) !? { ^ result };
+		(result = server.options.tryPerform(selector, *args)) !? { ^ result };
+		(result = server.addr.tryPerform(selector, *args)) !? { ^ result };
+	}
+
 }

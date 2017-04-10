@@ -63,8 +63,9 @@ Mesh(\mesh1).push;
 Vertex(\serverOne, \server, \rose, \mesh1, \arg1);
 Vertex(\serverTwo, \server, \rose, \mesh2, \arg2);
 
-Vertex(\serverOne).postln;
+Vertex(\serverOne);
 Vertex(\serverOne).test;
+Vertex(\serverOne).ping;
 Vertex(\serverTwo, meshName: \mesh2).test;
 
 Mesh(\mesh2).push;
