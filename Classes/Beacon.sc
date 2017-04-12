@@ -67,7 +67,10 @@ Beacon {
 		// Start a function that periodically checks whether hosts are still online.
 		// This continues running, even after Cmd+Period
 		beaconKeeper = SkipJack({
-			broadcastAddr.sendMsg(oscPath, me.name);
+			try { broadcastAddr.sendMsg(oscPath, me.name)}
+			{|error| this.networkError(error)};
+
+
 			mesh.hostManager.checkTimeouts;
 			}, pollPeriod, false);
 	}
@@ -111,7 +114,7 @@ Beacon {
 	ping { |me| broadcastAddr.sendMsg("/ping", me.name) }
 
 	start {
-		// TODO: This
+		beaconKeeper.start;
 	}
 
 	stop {
@@ -123,4 +126,12 @@ Beacon {
 		OSCdef(outDefName).free;
 
 		}
+
+	networkError {|error|
+		error.postln;
+		"Network Error! beacon stopped.".postln;
+		// TODO: retry counter?
+		"Try Mesh.peek.hostManager.beacon.start;".postln;
+		this.stop;
+	}
 }
