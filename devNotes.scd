@@ -2,11 +2,7 @@
 
 TODO:
 
-Rename:
--------
-meshList > meshes
-meshStack >
-
+Make Offline otion for new Mesh?
 
 
 
