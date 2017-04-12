@@ -4,7 +4,7 @@
 ----------------------
 -   Class Variables : Type
 -
-- 		meshList : IdentityDictionary
+- 		meshDict : IdentityDictionary
 -		Dictionary of created meshes
 -
 -		meshStack : Array
@@ -19,7 +19,7 @@
 -		Initializes the Class Variables
 -
 -		at : key : Mesh
--		returns the Mesh by name from the meshList
+-		returns the Mesh by name from the meshDict
 -
 -		new : name : Mesh
 -		If there is not a mesh with the given name, create a new mesh, with that name.
@@ -97,21 +97,21 @@
 */
 
 Mesh {
-	classvar meshList, meshStack, me;
-	var meshName, env, hostManager, <>vertexList, <>meshView;
+	classvar meshDict, meshStack, me;
+	var meshName, env, hostManager, <>vertexDict, <>meshView;
 
 	*initClass {
 		meshStack = [];
-		meshList = IdentityDictionary.new;
+		meshDict = IdentityDictionary.new;
 		me = me.as(MeshHost);
-		Vertex.initVertexTypeList;
+		Vertex.initVertexTypeDict;
 	}
 
-	*at {|name| ^ this.meshList.at(name)}
+	*at {|name| ^ this.meshDict.at(name)}
 
 
 	*new {|name|
-		^ meshList.at(name) ?? {^ super.new.init(name).addMesh};
+		^ meshDict.at(name) ?? {^ super.new.init(name).addMesh};
 	}
 
 	*newFrom { |mesh|
@@ -125,7 +125,7 @@ Mesh {
 		{("No active mesh").warn; ^nil}
 	}
 
-	*list {^meshList.keys.asArray}
+	*list {^meshDict.keys.asArray}
 
 	*stack { ^meshStack.collect({ arg item; item.meshName}) }
 
@@ -150,7 +150,7 @@ Mesh {
 
 		meshName = name.asSymbol;
 		hostManager = MeshHostManager.new(this, me);
-		vertexList = VertexList.new;
+		vertexDict = VertexDict.new;
 		meshView = MeshView(this);
 		env = Environment.make {};
 		env.put(meshName.asSymbol, this);
@@ -159,7 +159,7 @@ Mesh {
 		env.use({
 			~mesh = meshName;
 			~me = me;
-			~vl = vertexList;
+			~vl = vertexDict;
 			~win = meshView;
 		});
 		postf("New Mesh Created: % \n", meshName);
@@ -168,7 +168,7 @@ Mesh {
 
 	printOn { |stream| stream << this.class.name << "(" << meshName << ")" }
 
-	addMesh { meshList.put(this.meshName, this) }
+	addMesh { meshDict.put(this.meshName, this) }
 
 	meshName { ^meshName }
 
@@ -232,7 +232,7 @@ Mesh {
 			hostManager.free(me);
 
 			// list.atFail(this.name) {("No Such Mesh").warn};
-			meshList.removeAt(this.meshName);
+			meshDict.removeAt(this.meshName);
 			meshView.free;
 			("removed mesh").warn;
 		}

@@ -1,18 +1,18 @@
 Vertex {
-	classvar vertexTypeList;
+	classvar vertexTypeDict;
 
 	// This is the interface for creating and controlling vertexes and vertexTypes,
-	// any method calls get passed to the vertex type OR vertex Proxy object in the vertexList
+	// any method calls get passed to the vertex type OR vertex Proxy object in the vertexDict
 
-	*initVertexTypeList { // called by Mesh.initClass
-		vertexTypeList = VertexAbstract.subclasses.collectAs({|item|
+	*initVertexTypeDict { // called by Mesh.initClass
+		vertexTypeDict = VertexAbstract.subclasses.collectAs({|item|
 			var key = item.name.asString.drop(6);
 			key[0] = key.first.toLower;
 			key.asSymbol -> item;
 		}, IdentityDictionary);
 
 		// For all vertex types, try initializing their OSCdefs:
-		vertexTypeList.keysValuesDo({|key, value| value.tryPerform(\makeOSCDefs)});
+		vertexTypeDict.keysValuesDo({|key, value| value.tryPerform(\makeOSCDefs)});
 	}
 
 	*new {| name, type, hostName, meshName ... passArgs|
@@ -24,8 +24,8 @@ Vertex {
 
 
 		// TODO: Handle nil or wrong VertexType
-		^ Mesh(meshName).vertexList[name] ?? {
-			vertexTypeList[type.asSymbol].vertexRequestor( name, Mesh(meshName)[hostName], Mesh(meshName), *passArgs);
+		^ Mesh(meshName).vertexDict[name] ?? {
+			vertexTypeDict[type.asSymbol].vertexRequestor( name, Mesh(meshName)[hostName], Mesh(meshName), *passArgs);
 			^ "New Vertex Requested".inform
 		}
 	}

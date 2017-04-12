@@ -1,4 +1,4 @@
-VertexList : IdentityDictionary {
+VertexDict : IdentityDictionary {
 
 	// //this is what makes Vertex(\Name) return the vertex.obj contained
 	//

@@ -7,31 +7,26 @@ TestMesh : UnitTest {
 	tearDown {
 	}
 
-	test_Mesh {
-		Mesh.(\mesh1);
-		Mesh.newFrom(\mesh2);
-		Mesh.activeMesh;
-		Mesh.list.class;
-		Mesh.list;
-		Mesh.stack;
-		Mesh.peek;
+	test_meshInitClass{
 
-		Mesh(\mesh1).postln;
-		Mesh(\mesh1).meshName.class;
-		Mesh(\mesh1).name;
-		Mesh(\mesh1).hostManager;
-		Mesh(\mesh1).push.class;
-		Mesh(\mesh2).pop;
-		Mesh(\mesh2).free;
-		Mesh.list;
+		this.assert( Mesh.stack.isEmpty,
+			"Stack is empty");
 
-		Mesh(\mesh1).push;
+		this.assert( Mesh.list.isEmpty,
+			"list is empty");
 
-		Mesh.pop;
+		this.assert( Mesh.me.isKindOf(MeshHost),
+			"Me is host");
 
-		Mesh(\mesh1).free;
-		// make it active:
 
 
 	}
+
+	test_createMesh{
+		var res = Mesh(\mesh1);
+		this.assert( res.class == Mesh, "New Mesh is a Mesh");
+
+	}
+
+
 }

@@ -24,7 +24,7 @@ VertexServer : VertexAbstract {
 		host = Mesh.me;
 		server = Server.local;
 
-		Mesh(meshName).vertexList.add(vertexName -> this);
+		Mesh(meshName).vertexDict.add(vertexName -> this);
 
 		//TODO: test success
 		server.boot;

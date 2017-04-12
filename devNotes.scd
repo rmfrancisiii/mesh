@@ -1,5 +1,15 @@
 /* Development notes
 
+TODO:
+
+Rename:
+-------
+meshList > meshes
+meshStack >
+
+
+
+
 Ideas:
 
 Use Preprocessor for command confirmation request?
@@ -77,7 +87,7 @@ Generic Object creation pseudocode:
    7d. returns success status to vertexRequestHandler
 
 8a. If Creation succeeded, vertexRequestHandler calls VertexType.vertexProxyRequestor
-8b. If Creation failed, vertexRequestHandler returns an OSC Message to the invoking client
+8b. If Creation failed, vertexRequestHandler returns an OSC Remoting Error Message to the invoking client
 
 9. vertexProxyRequestor
 
