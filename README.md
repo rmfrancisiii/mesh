@@ -23,7 +23,7 @@ Artists directly interact with the mesh, and do not need to know many of the det
 * Sample Bank
 * Clock
 
-![Image of Vertex Invocation Diagram](https://github.com/wtkns/mesh/blob/VertexServer/VertexInvocation.png)
+![Image of Vertex Invocation Diagram](Diagrams/VertexInvocation.png)
 
 
 **Port:** a single data terminal on a vertex, eg one control value from one knob on an Arduino, one pdefn from a pattern, one channel of audio in or out.
