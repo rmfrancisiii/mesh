@@ -1,103 +1,5 @@
-/*
-----------------------
-- Class: Mesh
-----------------------
--   Class Variables : Type
--
-- 		meshDict : IdentityDictionary
--		Dictionary of created meshes
--
--		meshStack : Array
--		A Stack of references to the meshes
--
--		me : MeshHost
--		This machine as a host (should be the same in every mesh, i.e. same Hostname/Port/IP address)
--
--	Class Methods : Args : Return Type
--
--		initClass	:	:	Class
--		Initializes the Class Variables
--
--		at : key : Mesh
--		returns the Mesh by name from the meshDict
--
--		new : name : Mesh
--		If there is not a mesh with the given name, create a new mesh, with that name.
--		If there IS a mesh with that name just return it.
--		Side Effect: Creates/Starts Mesh's Beacon
--		Side Effect: Creates/Starts Mesh's OSCdefs
--
--		newFrom : name or  : Mesh
--		If there is not a mesh with the given name, create a new mesh, with that name.
--		If there IS a mesh with that name just return it.
--
--		activeMesh : - : symbol
--		Returns key of the top mesh on the stack
--		if there is no Active Mesh, Warns and returns Nil.
--
--		list : - : Array
--		Returns an array of available (created) meshes
--
--		stack : - : Array
--		Returns an array of meshes in the order they have been pushed onto the stack
--
--		me : - : MeshHost
--		Returns this Computer as a host
--
--		peek : - : Mesh
--		Returns the top mesh on the stack
--
--		pop : - : IdentityDictionary
--		Removes the top mesh from the stack
--		Side Effect: Environment Changes
--
--		freeAll : - : -
--		Frees all of the current meshes
--
-----------------------
-- 	Instance Variables : Type : Description
--
--		meshName : Symbol : key for the mesh
--
--		env : Environment : A place to put things, esp. patterns, etc.
--
--		hostManager : MeshHostManager : This contains the host list, timeout list, beacon
--
--	Instance Methods : Args : Return Type
--
--		meshName :  : symbol
--		name :  : symbol
--		Returns the name of this Mesh as a Symbol
--
--		hostManager :  :
--		Returns the hostmanager for this Mesh
--
--		push : mesh : Mesh
--		Pushes this mesh onto the meshStack
--		Side Effect: Environment Changes
--
--		pop : - : -
--		Removes this mesh from the top of the stack
--		IF it is the current mesh. otherwise returns nil
--		Side Effect: Environment Changes
--
--		free : Mesh : -
--		Frees a created Mesh.
--		Side Effect: Stops Mesh's Beacon
--		Side Effect: Frees Mesh's OSCdefs
--
--	Private Methods
--
--		init : name : Mesh
--
--		printOn :  :
--
--		addMesh : mesh : Mesh
-----------------------
-*/
-
 Mesh {
-	classvar meshDict, meshStack, me;
+	classvar <meshDict, meshStack, me;
 	var meshName, env, hostManager, <>vertexDict, <>meshView;
 
 	*initClass {
@@ -107,7 +9,7 @@ Mesh {
 		Vertex.initVertexTypeDict;
 	}
 
-	*at {|name| ^ this.meshDict.at(name)}
+	*at {|name| ^ meshDict.at(name)}
 
 
 	*new {|name|
@@ -125,7 +27,7 @@ Mesh {
 		{("No active mesh").warn; ^nil}
 	}
 
-	*list {^meshDict.keys.asArray}
+	*list {^meshDict.keys.asList} // as List?
 
 	*stack { ^meshStack.collect({ arg item; item.meshName}) }
 
@@ -230,8 +132,6 @@ Mesh {
 		{("Cannot remove current mesh").warn; ^nil} // post a warning
 		{
 			hostManager.free(me);
-
-			// list.atFail(this.name) {("No Such Mesh").warn};
 			meshDict.removeAt(this.meshName);
 			meshView.free;
 			("removed mesh").warn;

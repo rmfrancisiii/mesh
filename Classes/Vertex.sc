@@ -1,5 +1,5 @@
 Vertex {
-	classvar vertexTypeDict;
+	classvar <vertexTypeDict;
 
 	// This is the interface for creating and controlling vertexes and vertexTypes,
 	// any method calls get passed to the vertex type OR vertex Proxy object in the vertexDict
