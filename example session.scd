@@ -1,6 +1,10 @@
 // create a mesh,
 //  other hosts should use the same mesh name.
 Mesh(\mesh1).push;
+Mesh(\mesh1).hostManager.beacon.start;
+
+Mesh.at(\some)
+Mesh.at(\mesh1)
 
 // create another mesh and push it onto the stack:
 Mesh(\mesh3).push;

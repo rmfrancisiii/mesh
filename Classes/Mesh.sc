@@ -1,6 +1,6 @@
 Mesh {
-	classvar <meshDict, meshStack, me;
-	var meshName, env, hostManager, <>vertexDict, <>meshView;
+	classvar <>meshDict, <>meshStack, me;
+	var meshName, <>env, hostManager, <>vertexDict, <>meshView;
 
 	*initClass {
 		meshStack = [];
