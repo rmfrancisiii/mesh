@@ -44,6 +44,12 @@ Mesh {
 		{("No active mesh").warn}
 	}
 
+	*popAll {
+		meshStack = [];
+		{("No active mesh").warn}
+	}
+
+
 	* freeAll {
 		this.list.do({|item|
 			item.postln;

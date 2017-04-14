@@ -7,6 +7,8 @@ TestMesh : UnitTest {
 	tearDown {
 	}
 
+
+
 	test_meshInitClassTest{
 
 		this.assert( Mesh.me.isKindOf(MeshHost),
@@ -84,81 +86,93 @@ TestMesh : UnitTest {
 			"Correct number of meshes" );
 	}
 
+	test_meshStackPopAll{
+		Mesh.popAll;
+		this.assert( Mesh.meshStack.isEmpty,
+			"Nothing on the stack" );
+	}
+
 
 	test_meshActiveMeshIsNil{
 		this.assert( Mesh.activeMesh.isNil,
 			"No initially active mesh" );
 	}
 
-	test_meshPushAddsToStack{
-		Mesh(\mesh1).push;
-		this.assert( Mesh.stack.includes(\mesh1),
-			"New Mesh is on the stack" );
+	// test_meshPushAddsToStack{|testMesh|
+	//
+	// 	testMesh ?? Mesh(\mesh1);
+	// 	testMesh.push;
+	//
+	// 	this.assert( Mesh.stack.includes(testMesh.meshName),
+	// 	"New Mesh is on the stack" );
+	//
+	// 	this.assert( Mesh.peek == testMesh,
+	// 	"Mesh Peek returns the active mesh" );
+	// }
+
+	test_meshPushMoreMeshes{ |number = 4|
+
+		var initialMeshStackSize = Mesh.stack.size;
+
+		number.do({|i|
+			var meshNumber = (i + initialMeshStackSize + 1);
+			var name = ("mesh" ++ meshNumber).asSymbol;
+			Mesh(name).push});
+
+		this.assert( Mesh.stack.size == (initialMeshStackSize + number),
+			"Correct number of meshes" );
 	}
 
-	test_meshPeekReturnsActiveMesh{
-		this.assert( Mesh.peek == Mesh(\mesh1),
-			"Mesh Peek returns the active mesh" );
-	}
-
-	test_meshPushMultipleMeshOnStack{
-		Mesh(\mesh2).push;
-		Mesh(\mesh3).push;
-
-		this.assert( Mesh.stack.size == 3,
-			"More Meshes pushed onto Stack" );
-	}
-
-	test_meshPeekReturnsNewActiveMesh{
-		this.assert( Mesh.peek == Mesh(\mesh3),
-			"Last Mesh pushed is the active mesh" );
-	}
-
-
-	test_meshClassPopRemovesActiveMeshFromStack{
-		Mesh.pop;
-		this.assert( Mesh.peek == Mesh(\mesh2),
-			"Last Mesh pushed is gone from the stack" );
-	}
-
-	test_meshInstPopRemovesActiveMeshFromStack{
-		Mesh(\mesh2).pop;
-		this.assert( Mesh.peek == Mesh(\mesh1),
-			"Named Mesh pushed is gone from the stack" );
-	}
-
-	test_meshFreeFailsForActiveMesh{
-		Mesh(\mesh1).free;
-		this.assert( Mesh.peek == Mesh(\mesh1),
-			"removing the active mesh failed" );
-	}
-
-	test_meshFree{
-		Mesh.pop;
-		Mesh(\mesh1).free;
-		this.assert( Mesh.list.includes(\mesh1).not,
-			"Freed Mesh is gone from the list" );
-	}
-
-	// test_meshFreeAll{
-	// 	"freeall".postln;
-	// 	Mesh.freeAll;
-	// 	Mesh.list.postln;
+	// test_meshPeekReturnsNewActiveMesh{
+	// 	this.assert( Mesh.peek == Mesh(\mesh3),
+	// 	"Last Mesh pushed is the active mesh" );
+	// }
+	//
+	//
+	// test_meshClassPopRemovesActiveMeshFromStack{
+	// 	Mesh.pop;
+	// 	this.assert( Mesh.peek == Mesh(\mesh2),
+	// 	"Last Mesh pushed is gone from the stack" );
+	// }
+	//
+	// test_meshInstPopRemovesActiveMeshFromStack{
+	// 	Mesh(\mesh2).pop;
+	// 	this.assert( Mesh.peek == Mesh(\mesh1),
+	// 	"Named Mesh pushed is gone from the stack" );
+	// }
+	//
+	// test_meshFreeFailsForActiveMesh{
+	// 	Mesh(\mesh1).free;
+	// 	this.assert( Mesh.peek == Mesh(\mesh1),
+	// 	"removing the active mesh failed" );
+	// }
+	//
+	// test_meshFree{
+	// 	Mesh.pop;
+	// 	Mesh(\mesh1).free;
 	// 	this.assert( Mesh.list.includes(\mesh1).not,
 	// 	"Freed Mesh is gone from the list" );
 	// }
-
 	//
-	// test_meshFree{
-	// 	var temp = Mesh(\mesh1);
-	// 	temp.free;
-	// 	this.assert( temp.class == Mesh, "New Mesh is a Mesh");
-	// }
+	// // test_meshFreeAll{
+	// // 	"freeall".postln;
+	// // 	Mesh.freeAll;
+	// // 	Mesh.list.postln;
+	// // 	this.assert( Mesh.list.includes(\mesh1).not,
+	// // 	"Freed Mesh is gone from the list" );
+	// // }
 	//
-	// test_meshNewReturnsExisting{
-	// 	var temp = Mesh(\mesh1);
-	// 	this.assert( temp == Mesh(\mesh1), "recalling a mesh by name");
-	// }
-
+	// //
+	// // test_meshFree{
+	// // 	var temp = Mesh(\mesh1);
+	// // 	temp.free;
+	// // 	this.assert( temp.class == Mesh, "New Mesh is a Mesh");
+	// // }
+	// //
+	// // test_meshNewReturnsExisting{
+	// // 	var temp = Mesh(\mesh1);
+	// // 	this.assert( temp == Mesh(\mesh1), "recalling a mesh by name");
+	// // }
+	//
 
 }
