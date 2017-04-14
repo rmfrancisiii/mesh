@@ -50,8 +50,8 @@ UnitTest.gui;
 Mesh(\mesh1).hosts;
 Mesh(\mesh1).ping;
 
-
-
+Mesh.activeMesh;
+Mesh.peek;
 Vertex Syntax:
 -----------
 New:

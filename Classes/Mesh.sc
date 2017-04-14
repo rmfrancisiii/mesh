@@ -45,6 +45,18 @@ Mesh {
 	}
 
 	* freeAll {
+		this.list.do({|item|
+			item.postln;
+			// if (currentEnvironment === item.env)
+			// {("Cannot remove current mesh").warn; ^nil} // post a warning
+			// {
+			// 	item.hostManager.free;
+			// 	item.meshView.free;
+			// 	meshDict.removeAt(item.meshName);
+			// 	("removed mesh").warn;
+			// }
+
+		});
 		// TODO: this.
 	}
 
@@ -95,7 +107,7 @@ Mesh {
 
 		// otherwise:
 		if (meshStack.notNil and: { meshStack.notEmpty })
-		   {Mesh.peek.meshView.deactivate}; //.meshView.postln; //deactivate;
+		{Mesh.peek.meshView.deactivate}; //.meshView.postln; //deactivate;
 
 		meshStack = meshStack.add(this);
 		env.push; // push this Mesh's Environment onto the Environment Stack
@@ -115,7 +127,7 @@ Mesh {
 			env.pop;
 			meshStack.pop;
 			if (meshStack.notNil and: { meshStack.notEmpty })
-			  {Mesh.peek.meshView.activate};
+			{Mesh.peek.meshView.activate};
 		}
 
 		{
