@@ -45,25 +45,31 @@ Mesh {
 	}
 
 	*popAll {
-		meshStack = [];
-		{("No active mesh").warn}
+		meshStack.do({Mesh.pop});
+		("No active mesh").warn;
 	}
 
 
 	* freeAll {
-		this.list.do({|item|
-			item.postln;
-			// if (currentEnvironment === item.env)
-			// {("Cannot remove current mesh").warn; ^nil} // post a warning
-			// {
-			// 	item.hostManager.free;
-			// 	item.meshView.free;
-			// 	meshDict.removeAt(item.meshName);
-			// 	("removed mesh").warn;
-			// }
 
+		"freeAll Started".postln;
+
+		this.list.size.postln;
+		this.list.postln;
+		this.stack.size.postln;
+		this.stack.postln;
+
+		this.popAll;
+		{
+		this.list.do({|item|
+			("removing mesh:  " ++ item.meshName).warn;
+			item.hostManager.free;
+			item.meshView.free;
+			meshDict.removeAt(item.meshName);
+			"removed".postln;
 		});
-		// TODO: this.
+		}.defer(10)
+
 	}
 
 	init {|name|
@@ -140,6 +146,12 @@ Mesh {
 			(meshName ++ "is not the current Mesh.").warn;
 			^nil
 		}
+	}
+
+
+
+	popEvery {
+		// pops every instance of this mesh off of the stack and removes its environment from the Environment Stack.
 	}
 
 	free {
