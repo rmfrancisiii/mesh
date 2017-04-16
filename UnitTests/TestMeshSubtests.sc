@@ -65,7 +65,6 @@
 	}
 
 	testName {|name|
-		this.getMesh(name).postln;
 		this.assert( this.getMesh(name).meshName == name,
 			"New Mesh has the right name" );
 	}
@@ -121,7 +120,7 @@
 	}
 
 	testMeshPeek {|mesh|
-		this.assert( Mesh.peek == mesh,
+		this.assert( Mesh.peek == this.asMesh(mesh),
 			"Correct Mesh is on the top of the stack" );
 	}
 
@@ -129,6 +128,7 @@
 		if (mesh.isKindOf(Mesh)) {^mesh};
 		if (mesh.isKindOf(Symbol)) {^Mesh(mesh)};
 		if (mesh.isKindOf(String)) {^Mesh(mesh.asSymbol)};
+	    if (mesh.isNil) {^nil};
 		this.assert( false, "Couldn't cast as Mesh" );
 	}
 
@@ -139,7 +139,7 @@
 			"Couldn't Push Mesh" );
 	}
 
-	getPenultiMesh {^ Mesh.stack[(Mesh.stack.size -2)]}
+	getPenultiMesh {^ this.asMesh(Mesh.stack[(Mesh.stack.size -2)])}
 
 }
 

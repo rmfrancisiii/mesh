@@ -17,7 +17,7 @@ TestMesh : UnitTest {
 	}
 
 
-	test_meshMakeManyMeshes{ |number = 5|
+	test_meshMakeManyMeshes{ |number = 3|
 		var initialMeshCount = Mesh.meshDict.size;
 		number.do({
 			this.testMeshNew(this.nextNewMeshName)
@@ -26,63 +26,46 @@ TestMesh : UnitTest {
 		"Make Many Meshes tests performed\n\n".inform;
 	}
 
+	// NEED TO REWRITE THIS. maybe: testMeshNew returns mesh?
+	// test_meshNewReturnsExisting{
+	// 	var name = this.nextNewMeshName;
+	// 	this.testMeshNew(name);
+	// 	this.assert( mesh == Mesh(name),
+	// 	"recalling a mesh by name");
+	// }
+
 	test_meshPush{ |mesh = (this.asMesh(this.nextNewMeshName))|
-		var stackSize = Mesh.stack.size;
+		var initialStackSize = Mesh.stack.size;
 		this.pushMeshOrName(mesh);
 		this.testMeshPeek(mesh);
-		this.testStackSize(stackSize+1);
+		this.testStackSize(initialStackSize + 1);
+	}
+
+	test_meshPop{
+		var penultiMesh = this.getPenultiMesh;
+		var initialStackSize = Mesh.stack.size;
+		Mesh.pop;
+		this.testMeshPeek(penultiMesh);
+		this.testStackSize(initialStackSize - 1);
+	}
+
+	test_meshPushAll{
+		Mesh.meshDict.keysDo({|name|
+			var initialStackSize = Mesh.stack.size;
+			this.pushMeshOrName(name);
+			this.testMeshPeek(name);
+			this.testStackSize(initialStackSize + 1);
+		});
+	}
+
+	test_meshPopAll{
+		Mesh.stack.size.do({
+			this.test_meshPop;
+		});
+		this.meshStackIsEmpty;
 	}
 
 
-	// test_meshStackPopAll{
-	// 	Mesh.popAll;
-	// 	this.assert( Mesh.meshStack.isEmpty,
-	// 	"Nothing on the stack" );
-	// }
-	//
-	//
-	// test_meshActiveMeshIsNil{
-	// 	this.assert( Mesh.activeMesh.isNil,
-	// 	"No initially active mesh" );
-	// }
-	//
-	// pushOneMeshOntoStack{|testMesh|
-	//
-	// 	testMesh.push;
-	//
-	// 	this.assert( Mesh.peek == testMesh,
-	// 	"Mesh Peek returns the active mesh" );
-	// }
-	//
-	// test_meshPushMoreMeshes{ |number = 4|
-	//
-	// 	var initialMeshStackSize = Mesh.stack.size;
-	//
-	// 	number.do({|i|
-	// 		var meshNumber = (i + initialMeshStackSize + 1);
-	// 		var name = ("mesh" ++ meshNumber).asSymbol;
-	// 		this.pushOneMeshOntoStack(Mesh(name));
-	// 		this.assert( Mesh.peek == Mesh(name),
-	// 		"Last Mesh pushed is the active mesh" );
-	// 	});
-	//
-	// 	this.assert( Mesh.stack.size == (initialMeshStackSize + number),
-	// 	"Correct number of meshes" );
-	// }
-	//
-	// test_meshClassPopRemovesActiveMeshFromStack{
-	// 	var penultimateMesh = Mesh.at(Mesh.stack[Mesh.stack.size-2]);
-	// 	Mesh.pop;
-	// 	this.assert( Mesh.peek == penultimateMesh,
-	// 	"Last Mesh pushed is gone from the stack" );
-	// }
-	//
-	// test_meshClassPopEach{
-	// 	Mesh.stack.do({this.test_meshClassPopRemovesActiveMeshFromStack});
-	// 	this.assert( Mesh.peek.isNil,
-	// 	"Last Mesh is gone from the stack" );
-	// }
-	//
 	//
 	// test_meshFreeAll{
 	// 	"\n\n\nFreeAll".postln;
@@ -133,11 +116,7 @@ TestMesh : UnitTest {
 	// 	temp.free;
 	// 	this.assert( temp.class == Mesh, "New Mesh is a Mesh");
 	// }
-	//
-	// test_meshNewReturnsExisting{
-	// 	var temp = Mesh(\mesh1);
-	// 	this.assert( temp == Mesh(\mesh1), "recalling a mesh by name");
-	// }
+
 
 
 }
