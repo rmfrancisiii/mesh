@@ -21,23 +21,43 @@ Mesh {
 		^this.new(mesh);
 	}
 
-	*activeMesh {
+	*isThereActiveMesh {
 		if (meshStack.notNil and: { meshStack.notEmpty })
-		{^this.peek.meshName}
-		{("No active mesh").warn; ^nil}
+		{	^ true}
+		{	^ false}
 	}
 
-	*list {^meshDict.keys.asList} // as List?
+	*activeMeshName {
+		if (this.isThereActiveMesh)
+		{^this.peek.meshName}
+		{("No active mesh").warn; ^List.newClear}
+	}
+
+	*activeMesh {
+		if (this.isThereActiveMesh)
+		{^ this.peek}
+		{("No active mesh").warn; ^List.newClear}
+	}
+
+	*isThisActiveMesh { |name|
+		if (this.isThereActiveMesh)
+		{^ Mesh.at(name.asSymbol) == this.peek}
+		{("No active mesh").warn; ^List.newClear}
+	}
+
+	*list {^meshDict.keys.asList}
 
 	*stack { ^meshStack.collect({ arg item; item.meshName}) }
 
 	*me { ^me }
 
 	// return the last (top) mesh from the stack
-	*peek { ^meshStack[(meshStack.size-1)] }
+	*peek {
+		if (this.isThereActiveMesh)
+		{	^ meshStack[(meshStack.size-1)]}
+		{("No active mesh").warn; ^List.newClear}
+	}
 
-	// remove the current mesh from the stack,
-	// so the previous mesh is active
 	*pop {
 		if (meshStack.notNil and: { meshStack.notEmpty })
 		{this.peek.pop}
@@ -45,51 +65,41 @@ Mesh {
 	}
 
 	*popAll {
-		meshStack.do({Mesh.pop});
+		meshStack.size.do({Mesh.pop});
 		("No active mesh").warn;
 	}
 
-
-	* freeAll {
-
-		"freeAll Started".postln;
-
-		this.list.size.postln;
-		this.list.postln;
-		this.stack.size.postln;
-		this.stack.postln;
-
-		this.popAll;
-		{
-		this.list.do({|item|
-			("removing mesh:  " ++ item.meshName).warn;
-			item.hostManager.free;
-			item.meshView.free;
-			meshDict.removeAt(item.meshName);
-			"removed".postln;
-		});
-		}.defer(10)
-
+	*popEvery {|name|
+		// pops every instance of this mesh off of the stack and removes its environment from the Environment Stack.
 	}
 
 	init {|name|
+		name = name.asSymbol;
+		this.initializeInstanceVariables(name);
+		this.initializeInstanceEnvironment;
+		postf("New Mesh Created: % \n", (name));
+	}
 
-		meshName = name.asSymbol;
+	initializeInstanceVariables {|name|
+		meshName = name;
 		hostManager = MeshHostManager.new(this, me);
 		vertexDict = VertexDict.new;
 		meshView = MeshView(this);
-		env = Environment.make {};
-		env.put(meshName.asSymbol, this);
+	}
 
-		// TODO: consider expanding these, to what? vertexes? hosts? etc.
+	initializeInstanceEnvironment {
+		env = Environment.make {};
+		env.put(meshName, this);
+		this.addEnvironmentShortcuts(env, meshName);
+	}
+
+	addEnvironmentShortcuts {|env|
 		env.use({
 			~mesh = meshName;
 			~me = me;
 			~vl = vertexDict;
 			~win = meshView;
 		});
-		postf("New Mesh Created: % \n", meshName);
-
 	}
 
 	printOn { |stream| stream << this.class.name << "(" << meshName << ")" }
@@ -109,12 +119,9 @@ Mesh {
 	ping { ^hostManager.beacon.ping(me) }
 
 	push {
-
-		// pushes this mesh onto the stack and activates its environment.
 		if (currentEnvironment === env) {
-			// if this Mesh's Environment is already the current Environment,
-			"Mesh Already Current Environment!".warn; // warn the user
-			^this; // do nothing else and return the current Mesh
+			"Mesh Already Current Environment!".warn;
+			^this;
 		};
 
 		// otherwise:
@@ -150,9 +157,6 @@ Mesh {
 
 
 
-	popEvery {
-		// pops every instance of this mesh off of the stack and removes its environment from the Environment Stack.
-	}
 
 	free {
 		// FIXME: freeing a Mesh that doesnt exist Creates it and then removes it.
@@ -167,4 +171,27 @@ Mesh {
 			("removed mesh").warn;
 		}
 	}
+
+
+		// * freeAll {
+	//
+	// 	"freeAll Started".postln;
+	//
+	// 	this.list.size.postln;
+	// 	this.list.postln;
+	// 	this.stack.size.postln;
+	// 	this.stack.postln;
+	//
+	// 	this.popAll;
+	// 	{
+	// 		this.list.do({|item|
+	// 			("removing mesh:  " ++ item.meshName).warn;
+	// 			item.hostManager.free;
+	// 			item.meshView.free;
+	// 			meshDict.removeAt(item.meshName);
+	// 			"removed".postln;
+	// 		});
+	// 	}.defer(10)
+	//
+	// }
 }

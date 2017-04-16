@@ -32,16 +32,31 @@ TestMesh : UnitTest {
 		"Push All the Meshes tests performed\n\n".inform;
 	}
 
-	test_meshPopAllTheMeshes{
+	test_meshPopEveryMesh{
 		Mesh.stack.size.do({
 			this.popMeshAndTest;
 		});
 		this.testStackIsEmpty;
 	}
 
+	test_meshPopAll{
+		this.test_meshMakeManyMeshes(20);
+		this.test_meshPushAllTheMeshes;
+		Mesh.popAll;
+		this.testStackIsEmpty;
+	}
+
+	// test_meshFreeEveryMesh{
+	//
+	//
+	// 	TestMesh.new.testStackIsEmpty;
+	// 	TestMesh.new.testMeshListIsEmpty;
+	//
+	// 	Mesh.list.size;
+
 	makeNewMeshAndTest{|name = (this.nextNewMeshName)|
 		this.invokeAndTestMesh(name);
-		this.testMeshInstanceVariables(name);
+		this.allInstanceVariableTests(name);
 		this.testNewGetsExistingMesh(name);
 		"Mesh Created and tested.\n\n".inform;
 	}
@@ -58,7 +73,7 @@ TestMesh : UnitTest {
 		var initialStackSize = Mesh.stack.size;
 		Mesh.pop;
 
-		if (penultiMesh.notNil)
+		if (penultiMesh.isKindOf(List).not)
 		{	this.testMeshPeek(penultiMesh)}
 		{	this.testStackIsEmpty};
 
@@ -72,13 +87,12 @@ TestMesh : UnitTest {
 		this.testMeshList(name);
 	}
 
-	testMeshInstanceVariables{|name|
+	allInstanceVariableTests{|name|
 		var mesh = this.getMesh(name);
 		this.testHostManager(mesh);
 		this.testVertexDict(mesh);
 		this.testMeshView(mesh);
 		this.testMeshEnvironment(mesh);
-
 	}
 
 

@@ -3,8 +3,6 @@
 		^ Mesh.meshDict.at(name.asSymbol);
 	}
 
-
-
 	makeMesh {|name|
 		^ Mesh(name.asSymbol);
 	}
@@ -15,7 +13,7 @@
 	}
 
 	getPenultiMesh {
-		if (Mesh.stack.size <= 1) { ^ nil};
+		if (Mesh.stack.size <= 1) { ^ List.new(1)};
 		^ this.asMesh(Mesh.stack[(Mesh.stack.size -2)])
 	}
 
@@ -33,9 +31,6 @@
 			"Couldn't Push Mesh" );
 	}
 
-
-
-	// subtests
 	testMeshIsAMesh {|name|
 		this.assert( this.getMesh(name).isKindOf(Mesh),
 			"A Mesh is a Mesh is a Mesh");
