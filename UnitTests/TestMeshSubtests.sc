@@ -1,67 +1,75 @@
 + TestMesh{
+	getMesh {|name|
+		^ Mesh.meshDict.at(name.asSymbol);
+	}
+
+
+
+	makeMesh {|name|
+		^ Mesh(name.asSymbol);
+	}
+
+	nextNewMeshName {
+		var meshNumber = Mesh.meshDict.size + 1;
+		^ ("mesh" ++ meshNumber).asSymbol
+	}
+
+	getPenultiMesh {
+		if (Mesh.stack.size <= 1) { ^ nil};
+		^ this.asMesh(Mesh.stack[(Mesh.stack.size -2)])
+	}
+
+	asMesh {|mesh|
+		if (mesh.isKindOf(Mesh)) {^mesh};
+		if (mesh.isKindOf(Symbol)) {^Mesh(mesh)};
+		if (mesh.isKindOf(String)) {^Mesh(mesh.asSymbol)};
+		this.assert( false, "Couldn't cast as Mesh" );
+	}
+
+	pushMeshOrName {|mesh|
+		if (mesh.isKindOf(Mesh)) {mesh.push; ^true};
+		if (mesh.isKindOf(Symbol)) {Mesh(mesh).push; ^true};
+		this.assert( false,
+			"Couldn't Push Mesh" );
+	}
+
+
 
 	// subtests
-	meIsMeshHost {
+	testMeshIsAMesh {|name|
+		this.assert( this.getMesh(name).isKindOf(Mesh),
+			"A Mesh is a Mesh is a Mesh");
+	}
+
+	testNewGetsExistingMesh {|name|
+		this.assert( Mesh(name.asSymbol) == this.getMesh(name),
+			"Mesh(name) returns mesh as expected");
+	}
+
+
+	testMeIsMeshHost {
 		this.assert( Mesh.me.isKindOf(MeshHost),
 			"Me is a MeshHost");
 	}
 
-	meshStackIsStack {
+	testStackIsStack {
 		this.assert( Mesh.stack.isKindOf(Array),
 			"Stack is an Array");
 	}
 
-	meshStackIsEmpty {
+	testStackIsEmpty {
 		this.assert( Mesh.stack.isEmpty,
 			"Stack is empty");
 	}
 
-	meshListIsList  {
+	testMeshListIsList  {
 		this.assert( Mesh.list.isKindOf(List),
 			"Mesh List is a List");
 	}
 
-	meshListIsEmpty {
+	testMeshListIsEmpty {
 		this.assert( Mesh.list.isEmpty,
 			"Mesh List is empty");
-	}
-
-	vertexIsInitialized {
-		this.assert( Vertex.vertexTypeDict.isKindOf(IdentityDictionary),
-			"Vertex Type Dictionary created");
-	}
-
-	testMeshNew{|name = (this.nextNewMeshName)|
-		this.testMeshInvocation(name);
-		this.testMeshInstanceVariables(name);
-		"Mesh Creation tests performed\n\n".inform;
-	}
-
-	testMeshInvocation {|name|
-		this.makeMesh(name);
-		this.testName(name);
-		this.testMeshList(name);
-	}
-
-	testMeshInstanceVariables{|name|
-		var mesh = this.getMesh(name);
-		this.testHostManager(mesh);
-		this.testVertexDict(mesh);
-		this.testMeshView(mesh);
-		this.testMeshEnvironment(mesh);
-
-	}
-
-	getMesh {|name|
-		^Mesh.meshDict.at(name.asSymbol);
-	}
-
-
-	makeMesh {|name|
-		Mesh(name.asSymbol);
-		this.assert( this.getMesh(name).isKindOf(Mesh),
-			"A Mesh is a Mesh is a Mesh");
-
 	}
 
 	testName {|name|
@@ -114,32 +122,11 @@
 			"Correct number of meshes in Stack" );
 	}
 
-	nextNewMeshName {
-		var meshNumber = Mesh.meshDict.size + 1;
-		^ ("mesh" ++ meshNumber).asSymbol
-	}
-
 	testMeshPeek {|mesh|
 		this.assert( Mesh.peek == this.asMesh(mesh),
 			"Correct Mesh is on the top of the stack" );
 	}
 
-	asMesh {|mesh|
-		if (mesh.isKindOf(Mesh)) {^mesh};
-		if (mesh.isKindOf(Symbol)) {^Mesh(mesh)};
-		if (mesh.isKindOf(String)) {^Mesh(mesh.asSymbol)};
-	    if (mesh.isNil) {^nil};
-		this.assert( false, "Couldn't cast as Mesh" );
-	}
-
-	pushMeshOrName {|mesh|
-		if (mesh.isKindOf(Mesh)) {mesh.push; ^true};
-		if (mesh.isKindOf(Symbol)) {Mesh(mesh).push; ^true};
-		this.assert( false,
-			"Couldn't Push Mesh" );
-	}
-
-	getPenultiMesh {^ this.asMesh(Mesh.stack[(Mesh.stack.size -2)])}
 
 }
 

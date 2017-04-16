@@ -7,62 +7,78 @@ TestMesh : UnitTest {
 	}
 
 	test_meshEmptyClassTest{
-		this.meIsMeshHost;
-		this.meshStackIsStack;
-		this.meshStackIsEmpty;
-		this.meshListIsList;
-		this.meshListIsEmpty;
-		this.vertexIsInitialized;
+		this.testMeIsMeshHost;
+		this.testStackIsStack;
+		this.testStackIsEmpty;
+		this.testMeshListIsList;
+		this.testMeshListIsEmpty;
+		TestVertex.new.testVertexIsInitialized;
 		"Mesh empty class tests performed\n\n".inform;
 	}
-
 
 	test_meshMakeManyMeshes{ |number = 3|
 		var initialMeshCount = Mesh.meshDict.size;
 		number.do({
-			this.testMeshNew(this.nextNewMeshName)
+			this.makeNewMeshAndTest;
 		});
 		this.testMeshCount(initialMeshCount+number);
 		"Make Many Meshes tests performed\n\n".inform;
 	}
 
-	// NEED TO REWRITE THIS. maybe: testMeshNew returns mesh?
-	// test_meshNewReturnsExisting{
-	// 	var name = this.nextNewMeshName;
-	// 	this.testMeshNew(name);
-	// 	this.assert( mesh == Mesh(name),
-	// 	"recalling a mesh by name");
-	// }
+	test_meshPushAllTheMeshes{
+		Mesh.meshDict.keysDo({|name|
+			this.pushMeshAndTest(name);
+		});
+		"Push All the Meshes tests performed\n\n".inform;
+	}
 
-	test_meshPush{ |mesh = (this.asMesh(this.nextNewMeshName))|
+	test_meshPopAllTheMeshes{
+		Mesh.stack.size.do({
+			this.popMeshAndTest;
+		});
+		this.testStackIsEmpty;
+	}
+
+	makeNewMeshAndTest{|name = (this.nextNewMeshName)|
+		this.invokeAndTestMesh(name);
+		this.testMeshInstanceVariables(name);
+		this.testNewGetsExistingMesh(name);
+		"Mesh Created and tested.\n\n".inform;
+	}
+
+	pushMeshAndTest{ |mesh|
 		var initialStackSize = Mesh.stack.size;
 		this.pushMeshOrName(mesh);
 		this.testMeshPeek(mesh);
 		this.testStackSize(initialStackSize + 1);
 	}
 
-	test_meshPop{
+	popMeshAndTest{
 		var penultiMesh = this.getPenultiMesh;
 		var initialStackSize = Mesh.stack.size;
 		Mesh.pop;
-		this.testMeshPeek(penultiMesh);
+
+		if (penultiMesh.notNil)
+		{	this.testMeshPeek(penultiMesh)}
+		{	this.testStackIsEmpty};
+
 		this.testStackSize(initialStackSize - 1);
 	}
 
-	test_meshPushAll{
-		Mesh.meshDict.keysDo({|name|
-			var initialStackSize = Mesh.stack.size;
-			this.pushMeshOrName(name);
-			this.testMeshPeek(name);
-			this.testStackSize(initialStackSize + 1);
-		});
+	invokeAndTestMesh {|name|
+		this.makeMesh(name);
+		this.testMeshIsAMesh(name);
+		this.testName(name);
+		this.testMeshList(name);
 	}
 
-	test_meshPopAll{
-		Mesh.stack.size.do({
-			this.test_meshPop;
-		});
-		this.meshStackIsEmpty;
+	testMeshInstanceVariables{|name|
+		var mesh = this.getMesh(name);
+		this.testHostManager(mesh);
+		this.testVertexDict(mesh);
+		this.testMeshView(mesh);
+		this.testMeshEnvironment(mesh);
+
 	}
 
 
