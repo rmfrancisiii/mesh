@@ -45,6 +45,14 @@ Mesh {
 		{("No active mesh").warn; ^List.newClear}
 	}
 
+	*isThisKeyInMeshDict { |name|
+		^ meshDict.includesKey(name)
+	}
+
+	*isThisKeyOnTheStack { |name|
+		^ this.stack.includes(name);
+	}
+
 	*list {^meshDict.keys.asList}
 
 	*stack { ^meshStack.collect({ arg item; item.meshName}) }
@@ -55,22 +63,36 @@ Mesh {
 	*peek {
 		if (this.isThereActiveMesh)
 		{	^ meshStack[(meshStack.size-1)]}
-		{("No active mesh").warn; ^List.newClear}
+		{("No active mesh").warn; ^ meshStack}
 	}
 
 	*pop {
-		if (meshStack.notNil and: { meshStack.notEmpty })
+		if (this.isThereActiveMesh)
 		{this.peek.pop}
 		{("No active mesh").warn}
+		^ meshStack;
 	}
 
 	*popAll {
 		meshStack.size.do({Mesh.pop});
 		("No active mesh").warn;
+		^ meshStack;
 	}
 
 	*popEvery {|name|
-		// pops every instance of this mesh off of the stack and removes its environment from the Environment Stack.
+		Mesh.at(name).pop;
+		Mesh.removeNameFromStack(name);
+	}
+
+	*removeNameFromStack {|name|
+		meshStack = meshStack.reject({|val| val == Mesh.at(name)});
+	}
+
+	*freeAll {
+		this.popAll;
+		Mesh.meshDict.do({|item|
+			item.free;
+		});
 	}
 
 	init {|name|
@@ -102,6 +124,15 @@ Mesh {
 		});
 	}
 
+	hideCurrentWindow { Mesh.peek.meshView.deactivate }
+
+	showCurrentWindow { Mesh.peek.meshView.activate }
+
+	isThisCurrentMesh{
+		^ currentEnvironment === env
+	}
+
+
 	printOn { |stream| stream << this.class.name << "(" << meshName << ")" }
 
 	addMesh { meshDict.put(this.meshName, this) }
@@ -119,39 +150,30 @@ Mesh {
 	ping { ^hostManager.beacon.ping(me) }
 
 	push {
-		if (currentEnvironment === env) {
-			"Mesh Already Current Environment!".warn;
-			^this;
-		};
-
-		// otherwise:
-		if (meshStack.notNil and: { meshStack.notEmpty })
-		{Mesh.peek.meshView.deactivate}; //.meshView.postln; //deactivate;
-
+		if (this.isThisCurrentMesh) { ^ meshStack; };
+		if (Mesh.isThereActiveMesh) { this.hideCurrentWindow };
 		meshStack = meshStack.add(this);
 		env.push; // push this Mesh's Environment onto the Environment Stack
 		("Entering Mesh: " ++ meshName).inform; // post a confirmation,
 		meshView.activate;
+		^ meshStack;
 	}
 
-	pop {
-		// pops this mesh off of the stack and removes its environment from the Environment Stack.
-		// generally i would use Mesh.pop instead
 
-		// DECIDE: should this remove it from the stack entirely?
-		if (currentEnvironment === env)
+	pop {
+		if (this.isThisCurrentMesh)
 		{
-			meshView.deactivate;
+			this.hideCurrentWindow;
 			("Leaving Mesh: " ++ meshName).inform; // post a confirmation,
 			env.pop;
 			meshStack.pop;
-			if (meshStack.notNil and: { meshStack.notEmpty })
-			{Mesh.peek.meshView.activate};
+			if (Mesh.isThereActiveMesh) {this.showCurrentWindow};
+			^ meshStack;
 		}
 
 		{
-			(meshName ++ "is not the current Mesh.").warn;
-			^nil
+			(meshName ++ "is not the current Mesh. Try Mesh.pop").warn;
+			^ meshStack;
 		}
 	}
 
@@ -159,11 +181,10 @@ Mesh {
 
 
 	free {
-		// FIXME: freeing a Mesh that doesnt exist Creates it and then removes it.
-		// FIXME: Shouldn't be able to remove a mesh on the stack.
 
-		if (currentEnvironment === env)
-		{("Cannot remove current mesh").warn; ^nil} // post a warning
+		if (this.isThisCurrentMesh)
+		{("Cannot remove current mesh, Try Mesh.pop First!").warn; ^ meshStack} // post a warning
+
 		{
 			hostManager.free(me);
 			meshDict.removeAt(this.meshName);
@@ -173,7 +194,7 @@ Mesh {
 	}
 
 
-		// * freeAll {
+	// * freeAll {
 	//
 	// 	"freeAll Started".postln;
 	//
