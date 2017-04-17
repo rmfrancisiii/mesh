@@ -9,15 +9,14 @@ Mesh {
 		Vertex.initVertexTypeDict;
 	}
 
-	*at {|name| ^ meshDict.at(name)}
-
+	*at {|name| ^ meshDict.at(name) }
 
 	*new {|name|
-		^ meshDict.at(name) ?? {^ super.new.init(name).addMesh};
+		^ meshDict.at(name) ?? { ^ super.new.init(name).addMesh };
 	}
 
 	*newFrom { |mesh|
-		if(mesh.isKindOf(this)) { ^mesh };
+		if(mesh.isKindOf(this)) { ^ mesh };
 		^this.new(mesh);
 	}
 
@@ -45,15 +44,11 @@ Mesh {
 		{("No active mesh").warn; ^List.newClear}
 	}
 
-	*isThisKeyInMeshDict { |name|
-		^ meshDict.includesKey(name)
-	}
+	*isThisKeyInMeshDict { |name| ^ meshDict.includesKey(name) }
 
-	*isThisKeyOnTheStack { |name|
-		^ this.stack.includes(name);
-	}
+	*isThisKeyOnTheStack { |name| ^ this.stack.includes(name) }
 
-	*list {^meshDict.keys.asList}
+	*list { ^ meshDict.keys.asList }
 
 	*stack { ^meshStack.collect({ arg item; item.meshName}) }
 
@@ -69,7 +64,7 @@ Mesh {
 	*pop {
 		if (this.isThereActiveMesh)
 		{this.peek.pop}
-		{("No active mesh").warn}
+		{("No active mesh").warn};
 		^ meshStack;
 	}
 
@@ -128,10 +123,7 @@ Mesh {
 
 	showCurrentWindow { Mesh.peek.meshView.activate }
 
-	isThisCurrentMesh{
-		^ currentEnvironment === env
-	}
-
+	isThisCurrentMesh{ ^ currentEnvironment === env }
 
 	printOn { |stream| stream << this.class.name << "(" << meshName << ")" }
 
@@ -159,7 +151,6 @@ Mesh {
 		^ meshStack;
 	}
 
-
 	pop {
 		if (this.isThisCurrentMesh)
 		{
@@ -177,9 +168,6 @@ Mesh {
 		}
 	}
 
-
-
-
 	free {
 
 		if (this.isThisCurrentMesh)
@@ -193,26 +181,4 @@ Mesh {
 		}
 	}
 
-
-	// * freeAll {
-	//
-	// 	"freeAll Started".postln;
-	//
-	// 	this.list.size.postln;
-	// 	this.list.postln;
-	// 	this.stack.size.postln;
-	// 	this.stack.postln;
-	//
-	// 	this.popAll;
-	// 	{
-	// 		this.list.do({|item|
-	// 			("removing mesh:  " ++ item.meshName).warn;
-	// 			item.hostManager.free;
-	// 			item.meshView.free;
-	// 			meshDict.removeAt(item.meshName);
-	// 			"removed".postln;
-	// 		});
-	// 	}.defer(10)
-	//
-	// }
 }
