@@ -3,6 +3,7 @@
 Mesh(\mesh1).push;
 Mesh(\mesh1).hostManager.beacon.start;
 
+UnitTest.gui;
 Mesh.at(\some)
 Mesh.at(\mesh1)
 
@@ -140,6 +141,3 @@ Vertex(\sinSynth, \Instrument,
 // AND:
 
 Vertex(\sinPattern, \PVert, trunk: \sinSynth)
-
-
-

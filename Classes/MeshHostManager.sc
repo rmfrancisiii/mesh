@@ -1,31 +1,9 @@
-/*
-----------------------
-- Class: MeshHostManager
-----------------------
--	Class Methods : Args : Return Type
--		new : - : MeshHostManager
--
-----------------------
-- 	Instance Variables : Type : Description
-- 		hostList : MeshHostList : Dictionary of hosts
--		timeoutList : IdentityDictionary : Dictionary of (hosts -> last time Pinged)
--		beacon : Beacon : manages network communication with other hosts
--
--	Instance Methods : Args : Return Type
--		init : - : MeshHostManager
--		free : MeshHostManager : -
--		checkTimeouts :  :
--		addHost : mesh : MeshHostList
--		hostNames : - : Array
--		hosts : - : -
-- 		update : - : -
-
-----------------------
-
-*/
-
 MeshHostManager {
 	var <hostList, <>timeoutList, <>beacon;
+
+// add start Beacon argument default true
+// And
+// DI for beacon to allow MockBeacon for testing
 
 	*new {|mesh, me| ^ super.new.init(mesh, me) }
 

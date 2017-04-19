@@ -2,6 +2,7 @@ Mesh {
 	classvar <>meshDict, <>meshStack, me;
 	var meshName, <>env, hostManager, <>vertexDict, <>meshView;
 
+// test
 	*initClass {
 		meshStack = [];
 		meshDict = IdentityDictionary.new;

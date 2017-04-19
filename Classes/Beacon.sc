@@ -1,41 +1,8 @@
-
-/*
-----------------------
-- Class: Beacon
-----------------------
--	Class Methods : Args : Return Type
--		new : - : MeshHostList
--
-----------------------
-- 	Instance Variables : Type : Description
--
--		oscPath : :
--		pollPeriod : :
--		broadcastAddr : :
--		beaconKeeper : :
--		inDefName : :
--		outDefName : :
-
--	Instance Methods : Args : Return Type
--		init : Mesh :
--		makeOSCdefs : Mesh :
--		start : :
--		stop : :
--		free : :
-
-----------------------
-
-*/
-
 Beacon {
 
 	var oscPath, <pollPeriod, <broadcastAddr, beaconKeeper, inDefName, outDefName;
 
 	*new {|mesh, me| ^ super.new.init(mesh, me) }
-
-	//////////////////////////
-	// Instance Methods
-	//////////////////////////
 
 	init {|mesh, me|
 

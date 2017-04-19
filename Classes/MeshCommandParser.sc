@@ -1,4 +1,4 @@
-MeshCommandParser{ // rad.
+MeshCommandParser{
 	classvar active = true, chatTag = "//!!", panicTag = "//??", pingTag = "//**";
 	classvar pingFunc;
 

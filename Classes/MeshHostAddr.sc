@@ -1,23 +1,3 @@
-/*
-----------------------
-- Class: MeshHostAddr
--
--   implements a NetAddr that can have multiple ports...
--   this is the same as in Republic, but we duplicate here
--   for now in order to avoid the dependancy
--
-----------------------
--	Class Methods : Args : Return Type
--		new : - : MeshHostList
--
-----------------------
-- 	Instance Variables : Type : Description
--
--	Instance Methods : Args : Return Type
--
-----------------------
-*/
-
 MeshHostAddr : NetAddr {
 
 	var <>ports;
