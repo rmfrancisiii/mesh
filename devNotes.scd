@@ -39,9 +39,9 @@ VertexServer: A Vertex that represents a Supercollider server node.
 
 Generic Object creation pseudocode:
 
-1. Artist issues Vertex(\vertexName, \vertexType, \hostName, \meshName);
+1. Artist issues Vertex(\vertexName, \vertexType, \hostName, \name);
 
-2. Vertex checks to be sure the mesh exists, then checks \meshName.vertexList
+2. Vertex checks to be sure the mesh exists, then checks \name.vertexList
    2a. if it exists (currently returns the Vertex)
        Might want to extend functionality for updating in this syntax.
 

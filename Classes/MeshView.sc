@@ -7,7 +7,7 @@ MeshView {
 	}
 
 	init { |mesh|
-		var name = mesh.meshName.asSymbol;
+		var name = mesh.name.asSymbol;
 		var hostList = mesh.hostManager.hostList;
 		hostList.addDependant(this);
 		listView = ListView();

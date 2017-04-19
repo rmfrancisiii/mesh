@@ -1,19 +1,19 @@
 Mesh {
-	classvar <>meshDict, <>meshStack, me;
-	var meshName, <>env, hostManager, <>vertexDict, <>meshView;
+	classvar <>all, <>stack, <thisHost;
+	var <>name, <>env, <>hostManager, <>vertexDict, <>meshView;
 
 // test
 	*initClass {
-		meshStack = [];
-		meshDict = IdentityDictionary.new;
-		me = me.as(MeshHost);
+		stack = [];
+		all = IdentityDictionary.new;
+		thisHost = thisHost.as(MeshHost);
 		Vertex.initVertexTypeDict;
 	}
 
-	*at {|name| ^ meshDict.at(name) }
+	*at {|key| ^ all.at(key) }
 
-	*new {|name|
-		^ meshDict.at(name) ?? { ^ super.new.init(name).addMesh };
+	*new {|key|
+		^ all.at(key) ?? { ^ super.new.init(key).addMesh };
 	}
 
 	*newFrom { |mesh|
@@ -22,14 +22,14 @@ Mesh {
 	}
 
 	*isThereActiveMesh {
-		if (meshStack.notNil and: { meshStack.notEmpty })
+		if (stack.notNil and: { stack.notEmpty })
 		{	^ true}
 		{	^ false}
 	}
 
-	*activeMeshName {
+	*activename {
 		if (this.isThereActiveMesh)
-		{^this.peek.meshName}
+		{^this.peek.name}
 		{("No active mesh").warn; ^List.newClear}
 	}
 
@@ -39,82 +39,86 @@ Mesh {
 		{("No active mesh").warn; ^List.newClear}
 	}
 
-	*isThisActiveMesh { |name|
+	*isThisActiveMesh { |key|
 		if (this.isThereActiveMesh)
-		{^ Mesh.at(name.asSymbol) == this.peek}
+		{^ Mesh.at(key.asSymbol) == this.peek}
 		{("No active mesh").warn; ^List.newClear}
 	}
 
-	*isThisKeyInMeshDict { |name| ^ meshDict.includesKey(name) }
+	*isThisKeyInAll { |key| ^ all.includesKey(key) }
 
-	*isThisKeyOnTheStack { |name| ^ this.stack.includes(name) }
+	*isThisKeyOnTheStack { |key|
+		this.stack.do({|item|
+			if (item.name == key) {^true};
+		});
+		^ false
+	 }
 
-	*list { ^ meshDict.keys.asList }
+	*list { ^ all.keys.asList }
 
-	*stack { ^meshStack.collect({ arg item; item.meshName}) }
+	//*stack { ^stack.collect({ arg item; item.name}) }
 
-	*me { ^me }
+	*me { ^thisHost}
 
 	// return the last (top) mesh from the stack
 	*peek {
 		if (this.isThereActiveMesh)
-		{	^ meshStack[(meshStack.size-1)]}
-		{("No active mesh").warn; ^ meshStack}
+		{	^ stack[(stack.size-1)]}
+		{("No active mesh").warn; ^ stack}
 	}
 
 	*pop {
 		if (this.isThereActiveMesh)
 		{this.peek.pop}
 		{("No active mesh").warn};
-		^ meshStack;
+		^ stack;
 	}
 
 	*popAll {
-		meshStack.size.do({Mesh.pop});
+		stack.size.do({Mesh.pop});
 		("No active mesh").warn;
-		^ meshStack;
+		^ stack;
 	}
 
-	*popEvery {|name|
-		Mesh.at(name).pop;
-		Mesh.removeNameFromStack(name);
+	*popEvery {|key|
+		Mesh.at(key).pop;
+		Mesh.removeNameFromStack(key);
 	}
 
-	*removeNameFromStack {|name|
-		meshStack = meshStack.reject({|val| val == Mesh.at(name)});
+	*removeNameFromStack {|key|
+		stack = stack.reject({|val| val == Mesh.at(key)});
 	}
 
 	*freeAll {
 		this.popAll;
-		Mesh.meshDict.do({|item|
+		Mesh.all.do({|item|
 			item.free;
 		});
 	}
 
-	init {|name|
-		name = name.asSymbol;
+	init {|key|
+		name = key.asSymbol;
 		this.initializeInstanceVariables(name);
 		this.initializeInstanceEnvironment;
 		postf("New Mesh Created: % \n", (name));
 	}
 
-	initializeInstanceVariables {|name|
-		meshName = name;
-		hostManager = MeshHostManager.new(this, me);
+	initializeInstanceVariables {
+		hostManager = MeshHostManager.new(this, thisHost);
 		vertexDict = VertexDict.new;
 		meshView = MeshView(this);
 	}
 
 	initializeInstanceEnvironment {
 		env = Environment.make {};
-		env.put(meshName, this);
-		this.addEnvironmentShortcuts(env, meshName);
+		env.put(name, this);
+		this.addEnvironmentShortcuts(env, name);
 	}
 
 	addEnvironmentShortcuts {|env|
 		env.use({
-			~mesh = meshName;
-			~me = me;
+			~mesh = name;
+			~me = thisHost;
 			~vl = vertexDict;
 			~win = meshView;
 		});
@@ -126,57 +130,51 @@ Mesh {
 
 	isThisCurrentMesh{ ^ currentEnvironment === env }
 
-	printOn { |stream| stream << this.class.name << "(" << meshName << ")" }
+	printOn { |stream| stream << this.class.name << "(" << name << ")" }
 
-	addMesh { meshDict.put(this.meshName, this) }
-
-	meshName { ^meshName }
-
-	name { ^meshName }
-
-	hostManager { ^hostManager }
+	addMesh { all.put(this.name, this) }
 
 	hosts { ^hostManager.hosts }
 
-	at {|name| ^ hostManager.at(name)}
+	at {|key| ^ hostManager.at(key)}
 
-	ping { ^hostManager.beacon.ping(me) }
+	ping { ^hostManager.beacon.ping(thisHost) }
 
 	push {
-		if (this.isThisCurrentMesh) { ^ meshStack; };
+		if (this.isThisCurrentMesh) { ^ stack; };
 		if (Mesh.isThereActiveMesh) { this.hideCurrentWindow };
-		meshStack = meshStack.add(this);
+		stack = stack.add(this);
 		env.push; // push this Mesh's Environment onto the Environment Stack
-		("Entering Mesh: " ++ meshName).inform; // post a confirmation,
+		("Entering Mesh: " ++ name).inform; // post a confirmation,
 		meshView.activate;
-		^ meshStack;
+		^ stack;
 	}
 
 	pop {
 		if (this.isThisCurrentMesh)
 		{
 			this.hideCurrentWindow;
-			("Leaving Mesh: " ++ meshName).inform; // post a confirmation,
+			("Leaving Mesh: " ++ name).inform; // post a confirmation,
 			env.pop;
-			meshStack.pop;
+			stack.pop;
 			if (Mesh.isThereActiveMesh) {this.showCurrentWindow};
-			^ meshStack;
+			^ stack;
 		}
 
 		{
-			(meshName ++ "is not the current Mesh. Try Mesh.pop").warn;
-			^ meshStack;
+			(name ++ "is not the current Mesh. Try Mesh.pop").warn;
+			^ stack;
 		}
 	}
 
 	free {
 
 		if (this.isThisCurrentMesh)
-		{("Cannot remove current mesh, Try Mesh.pop First!").warn; ^ meshStack} // post a warning
+		{("Cannot remove current mesh, Try Mesh.pop First!").warn; ^ stack} // post a warning
 
 		{
-			hostManager.free(me);
-			meshDict.removeAt(this.meshName);
+			hostManager.free(thisHost);
+			all.removeAt(this.name);
 			meshView.free;
 			("removed mesh").warn;
 		}

@@ -38,11 +38,11 @@ Artists directly interact with the mesh, and do not need to know many of the det
 
 A Mesh is created with a name:
 ```SuperCollider
-Mesh(\meshName)
+Mesh(\name)
 ```
 and activated:
 ```SuperCollider
-Mesh(\meshName).push;
+Mesh(\name).push;
 ```
 
 As other machines on the network create a Mesh with the same name, they are added to that mesh as hosts.

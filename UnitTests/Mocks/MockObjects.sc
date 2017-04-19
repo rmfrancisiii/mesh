@@ -1,16 +1,13 @@
 MockMesh {
-	var <>meshName;
+	var <>name;
 
 	*new {|name|
 		^ super.new.init(name)
 	}
 
 	init {|name|
-		meshName = name;
+		name = name;
 		postf("Mock Mesh Created: % \n", (name));
 	}
-
-	name { ^meshName }
-
 
 }

@@ -17,7 +17,7 @@ TestMesh : UnitTest {
 	}
 
 	test_meshMakeManyMeshes{ |number = 2|
-		var initialMeshCount = Mesh.meshDict.size;
+		var initialMeshCount = Mesh.all.size;
 		number.do({
 			this.makeNewMeshAndTest;
 		});
@@ -26,7 +26,7 @@ TestMesh : UnitTest {
 	}
 
 	test_meshPushAllTheMeshes{
-		Mesh.meshDict.keysDo({|name|
+		Mesh.all.keysDo({|name|
 			this.pushMeshAndTest(name);
 		});
 		"Push All the Meshes tests performed\n\n".inform;
@@ -46,21 +46,21 @@ TestMesh : UnitTest {
 	}
 
 	test_freeOneMesh{|name = (this.chooseRandomMesh)|
-		var initialMeshCount = Mesh.meshDict.size;
+		var initialMeshCount = Mesh.all.size;
 		("freeing " ++ name).postln;
-		this.testMeshIsThisKeyInMeshDict(name);
+		this.testMeshIsThisKeyInAll(name);
 		Mesh.popEvery(name);
 		Mesh.at(name).free;
-		this.testMeshIsThisKeyInMeshDict(name);
+		this.testMeshIsThisKeyInAll(name);
 		this.testMeshCount(initialMeshCount - 1);
 	}
 
 	test_FreeFailsForActiveMesh{|name|
-		var initialMeshCount = Mesh.meshDict.size;
-		var exists = Mesh.isThisKeyInMeshDict(name);
+		var initialMeshCount = Mesh.all.size;
+		var exists = Mesh.isThisKeyInAll(name);
 		Mesh.at(name).push;
 		Mesh.at(name).free;
-		this.assert( Mesh.isThisKeyInMeshDict(name) == exists,
+		this.assert( Mesh.isThisKeyInAll(name) == exists,
 			"Mesh Key still Exists");
 		this.testMeshCount(initialMeshCount);
 		this.testMeshIsThisActiveMesh(name);
@@ -69,7 +69,7 @@ TestMesh : UnitTest {
 	test_pushMeshesRandomly{ |num = 5|
 		num.do({
 			var rand = this.chooseRandomMesh;
-			if (Mesh.activeMeshName != rand)
+			if (Mesh.activename != rand)
 			{ ("Pushing  " ++ rand).postln;
 				this.pushMeshAndTest(rand);
 			}{ "already Active mesh, not pushing".postln;};
@@ -79,7 +79,7 @@ TestMesh : UnitTest {
 
 	test_meshPopEvery{|name = (this.chooseRandomMesh)|
 		this.testMeshIsThisKeyOnTheStack(name);
-		if (name == Mesh.activeMeshName) {Mesh.pop};
+		if (name == Mesh.activename) {Mesh.pop};
 
 		Mesh.popEvery(name);
 		this.testMeshIsThisKeyOnTheStack(name);
@@ -94,15 +94,15 @@ TestMesh : UnitTest {
 	}
 
 		getMesh {|name|
-		^ Mesh.meshDict.at(name.asSymbol);
+		^ Mesh.all.at(name.asSymbol);
 	}
 
 	makeMesh {|name|
 		^ Mesh(name.asSymbol);
 	}
 
-	nextNewMeshName {
-		var meshNumber = Mesh.meshDict.size + 1;
+	nextNewname {
+		var meshNumber = Mesh.all.size + 1;
 		^ ("mesh" ++ meshNumber).asSymbol
 	}
 
@@ -128,12 +128,12 @@ TestMesh : UnitTest {
 			"Couldn't Push Mesh" );
 	}
 
-	makeNewMeshAndTest{|name = (this.nextNewMeshName)|
-		this.testMeshIsThisKeyInMeshDict(name);
+	makeNewMeshAndTest{|name = (this.nextNewname)|
+		this.testMeshIsThisKeyInAll(name);
 		this.invokeAndTestMesh(name);
 		this.allInstanceVariableTests(name);
 		this.testNewGetsExistingMesh(name);
-		this.testMeshIsThisKeyInMeshDict(name);
+		this.testMeshIsThisKeyInAll(name);
 		"Mesh Created and tested.\n\n".inform;
 	}
 
@@ -210,7 +210,7 @@ TestMesh : UnitTest {
 	}
 
 	testName {|name|
-		this.assert( this.getMesh(name).meshName == name,
+		this.assert( this.getMesh(name).name == name,
 			"New Mesh has the right name" );
 	}
 
@@ -223,14 +223,14 @@ TestMesh : UnitTest {
 			"Active Mesh Test Valid");
 	}
 
-	testMeshIsThisKeyInMeshDict  { |name|
-		var matches = Mesh.meshDict.includesKey(name);
-		this.assert( Mesh.isThisKeyInMeshDict(name) == matches,
+	testMeshIsThisKeyInAll  { |name|
+		var matches = Mesh.all.includesKey(name);
+		this.assert( Mesh.isThisKeyInAll(name) == matches,
 			"Mesh Dict/Key Test Valid");
 	}
 
 	testMeshIsThisKeyOnTheStack  { |name|
-		var matches = Mesh.meshStack.includes(Mesh.at(name));
+		var matches = Mesh.stack.includes(Mesh.at(name));
 		this.assert( Mesh.isThisKeyOnTheStack(name) == matches,
 			"Mesh Stack/Key Test Valid");
 	}
@@ -259,7 +259,7 @@ TestMesh : UnitTest {
 	testMeshEnvironment{|mesh|
 		this.assert( mesh.env.isKindOf(Environment),
 			"New Mesh contains an Environment" );
-		this.assert( mesh.env.at(\mesh) == mesh.meshName,
+		this.assert( mesh.env.at(\mesh) == mesh.name,
 			"New Mesh environment contains a shortcut variable for its own name" );
 		this.assert( mesh.env.at(\me) == Mesh.me,
 			"New Mesh environment contains a shortcut variable for its MeshHost" );
@@ -272,7 +272,7 @@ TestMesh : UnitTest {
 	testMeshCount {|size|
 		this.assert( Mesh.list.size == size,
 			"Correct number of meshes in List" );
-		this.assert( Mesh.meshDict.size == size,
+		this.assert( Mesh.all.size == size,
 			"Correct number of meshes in Dictionary" );
 	}
 

@@ -1,9 +1,9 @@
 Mesh
-  *meshDict       Mesh.all            IdentityDictionary
-  *meshStack      Mesh.stack          Array of Symbols
+  *all       Mesh.all            IdentityDictionary
+  *stack      Mesh.stack          Array of Symbols
   *me             Mesh.thisHost       MeshHost
 
-  meshName        this.name           Symbol
+  name        this.name           Symbol
   env             this.environment    Environment
   hostManager     this.hosts          HostManager
   vertexDict      this.vertexes       VertexDict
@@ -41,9 +41,9 @@ Mesh.at(\name).vertexes.at(\name) >> Vertex(\name)
 	*newFrom {}
 
   Mesh.current <<	*activeMesh << *peek
-	Mesh.current.name << *activeMeshName
+	Mesh.current.name << *activename
 	Mesh.isCurrent(\name) << *isThisActiveMesh {}
-	Mesh.exists(\name) << *isThisKeyInMeshDict {}
+	Mesh.exists(\name) << *isThisKeyInall {}
 	Mesh.onStack(\name) <<  *isThisKeyOnTheStack {}
 	Mesh.names  << *list {}
 	Mesh.stack {}

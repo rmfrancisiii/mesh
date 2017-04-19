@@ -6,7 +6,7 @@ Beacon {
 
 	init {|mesh, me|
 
-		var name = mesh.meshName;
+		var name = mesh.name;
 		// Mesh.me.postln;
 
 		inDefName = ( name ++ "BeaconIn").asSymbol;

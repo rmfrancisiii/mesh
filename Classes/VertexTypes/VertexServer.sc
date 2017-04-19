@@ -20,11 +20,11 @@ VertexServer : VertexAbstract {
 
 
 	/// working on this:
-	init {|requestor, vertexName, meshName, thisHost, thisServer|
+	init {|requestor, vertexName, name, thisHost, thisServer|
 		host = Mesh.me;
 		server = Server.local;
 
-		Mesh(meshName).vertexDict.add(vertexName -> this);
+		Mesh(name).vertexDict.add(vertexName -> this);
 
 		//TODO: test success
 		server.boot;

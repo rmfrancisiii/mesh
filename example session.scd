@@ -71,7 +71,7 @@ Vertex(\serverTwo, \server, \rose, \mesh2, \arg2);
 Vertex(\serverOne);
 Vertex(\serverOne).test;
 Vertex(\serverOne).ping;
-Vertex(\serverTwo, meshName: \mesh2).test;
+Vertex(\serverTwo, name: \mesh2).test;
 
 Mesh(\mesh2).push;
 Vertex(\serverTwo).test;
