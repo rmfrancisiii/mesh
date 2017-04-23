@@ -24,7 +24,22 @@ Mesh {
 	*current {
 		if (Mesh.hasCurrent)
 		{	^ stack[(stack.size-1)]}
-		{("No active mesh").warn; ^ stack}
+		{("No current mesh").warn; ^ stack}
+	}
+
+	*hasPrevious {
+		^ stack.size > 1
+	}
+
+	*previous {
+		if (Mesh.hasPrevious)
+		{	^ stack[(stack.size-2)]}
+		{("No Previous mesh").warn; ^ stack}
+	}
+
+	*isPrevious { |key|
+		if (Mesh.hasPrevious.not) {^ false};
+		^ Mesh.previous.name == key
 	}
 
 	*hasCurrent {
@@ -47,9 +62,7 @@ Mesh {
 			if (mesh.name == key) {^true};
 		});
 		^ false
-	 }
-
-	*list { ^ all.keys.asList }
+	}
 
 	*pop {
 		if (Mesh.hasCurrent)

@@ -6,284 +6,140 @@ TestMesh : UnitTest {
 	tearDown {
 	}
 
-	test_meshEmptyClassTest{
-		this.testMeIsMeshHost;
-		this.testStackIsStack;
-		this.testStackIsEmpty;
-		this.testMeshListIsList;
-		this.testMeshListIsEmpty;
-		TestVertex.new.testVertexIsInitialized;
-		"Mesh empty class tests performed\n\n".inform;
+	test_OneMesh{
+		var mesh;
+		var key = this.nextNewName;
+		this.classInitialized;
+		mesh = this.makeMesh(key);
+		this.meshInitialized(key, mesh);
+
 	}
 
-	test_meshMakeManyMeshes{ |number = 2|
-		var initialMeshCount = Mesh.all.size;
-		number.do({
-			this.makeNewMeshAndTest;
-		});
-		this.testMeshCount(initialMeshCount+number);
-		"Make Many Meshes tests performed\n\n".inform;
+	classInitialized {
+		this.hostInitialized;
+		this.stackInitialized;
+		this.allInitialized;
+		TestVertex.new.vertexInitialized;
 	}
 
-	test_meshPushAllTheMeshes{
-		Mesh.all.keysDo({|name|
-			this.pushMeshAndTest(name);
-		});
-		"Push All the Meshes tests performed\n\n".inform;
+	hostInitialized {
+		this.thisHostIsMeshHost;
+		// test IP and hostName?
+	}
+	stackInitialized {
+		this.stackIsArray;
+		this.stackIsEmpty;
 	}
 
-	test_meshPopAllTheMeshes{
-		Mesh.stack.size.do({
-			this.popMeshAndTest;
-		});
-		this.testStackIsEmpty;
+	allInitialized {
+			this.allIsIdentityDict;
+			this.allIsEmpty;
 	}
 
-	test_meshPopAll{
-		this.test_meshPushAllTheMeshes;
-		Mesh.popAll;
-		this.testStackIsEmpty;
+	meshInitialized {|key, mesh|
+		this.meshIsAMesh(mesh);
+		this.checkName(key, mesh);
+		this.hostsIsMeshHosts(mesh);
+		this.vertexesIsVertexDict(mesh);
+		this.windowIsMeshView(mesh);
+		this.meshEnvironmentInitialized(mesh);
 	}
 
-	test_freeOneMesh{|name = (this.chooseRandomMesh)|
-		var initialMeshCount = Mesh.all.size;
-		("freeing " ++ name).postln;
-		this.testMeshIsThisKeyInAll(name);
-		Mesh.popEvery(name);
-		Mesh.at(name).free;
-		this.testMeshIsThisKeyInAll(name);
-		this.testMeshCount(initialMeshCount - 1);
+	makeMesh {|key = (this.nextNewName)|
+	  ^ Mesh(key);
 	}
 
-	test_FreeFailsForActiveMesh{|name|
-		var initialMeshCount = Mesh.all.size;
-		var exists = Mesh.isThisKeyInAll(name);
-		Mesh.at(name).push;
-		Mesh.at(name).free;
-		this.assert( Mesh.isThisKeyInAll(name) == exists,
-			"Mesh Key still Exists");
-		this.testMeshCount(initialMeshCount);
-		this.testMeshIsThisActiveMesh(name);
+	nextNewName {
+	  var meshNumber = Mesh.all.size + 1;
+	  ^ ("mesh" ++ meshNumber).asSymbol
 	}
 
-	test_pushMeshesRandomly{ |num = 5|
-		num.do({
-			var rand = this.chooseRandomMesh;
-			if (Mesh.activename != rand)
-			{ ("Pushing  " ++ rand).postln;
-				this.pushMeshAndTest(rand);
-			}{ "already Active mesh, not pushing".postln;};
-		});
-		Mesh.stack.postln;
+	getMesh {|key|
+  	^ Mesh.all.at(key)
 	}
 
-	test_meshPopEvery{|name = (this.chooseRandomMesh)|
-		this.testMeshIsThisKeyOnTheStack(name);
-		if (name == Mesh.activename) {Mesh.pop};
-
-		Mesh.popEvery(name);
-		this.testMeshIsThisKeyOnTheStack(name);
+	chooseRandomMesh {
+		^ Mesh.values.choose
 	}
 
-	test_meshFreeAll{
-		this.test_meshPopAll;
-		Mesh.freeAll;
-		this.testMeshCount(0);
-		this.testStackIsEmpty;
-		this.testMeshListIsEmpty;
-	}
-
-		getMesh {|name|
-		^ Mesh.all.at(name.asSymbol);
-	}
-
-	makeMesh {|name|
-		^ Mesh(name.asSymbol);
-	}
-
-	nextNewname {
-		var meshNumber = Mesh.all.size + 1;
-		^ ("mesh" ++ meshNumber).asSymbol
-	}
-
-	getPenultiMesh {
-		if (Mesh.stack.size <= 1) { ^ List.new(1)};
-		^ this.asMesh(Mesh.stack[(Mesh.stack.size -2)])
-	}
-
-	chooseRandomMesh { ^ Mesh.list.choose }
-
-
-	asMesh {|mesh|
-		if (mesh.isKindOf(Mesh)) {^mesh};
-		if (mesh.isKindOf(Symbol)) {^Mesh(mesh)};
-		if (mesh.isKindOf(String)) {^Mesh(mesh.asSymbol)};
-		this.assert( false, "Couldn't cast as Mesh" );
-	}
-
-	pushMeshOrName {|mesh|
-		if (mesh.isKindOf(Mesh)) {mesh.push; ^true};
-		if (mesh.isKindOf(Symbol)) {Mesh(mesh).push; ^true};
-		this.assert( false,
-			"Couldn't Push Mesh" );
-	}
-
-	makeNewMeshAndTest{|name = (this.nextNewname)|
-		this.testMeshIsThisKeyInAll(name);
-		this.invokeAndTestMesh(name);
-		this.allInstanceVariableTests(name);
-		this.testNewGetsExistingMesh(name);
-		this.testMeshIsThisKeyInAll(name);
-		"Mesh Created and tested.\n\n".inform;
-	}
-
-	pushMeshAndTest{ |name|
-		var initialStackSize = Mesh.stack.size;
-		this.testMeshIsThisActiveMesh(name);
-		this.pushMeshOrName(name);
-		this.testMeshPeek(name);
-		this.testMeshIsThisActiveMesh(name);
-		this.testStackSize(initialStackSize + 1);
-	}
-
-	popMeshAndTest{
-		var penultiMesh = this.getPenultiMesh;
-		var initialStackSize = Mesh.stack.size;
-		Mesh.pop;
-
-		if (penultiMesh.isKindOf(List).not)
-		{	this.testMeshPeek(penultiMesh)}
-		{	this.testStackIsEmpty};
-
-		this.testStackSize(initialStackSize - 1);
-	}
-
-	invokeAndTestMesh {|name|
-		this.makeMesh(name);
-		this.testMeshIsAMesh(name);
-		this.testName(name);
-		this.testMeshList(name);
-	}
-
-	allInstanceVariableTests{|name|
-		var mesh = this.getMesh(name);
-		this.testHostManager(mesh);
-		this.testVertexDict(mesh);
-		this.testMeshView(mesh);
-		this.testMeshEnvironment(mesh);
-	}
-
-	testMeshIsAMesh {|name|
-		this.assert( this.getMesh(name).isKindOf(Mesh),
-			"A Mesh is a Mesh is a Mesh");
-	}
-
-	testNewGetsExistingMesh {|name|
-		this.assert( Mesh(name.asSymbol) == this.getMesh(name),
-			"Mesh(name) returns mesh as expected");
+	meshIsAMesh {|mesh|
+		if (Mesh.exists(mesh.name).not) {	^ List.new };
+	  this.assert( mesh.isKindOf(Mesh),
+	    "A Mesh is a Mesh is a Mesh");
 	}
 
 
-	testMeIsMeshHost {
-		this.assert( Mesh.me.isKindOf(MeshHost),
-			"Me is a MeshHost");
+	hostsIsMeshHosts {|mesh|
+	  this.assert( mesh.hosts.isKindOf(MeshHosts),
+	    "New Mesh has a host manager" );
 	}
 
-	testStackIsStack {
+	vertexesIsVertexDict {|mesh|
+	  this.assert( mesh.vertexes.isKindOf(VertexDict),
+	    "New Mesh has a vertex Dict" );
+	}
+
+	windowIsMeshView {|mesh|
+	  this.assert( mesh.window.isKindOf(MeshView),
+	    "New Mesh has a mesh View" );
+	}
+
+	meshEnvironmentInitialized{|mesh|
+	  this.assert( mesh.environment.isKindOf(Environment),
+	    "New Mesh contains an Environment" );
+	  this.assert( mesh.environment.at(\mesh) == mesh.name,
+	    "New Mesh environment contains a shortcut variable for its own name" );
+	  this.assert( mesh.environment.at(\me) == Mesh.thisHost,
+	    "New Mesh environment contains a shortcut variable for its MeshHost" );
+	  this.assert( mesh.environment.at(\vl) == mesh.vertexes,
+	    "New Mesh environment contains a shortcut variable for its Vertex Dictionary" );
+	  this.assert( mesh.environment.at(\win) == mesh.window,
+	    "New Mesh environment contains a shortcut variable for its GUI Window" );
+	}
+
+	thisHostIsMeshHost{
+		this.assert( Mesh.thisHost.isKindOf(MeshHost),
+		"Mesh.thisHost is a MeshHost");
+	}
+
+	stackIsArray{
 		this.assert( Mesh.stack.isKindOf(Array),
-			"Stack is an Array");
+		"Mesh.stack is an Array");
 	}
 
-	testStackIsEmpty {
-		this.assert( Mesh.stack.isEmpty,
-			"Stack is empty");
+	stackIsEmpty {
+	  this.assert( Mesh.stack.isEmpty,
+	    "Mesh.stack is empty");
 	}
 
-	testMeshListIsList  {
-		this.assert( Mesh.list.isKindOf(List),
-			"Mesh List is a List");
+	allIsIdentityDict {
+		this.assert(Mesh.all.isKindOf(IdentityDictionary),
+		"Mesh.all is an IdentityDictionary")
 	}
 
-	testMeshListIsEmpty {
-		this.assert( Mesh.list.isEmpty,
-			"Mesh List is empty");
+	allIsEmpty {
+		this.assert(Mesh.all.isEmpty,
+		"Mesh.all is empty")
 	}
 
-	testName {|name|
-		this.assert( this.getMesh(name).name == name,
-			"New Mesh has the right name" );
+	checkName {|key, mesh|
+	  this.assert( mesh.name == key,
+	    "New Mesh has the right name" );
 	}
 
-	testMeshIsThisActiveMesh  { |name|
-		var matches;
-		if (Mesh.isThereActiveMesh)
-		{ matches = (Mesh.at(name) == Mesh.peek) }
-		{ matches = List.newClear};
-		this.assert( Mesh.isThisActiveMesh(name) == matches,
-			"Active Mesh Test Valid");
+	checkCurrent {|key|
+		this.assert( Mesh.current.name == key,
+	    "Correct Mesh is on the top of the stack" );
 	}
 
-	testMeshIsThisKeyInAll  { |name|
-		var matches = Mesh.all.includesKey(name);
-		this.assert( Mesh.isThisKeyInAll(name) == matches,
-			"Mesh Dict/Key Test Valid");
+	checkStackSize {|size|
+	  this.assert( Mesh.stack.size == size,
+	    "Correct number of meshes in Stack" );
 	}
 
-	testMeshIsThisKeyOnTheStack  { |name|
-		var matches = Mesh.stack.includes(Mesh.at(name));
-		this.assert( Mesh.isThisKeyOnTheStack(name) == matches,
-			"Mesh Stack/Key Test Valid");
-	}
-
-
-	testMeshList {|name|
-		this.assert( Mesh.list.includes(name),
-			"New Mesh contained in the list" );
-	}
-
-	testHostManager {|mesh|
-		this.assert( mesh.hostManager.isKindOf(MeshHostManager),
-			"New Mesh has a host manager" );
-	}
-
-	testVertexDict {|mesh|
-		this.assert( mesh.vertexDict.isKindOf(VertexDict),
-			"New Mesh has a vertex Dict" );
-	}
-
-	testMeshView {|mesh|
-		this.assert( mesh.meshView.isKindOf(MeshView),
-			"New Mesh has a mesh View" );
-	}
-
-	testMeshEnvironment{|mesh|
-		this.assert( mesh.env.isKindOf(Environment),
-			"New Mesh contains an Environment" );
-		this.assert( mesh.env.at(\mesh) == mesh.name,
-			"New Mesh environment contains a shortcut variable for its own name" );
-		this.assert( mesh.env.at(\me) == Mesh.me,
-			"New Mesh environment contains a shortcut variable for its MeshHost" );
-		this.assert( mesh.env.at(\vl) == mesh.vertexDict,
-			"New Mesh environment contains a shortcut variable for its Vertex Dictionary" );
-		this.assert( mesh.env.at(\win) == mesh.meshView,
-			"New Mesh environment contains a shortcut variable for its GUI Window" );
-	}
-
-	testMeshCount {|size|
-		this.assert( Mesh.list.size == size,
-			"Correct number of meshes in List" );
-		this.assert( Mesh.all.size == size,
-			"Correct number of meshes in Dictionary" );
-	}
-
-	testStackSize {|size|
-		this.assert( Mesh.stack.size == size,
-			"Correct number of meshes in Stack" );
-	}
-
-	testMeshPeek {|name|
-		this.assert( Mesh.peek == this.asMesh(name),
-			"Correct Mesh is on the top of the stack" );
+	checkMeshCount {|size|
+	  this.assert( Mesh.all.size == size,
+	    "Correct number of meshes in all" );
 	}
 
 }
