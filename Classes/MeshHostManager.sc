@@ -55,22 +55,22 @@ MeshHosts {
 	}
 
 	printOn { |stream|
-		 stream << "Available hosts: \n" << this.allPrettyHosts()
+		 stream << "Available hosts: " << this.allPrettyHosts;
 	}
 
-	prettyHost {|key, stream|
+	prettyHost {|key|
 		var host = all.at(key);
-		stream << "(" << key << " : ";
+		var substrng = ("(" ++ key ++ " : ");
 		if (host.online)
-			 {stream << "online"}
-			 {stream << "offline"};
-		stream << " : " << host.ip << ") \n";
-		^ stream;
+			{substrng = substrng ++ "online"}
+			{substrng = substrng ++ "offline"};
+		substrng = substrng ++ " : " ++ host.ip ++ ") \n";
+		^ substrng;
 	}
 
-	allPrettyHosts {|stream|
-		all.keysDo {|key| stream << prettyHost(key) };
-		^ stream;
+	allPrettyHosts { |string = ""|
+		all.keysDo({|key| string = string ++ this.prettyHost(key) });
+		^ string;
 	}
 
 	resetTimeout {|key|

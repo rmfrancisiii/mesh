@@ -6,13 +6,23 @@ TestMesh : UnitTest {
 	tearDown {
 	}
 
-	test_OneMesh{
-		var mesh;
-		var key = this.nextNewName;
+	test_mesh{
 		this.classInitialized;
-		mesh = this.makeMesh(key);
-		this.meshInitialized(key, mesh);
+		this.makeMeshes(3);
+	}
 
+	makeMesh{|key = (this.nextNewName)|
+		var initialCount = this.countMeshes;
+		var mesh = Mesh.new(key);
+		this.meshInitialized(key, mesh);
+		this.checkMeshCount(initialCount + 1);
+		^ mesh;
+	}
+
+	makeMeshes {|count|
+		var initialCount = this.countMeshes;
+		count.do({this.makeMesh});
+		this.checkMeshCount(initialCount + count);
 	}
 
 	classInitialized {
@@ -26,6 +36,7 @@ TestMesh : UnitTest {
 		this.thisHostIsMeshHost;
 		// test IP and hostName?
 	}
+
 	stackInitialized {
 		this.stackIsArray;
 		this.stackIsEmpty;
@@ -36,6 +47,7 @@ TestMesh : UnitTest {
 			this.allIsEmpty;
 	}
 
+
 	meshInitialized {|key, mesh|
 		this.meshIsAMesh(mesh);
 		this.checkName(key, mesh);
@@ -45,9 +57,6 @@ TestMesh : UnitTest {
 		this.meshEnvironmentInitialized(mesh);
 	}
 
-	makeMesh {|key = (this.nextNewName)|
-	  ^ Mesh(key);
-	}
 
 	nextNewName {
 	  var meshNumber = Mesh.all.size + 1;
@@ -62,12 +71,20 @@ TestMesh : UnitTest {
 		^ Mesh.values.choose
 	}
 
+	countMeshes {
+		^ Mesh.all.size
+	}
+
 	meshIsAMesh {|mesh|
 		if (Mesh.exists(mesh.name).not) {	^ List.new };
 	  this.assert( mesh.isKindOf(Mesh),
 	    "A Mesh is a Mesh is a Mesh");
 	}
 
+	checkName {|key, mesh|
+		  this.assert( mesh.name == key,
+		    "New Mesh has the right name" );
+	}
 
 	hostsIsMeshHosts {|mesh|
 	  this.assert( mesh.hosts.isKindOf(MeshHosts),
@@ -120,11 +137,6 @@ TestMesh : UnitTest {
 	allIsEmpty {
 		this.assert(Mesh.all.isEmpty,
 		"Mesh.all is empty")
-	}
-
-	checkName {|key, mesh|
-	  this.assert( mesh.name == key,
-	    "New Mesh has the right name" );
 	}
 
 	checkCurrent {|key|
