@@ -49,7 +49,7 @@ Generic Object creation pseudocode:
 
 3. Messages vertexType.vertexRequestor, and passes:
     a. ref to Mesh object,
-    b. ref to Host object from hostList,
+    b. ref to Host object from all,
     c. any other Args as an array.
 
 4. VertexRequestor class method generates an OSC message and sends it to the named Host.

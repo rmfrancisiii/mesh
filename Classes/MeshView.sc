@@ -3,15 +3,15 @@ MeshView {
 	var <>model, <>window, <>listView;
 
 	*new { |mesh|
-		^super.newCopyArgs(mesh).init(mesh);
+		^super.new.init(mesh);
 	}
 
 	init { |mesh|
 		var name = mesh.name.asSymbol;
-		var hostList = mesh.hostManager.hostList;
-		hostList.addDependant(this);
+		var all = mesh.hosts.all;
+		all.addDependant(this);
 		listView = ListView();
-		this.setListView(hostList);
+		this.setListView(all);
 		this.makeGui(name);
 	}
 

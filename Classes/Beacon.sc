@@ -2,9 +2,9 @@ Beacon {
 
 	var oscPath, <pollPeriod, <broadcastAddr, beaconKeeper, inDefName, outDefName;
 
-	*new {|mesh, me| ^ super.new.init(mesh, me) }
+	*new {|mesh, host| ^ super.new.init(mesh, host) }
 
-	init {|mesh, me|
+	init {|mesh, host|
 
 		var name = mesh.name;
 		// Mesh.me.postln;
@@ -18,7 +18,7 @@ Beacon {
 		// Make the OSC responder definitions.
 		// these are OSC Defs, so they can be managed
 		// globally, eg after creating a mesh, try: OSCdef.all;
-		this.makeOSCdefs(mesh, me);
+		this.makeOSCdefs(mesh, host);
 
 		// Set a broadcast address.
 		// Use the IP address 255.255.255.255 to send a message to
@@ -34,51 +34,57 @@ Beacon {
 		// Start a function that periodically checks whether hosts are still online.
 		// This continues running, even after Cmd+Period
 		beaconKeeper = SkipJack({
-			try { broadcastAddr.sendMsg(oscPath, me.name)}
+			try { broadcastAddr.sendMsg(oscPath, host.name)}
 			{|error| this.networkError(error)};
-
-
-			mesh.hostManager.checkTimeouts;
-			}, pollPeriod, false);
+			mesh.hosts.checkTimeouts;
+		}, pollPeriod, false);
 	}
 
-	makeOSCdefs {|mesh, me|
+	networkError {|error|
+		error.postln;
+		"Network Error! beacon stopped.".postln;
+		// TODO: retry counter?
+		"Try Mesh.current.hosts.beacon.start;".postln;
+		this.stop;
+	}
+
+	makeOSCdefs {|mesh, host|
 
 		var replyPath = (oscPath ++ "-reply").asSymbol;
 
 		// This OSC Def Receives a msg from the Beacon
 		// updates the host list, AND replies to the Beacon
 		OSCdef(outDefName, {|msg, time, addr, recvPort|
-			var newHost= msg[1].asString.asSymbol;
+			var key = msg[1].asString.asSymbol;
 			addr = addr.as(MeshHostAddr);
-			mesh.hostManager.updateHostList(newHost, addr, time);
-			addr.sendMsg(replyPath, me.name);
-		}, oscPath, recvPort: me.addr.port);
+			mesh.hosts.checkHost(key, addr);
+			addr.sendMsg(replyPath, host.name);
+		}, oscPath, recvPort: host.addr.port);
 
 		// This OSC Def receives the reply
 		// and updates the host list.
 		OSCdef(inDefName, {|msg, time, addr, recvPort|
-			var newHost = msg[1].asString.asSymbol;
+			var key = msg[1].asString.asSymbol;
 			addr = addr.as(MeshHostAddr);
-			mesh.hostManager.updateHostList(newHost, addr, time);
-		}, replyPath, recvPort: me.addr.port);
+			mesh.hosts.checkHost(key, addr);
+		}, replyPath, recvPort: host.addr.port);
 
 		OSCdef(\ping, {|msg, time, addr, recvPort|
 			(msg[1] ++ " pinged on " ++ mesh.name).postln;
-			broadcastAddr.sendMsg("/pingReply", me.name);
-		}, '/ping', recvPort: me.addr.port);
+			broadcastAddr.sendMsg("/pingReply", host.name);
+		}, '/ping', recvPort: host.addr.port);
 
 		OSCdef(\chat, {|msg, time, addr, recvPort|
 			(msg[1]).postln;
-		}, '/chat', recvPort: me.addr.port);
+		}, '/chat', recvPort: host.addr.port);
 
 		OSCdef(\pingReply, {|msg, time, addr, recvPort|
 			(msg[1] ++ " replied to your ping on: " ++ mesh.name).postln;
-		}, '/pingReply', recvPort: me.addr.port);
+		}, '/pingReply', recvPort: host.addr.port);
 
 	}
 
-	ping { |me| broadcastAddr.sendMsg("/ping", me.name) }
+	ping { |host| broadcastAddr.sendMsg("/ping", host.name) }
 
 	start {
 		beaconKeeper.start;
@@ -91,14 +97,6 @@ Beacon {
 	free {
 		OSCdef(inDefName).free;
 		OSCdef(outDefName).free;
-
-		}
-
-	networkError {|error|
-		error.postln;
-		"Network Error! beacon stopped.".postln;
-		// TODO: retry counter?
-		"Try Mesh.peek.hostManager.beacon.start;".postln;
-		this.stop;
 	}
+
 }

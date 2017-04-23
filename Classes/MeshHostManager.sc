@@ -1,88 +1,111 @@
-MeshHostManager {
-	var <hostList, <>timeoutList, <>beacon;
+MeshHosts {
+	var <all, <>timeouts, <>beacon;
 
-// add start Beacon argument default true
-// And
-// DI for beacon to allow MockBeacon for testing
+	*new {|mesh, thisHost| ^ super.new.init(mesh, thisHost) }
 
-	*new {|mesh, me| ^ super.new.init(mesh, me) }
-
-	init {|mesh, me|
-		hostList = IdentityDictionary.new;
-		timeoutList = IdentityDictionary.new;
-		beacon = Beacon.new(mesh, me);
-		this.addHost(me);
-	}
-
-	at {|name| ^ this.hostList.at(name)}
-
-	checkTimeouts {
-		var now;
-		now = Main.elapsedTime;
-		timeoutList.keysValuesDo({|name, lastHeardFrom|
-			if((now - lastHeardFrom) > (beacon.pollPeriod * 2), {
-				if (hostList[name].online == true)
-					{"Host % seems to be offline\n".postf(name)};
-				hostList[name].online = false;
-				hostList.changed(\offlineHost, hostList[name]);
-			});
-		});
+	init {|mesh, thisHost|
+		all = IdentityDictionary.new;
+		timeouts = IdentityDictionary.new;
+		beacon = Beacon.new(mesh, thisHost);
+		this.addHost(thisHost);
 	}
 
 	addHost {|host|
 		host = host.as(MeshHost);
-		hostList[host.name] = host;
-		hostList.changed(\addedHost, host);
+		all.put(host.name, host);
+		all.changed(\addedHost, host);
+		this.setOnline(host);
 	}
 
-	hostNames {^hostList.keys.asArray}
+	now { ^ Main.elapsedTime }
 
-	hosts {
-		"Available hosts:".postln;
-		hostList.keysValuesDo {|key, value|
-			(key ++ " : " ++ if(value.online, "online", "offline") ++ " : " ++ value.ip).postln;
-		}
-	}
+	at {|key| ^ all.at(key) }
 
-	updateHostList {|name, addr, time|
+	names { ^ all.keys.asArray }
 
-		var host = this[name];
+	exists {|key| ^ all.includesKey(key) }
 
-		// new host!
-		if (host.isNil)
-		{
-			"Host % has joined the mesh!!\n ".postf(name);
-			host = MeshHost(name, addr);
-			this.addHost(host);
-			timeoutList[name] = time;
-		}
+	isOnline {|key| ^ all.at(key).online }
 
-		{   // host exists, check it!
-			if(host.addr.matches(addr).not)
-			{   // host is in the list, BUT the address doesn't match!
-				// this probably means the peer recompiled and has a different port
-				host.addr_(addr);
-				host.online = true;
-				hostList.changed(\rejoinedHost, hostList[name]);
-				timeoutList[name] = time;
-				"Host % rejoined the mesh\n".postf(name);
+	checkTimeouts {
+		timeouts.keysValuesDo({|key, lastHeardFrom|
+			var host = all.at(key);
+			if (host.online){
+				if (this.timedOut(lastHeardFrom))
+					 {this.setOffline(host)}
 			}
+		})
+	}
 
-			{   // host is in the list and the address matches, eveything is OK!
-				if (host.online == false) {
-					"Host % rejoined the mesh\n".postf(name);
-					hostList.changed(\offlineHost, hostList[name]);
-				};
-				host.online = true;
-				timeoutList[name] = time;
+	setOffline {|host|
+		host.online = false;
+		"Host % left the mesh\n".postf(host.name);
+		all.changed(\offlineHost, host);
+	}
+
+	setOnline {|host|
+		host.online = true;
+		"Host % joined the mesh\n".postf(host.name);
+		all.changed(\onlineHost, host);
+	}
+
+	timedOut {|lastHeardFrom|
+		var now = Main.elapsedTime;
+		^ (now - lastHeardFrom) > (beacon.pollPeriod * 2)
+	}
+
+	printOn { |stream|
+		 stream << "Available hosts: \n" << this.allPrettyHosts()
+	}
+
+	prettyHost {|key, stream|
+		var host = all.at(key);
+		stream << "(" << key << " : ";
+		if (host.online)
+			 {stream << "online"}
+			 {stream << "offline"};
+		stream << " : " << host.ip << ") \n";
+		^ stream;
+	}
+
+	allPrettyHosts {|stream|
+		all.keysDo {|key| stream << prettyHost(key) };
+		^ stream;
+	}
+
+	resetTimeout {|key|
+		timeouts[key] = this.now;
+	}
+
+	makeNewHost {|key, addr|
+		var host = MeshHost(key, addr);
+		this.addHost(host);
+		this.resetTimeout(key);
+	}
+
+	changeHostAddr {|host, addr|
+	 	host.addr = addr;
+		this.resetTimeout(host.name);
+		this.setOnline(host);
+	}
+
+	checkHost {|key, addr|
+		if (this.exists(key).not)
+		{ this.makeNewHost(key, addr) }
+		{
+			var host = all.at(key);
+			if (host.addr.matches(addr).not)
+			{ this.changeHostAddr(host, addr) }
+
+			{ if (host.online == false)
+					{ this.setOnline(host) };
+				this.resetTimeout(key);
 			};
 		}
 	}
 
-	free {
-		|me|
-		this[me.name].online = false;
-		hostList.changed(\offlineHost, hostList[me.name]);
+	free {|host|
+		this.setOffline(host);
 		beacon.stop;
 		beacon.free;
 	}

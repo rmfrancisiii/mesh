@@ -1,7 +1,7 @@
 // create a mesh,
 //  other hosts should use the same mesh name.
 Mesh(\mesh1).push;
-Mesh(\mesh1).hostManager.beacon.start;
+Mesh(\mesh1).hosts.beacon.start;
 
 UnitTest.gui;
 Mesh.at(\some)
