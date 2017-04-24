@@ -1,4 +1,4 @@
-TestHostManager : UnitTest {
+TestMeshHosts : UnitTest {
 	var dummyMesh, mgr, me, hosts, timeouts, beacon;
 
 	setUp {

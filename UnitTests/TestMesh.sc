@@ -7,7 +7,7 @@ TestMesh : UnitTest {
 	}
 
 	test_mesh{
-		var number = 5;
+		var number = 20;
 		this.classInitialized;
 		this.makeMeshes(number);
 		this.pushAll;
@@ -29,7 +29,6 @@ TestMesh : UnitTest {
 		this.checkMeshCount(initialCount - 1);
 	}
 
-
 	freeAll{
 		Mesh.freeAll;
 		this.classInitialized;
@@ -45,7 +44,6 @@ TestMesh : UnitTest {
 		});
 		this.checkStackSize(initialStackSize + number);
 	}
-
 
 	popMeshesRandomly{|number = 5|
 		var initialStackSize = this.countStack;
@@ -68,7 +66,6 @@ TestMesh : UnitTest {
 			this.pushAndTest(key);
 		});
 	}
-
 
 	popAll{
 		Mesh.stack.size.do({
@@ -278,6 +275,5 @@ TestMesh : UnitTest {
 		this.assert( Mesh.previous == previous,
 			"Mesh.previous returns previous mesh as expected");
 	}
-
 
 }
