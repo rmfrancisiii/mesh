@@ -7,9 +7,23 @@ TestMesh : UnitTest {
 	}
 
 	test_mesh{
+		var number = 10;
 		this.classInitialized;
-		this.makeMeshes(3);
-		this.pushAllMeshes;
+		this.makeMeshes(number);
+		this.pushAll;
+		Mesh.stack.postln;
+		this.popAll;
+		this.pushMeshesRandomly((number/2));
+		this.popAll;
+	}
+
+	pushMeshesRandomly{|number = 5|
+		number.do({
+			var rand = this.chooseMeshFromAll;
+			while ({rand == Mesh.current},
+				{rand = this.chooseMeshFromAll});
+			this.pushAndTest(rand.name);
+		});
 	}
 
 	makeMesh{|key = (this.nextNewName)|
@@ -20,13 +34,31 @@ TestMesh : UnitTest {
 		^ mesh;
 	}
 
-	pushAllMeshes{
+	pushAll{
 		Mesh.all.keysDo({|key|
-			this.pushMeshAndTest(key);
+			this.pushAndTest(key);
 		});
 	}
 
-	pushMeshAndTest{ |key|
+
+	popAll{
+		Mesh.stack.size.do({
+			this.popAndTest
+		});
+
+		this.stackIsEmpty;
+
+	}
+
+	popAndTest{
+		var initialStackSize = this.countStack;
+		var next = Mesh.previous;
+		Mesh.pop;
+		if (next != List.new) {this.checkCurrent(next.name)};
+		this.checkStackSize(initialStackSize - 1);
+	}
+
+	pushAndTest{ |key|
 		var initialStackSize = this.countStack;
 		var mesh = this.getMesh(key);
 		var previous = Mesh.current;
@@ -88,8 +120,12 @@ TestMesh : UnitTest {
 		^ Mesh.all.at(key)
 	}
 
-	chooseRandomMesh {
-		^ Mesh.values.choose
+	chooseMeshFromAll {
+		^ Mesh.all.values.choose
+	}
+
+	chooseMeshFromStack {
+		^ Mesh.stack.choose
 	}
 
 	countMeshes {

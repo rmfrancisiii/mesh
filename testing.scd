@@ -1,18 +1,4 @@
 
-
-test_meshPopAllTheMeshes{
-  Mesh.stack.size.do({
-    this.popMeshAndTest;
-  });
-  this.testStackIsEmpty;
-}
-
-test_meshPopAll{
-  this.test_meshPushAllTheMeshes;
-  Mesh.popAll;
-  this.testStackIsEmpty;
-}
-
 test_freeOneMesh{|name = (this.chooseRandomMesh)|
   var initialMeshCount = Mesh.all.size;
   ("freeing " ++ name).postln;

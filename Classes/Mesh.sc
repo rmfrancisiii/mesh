@@ -18,7 +18,7 @@ Mesh {
 
 	*newFrom {|mesh|
 		if(mesh.isKindOf(this)) { ^ mesh };
-		^ this.new(mesh);
+		^ this.new(mesh)
 	}
 
 	*current {
