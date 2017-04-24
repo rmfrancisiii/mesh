@@ -24,7 +24,7 @@ Mesh {
 	*current {
 		if (Mesh.hasCurrent)
 		{	^ stack[(stack.size-1)]}
-		{("No current mesh").warn; ^ stack}
+		{("No current mesh").warn; ^ List.new}
 	}
 
 	*hasPrevious {
@@ -34,7 +34,7 @@ Mesh {
 	*previous {
 		if (Mesh.hasPrevious)
 		{	^ stack[(stack.size-2)]}
-		{("No Previous mesh").warn; ^ stack}
+		{("No Previous mesh").warn; ^ List.new}
 	}
 
 	*isPrevious { |key|

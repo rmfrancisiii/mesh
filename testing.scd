@@ -1,19 +1,4 @@
 
-test_meshMakeManyMeshes{ |number = 2|
-  var initialMeshCount = Mesh.all.size;
-  number.do({
-    this.makeNewMeshAndTest;
-  });
-  this.testMeshCount(initialMeshCount+number);
-  "Make Many Meshes tests performed\n\n".inform;
-}
-
-test_meshPushAllTheMeshes{
-  Mesh.all.keysDo({|name|
-    this.pushMeshAndTest(name);
-  });
-  "Push All the Meshes tests performed\n\n".inform;
-}
 
 test_meshPopAllTheMeshes{
   Mesh.stack.size.do({
@@ -78,38 +63,6 @@ test_meshFreeAll{
 
 
 
-asMesh {|mesh|
-  if (mesh.isKindOf(Mesh)) {^mesh};
-  if (mesh.isKindOf(Symbol)) {^Mesh(mesh)};
-  if (mesh.isKindOf(String)) {^Mesh(mesh.asSymbol)};
-  this.assert( false, "Couldn't cast as Mesh" );
-}
-
-pushMeshOrName {|mesh|
-  if (mesh.isKindOf(Mesh)) {mesh.push; ^true};
-  if (mesh.isKindOf(Symbol)) {Mesh(mesh).push; ^true};
-  this.assert( false,
-    "Couldn't Push Mesh" );
-}
-
-makeNewMeshAndTest{|name = (this.nextNewname)|
-  this.testMeshIsThisKeyInAll(name);
-  this.invokeAndTestMesh(name);
-  this.allInstanceVariableTests(name);
-  this.testNewGetsExistingMesh(name);
-  this.testMeshIsThisKeyInAll(name);
-  "Mesh Created and tested.\n\n".inform;
-}
-
-pushMeshAndTest{ |name|
-  var initialStackSize = Mesh.stack.size;
-  this.testMeshIsThisActiveMesh(name);
-  this.pushMeshOrName(name);
-  this.testMeshPeek(name);
-  this.testMeshIsThisActiveMesh(name);
-  this.testStackSize(initialStackSize + 1);
-}
-
 popMeshAndTest{
   var penultiMesh = this.getPenultiMesh;
   var initialStackSize = Mesh.stack.size;
@@ -122,57 +75,3 @@ popMeshAndTest{
   this.testStackSize(initialStackSize - 1);
 }
 
-invokeAndTestMesh {|name|
-  this.makeMesh(name);
-  this.testMeshIsAMesh(name);
-  this.testName(name);
-  this.testMeshList(name);
-}
-
-allInstanceVariableTests{|name|
-  var mesh = this.getMesh(name);
-  this.testHostManager(mesh);
-  this.testVertexDict(mesh);
-  this.testMeshView(mesh);
-  this.testMeshEnvironment(mesh);
-}
-
-
-testNewGetsExistingMesh {|name|
-  this.assert( Mesh(name.asSymbol) == this.getMesh(name),
-    "Mesh(name) returns mesh as expected");
-}
-
-
-
-testName {|name|
-  this.assert( this.getMesh(name).name == name,
-    "New Mesh has the right name" );
-}
-
-testMeshIsThisActiveMesh  { |name|
-  var matches;
-  if (Mesh.isThereActiveMesh)
-  { matches = (Mesh.at(name) == Mesh.peek) }
-  { matches = List.newClear};
-  this.assert( Mesh.isThisActiveMesh(name) == matches,
-    "Active Mesh Test Valid");
-}
-
-testMeshIsThisKeyInAll  { |name|
-  var matches = Mesh.all.includesKey(name);
-  this.assert( Mesh.isThisKeyInAll(name) == matches,
-    "Mesh Dict/Key Test Valid");
-}
-
-testMeshIsThisKeyOnTheStack  { |name|
-  var matches = Mesh.stack.includes(Mesh.at(name));
-  this.assert( Mesh.isThisKeyOnTheStack(name) == matches,
-    "Mesh Stack/Key Test Valid");
-}
-
-
-testMeshList {|name|
-  this.assert( Mesh.list.includes(name),
-    "New Mesh contained in the list" );
-}
