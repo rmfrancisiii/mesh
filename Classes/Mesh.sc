@@ -2,7 +2,7 @@ Mesh {
 	classvar <>all, <>stack, <thisHost;
 	var <>name, <>environment, <>hosts, <>vertexes, <>window;
 
-// test
+	// test
 	*initClass {
 		stack = [];
 		all = IdentityDictionary.new;
@@ -165,20 +165,12 @@ Mesh {
 	}
 
 	free {
-
-		if (this.isCurrent)
-			{
-				("Cannot free an active mesh, Try Mesh.pop First!").warn;
-				^ stack
-			}
-
-
-			{
-				hosts.free(thisHost);
-				all.removeAt(this.name);
-				window.free;
-				("removed mesh").warn;
-			}
+		("freeing" ++ name).postln;
+		Mesh.popEvery(name);
+		hosts.free(thisHost);
+		all.removeAt(this.name);
+		window.free;
+		("removed mesh").warn;
 	}
 
 }

@@ -7,7 +7,7 @@ TestMesh : UnitTest {
 	}
 
 	test_mesh{
-		var number = 10;
+		var number = 5;
 		this.classInitialized;
 		this.makeMeshes(number);
 		this.pushAll;
@@ -15,50 +15,40 @@ TestMesh : UnitTest {
 		this.popAll;
 		this.pushMeshesRandomly((number*5));
 		this.popMeshesRandomly((number/2));
-		this.popAll;
+		this.freeOneMesh;
+		this.freeAll;
 	}
 
-	// test_freeOneMesh{|name = (this.chooseRandomMesh)|
-	// 	var initialMeshCount = Mesh.all.size;
-	// 	("freeing " ++ name).postln;
-	// 	this.testMeshIsThisKeyInAll(name);
-	// 	Mesh.popEvery(name);
-	// 	Mesh.at(name).free;
-	// 	this.testMeshIsThisKeyInAll(name);
-	// 	this.testMeshCount(initialMeshCount - 1);
-	// }
-	//
-	// test_FreeFailsForActiveMesh{|name|
-	// 	var initialMeshCount = Mesh.all.size;
-	// 	var exists = Mesh.isThisKeyInAll(name);
-	// 	Mesh.at(name).push;
-	// 	Mesh.at(name).free;
-	// 	this.assert( Mesh.isThisKeyInAll(name) == exists,
-	// 	"Mesh Key still Exists");
-	// 	this.testMeshCount(initialMeshCount);
-	// 	this.testMeshIsThisActiveMesh(name);
-	// }
-	//
-	//
-	// test_meshFreeAll{
-	// 	this.test_meshPopAll;
-	// 	Mesh.freeAll;
-	// 	this.testMeshCount(0);
-	// 	this.testStackIsEmpty;
-	// 	this.testMeshListIsEmpty;
-	// }
+	freeOneMesh{|key = (this.chooseMeshFromAll.name)|
+		var initialStackSize = this.countStack;
+		var initialCount = this.countMeshes;
+		var numKeyInStack = this.numKeyInStack(key);
+		Mesh(key).free;
+		this.checkNotOnStack(key);
+		this.checkStackSize(initialStackSize - numKeyInStack);
+		this.checkMeshCount(initialCount - 1);
+	}
+
+
+	freeAll{
+		Mesh.freeAll;
+		this.classInitialized;
+	}
 
 	pushMeshesRandomly{|number = 5|
+		var initialStackSize = this.countStack;
 		number.do({
 			var rand = this.chooseMeshFromAll;
 			while ({rand == Mesh.current},
 				{rand = this.chooseMeshFromAll});
 			this.pushAndTest(rand.name);
 		});
+		this.checkStackSize(initialStackSize + number);
 	}
 
 
 	popMeshesRandomly{|number = 5|
+		var initialStackSize = this.countStack;
 		number.do({
 			var rand = this.chooseMeshFromStack;
 			this.popEveryAndTest(rand.name);
@@ -98,12 +88,16 @@ TestMesh : UnitTest {
 
 	popEveryAndTest{|key|
 		var initialStackSize = this.countStack;
-		var numInStack = Mesh.stack.count({ arg item; item.name == key });
+		var numKeyInStack = Mesh.stack.count({ arg item; item.name == key });
 		// probably breaks if previous is SAME as current
 		var next = Mesh.previous;
 		Mesh.popEvery(key);
 		this.checkNotOnStack(key);
-		this.checkStackSize(initialStackSize - numInStack);
+		this.checkStackSize(initialStackSize - numKeyInStack);
+	}
+
+	numKeyInStack {|key|
+		^ Mesh.stack.count({ arg item; item.name == key })
 	}
 
 	pushAndTest{ |key|
