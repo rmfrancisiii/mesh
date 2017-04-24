@@ -1,3 +1,10 @@
+Mesh.test;
+Mesh(\mesh1).push;
+Mesh.current.postln;
+Mesh.current.hosts;
+Mesh.stack.postln;
+Mesh.all.postln;
+
 /* Development notes
 
 TODO:

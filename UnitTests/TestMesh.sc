@@ -18,6 +18,36 @@ TestMesh : UnitTest {
 		this.popAll;
 	}
 
+	// test_freeOneMesh{|name = (this.chooseRandomMesh)|
+	// 	var initialMeshCount = Mesh.all.size;
+	// 	("freeing " ++ name).postln;
+	// 	this.testMeshIsThisKeyInAll(name);
+	// 	Mesh.popEvery(name);
+	// 	Mesh.at(name).free;
+	// 	this.testMeshIsThisKeyInAll(name);
+	// 	this.testMeshCount(initialMeshCount - 1);
+	// }
+	//
+	// test_FreeFailsForActiveMesh{|name|
+	// 	var initialMeshCount = Mesh.all.size;
+	// 	var exists = Mesh.isThisKeyInAll(name);
+	// 	Mesh.at(name).push;
+	// 	Mesh.at(name).free;
+	// 	this.assert( Mesh.isThisKeyInAll(name) == exists,
+	// 	"Mesh Key still Exists");
+	// 	this.testMeshCount(initialMeshCount);
+	// 	this.testMeshIsThisActiveMesh(name);
+	// }
+	//
+	//
+	// test_meshFreeAll{
+	// 	this.test_meshPopAll;
+	// 	Mesh.freeAll;
+	// 	this.testMeshCount(0);
+	// 	this.testStackIsEmpty;
+	// 	this.testMeshListIsEmpty;
+	// }
+
 	pushMeshesRandomly{|number = 5|
 		number.do({
 			var rand = this.chooseMeshFromAll;
