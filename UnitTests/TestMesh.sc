@@ -13,7 +13,8 @@ TestMesh : UnitTest {
 		this.pushAll;
 		Mesh.stack.postln;
 		this.popAll;
-		this.pushMeshesRandomly((number/2));
+		this.pushMeshesRandomly((number*5));
+		this.popMeshesRandomly((number/2));
 		this.popAll;
 	}
 
@@ -23,6 +24,14 @@ TestMesh : UnitTest {
 			while ({rand == Mesh.current},
 				{rand = this.chooseMeshFromAll});
 			this.pushAndTest(rand.name);
+		});
+	}
+
+
+	popMeshesRandomly{|number = 5|
+		number.do({
+			var rand = this.chooseMeshFromStack;
+			this.popEveryAndTest(rand.name);
 		});
 	}
 
@@ -47,7 +56,6 @@ TestMesh : UnitTest {
 		});
 
 		this.stackIsEmpty;
-
 	}
 
 	popAndTest{
@@ -56,6 +64,16 @@ TestMesh : UnitTest {
 		Mesh.pop;
 		if (next != List.new) {this.checkCurrent(next.name)};
 		this.checkStackSize(initialStackSize - 1);
+	}
+
+	popEveryAndTest{|key|
+		var initialStackSize = this.countStack;
+		var numInStack = Mesh.stack.count({ arg item; item.name == key });
+		// probably breaks if previous is SAME as current
+		var next = Mesh.previous;
+		Mesh.popEvery(key);
+		this.checkNotOnStack(key);
+		this.checkStackSize(initialStackSize - numInStack);
 	}
 
 	pushAndTest{ |key|
@@ -68,7 +86,6 @@ TestMesh : UnitTest {
 		this.checkStackSize(initialStackSize + 1);
 		this.checkPrevious(previous);
 	}
-
 
 	makeMeshes {|count|
 		var initialCount = this.countMeshes;
@@ -98,7 +115,6 @@ TestMesh : UnitTest {
 		this.allIsEmpty;
 	}
 
-
 	meshInitialized {|key, mesh|
 		this.meshIsAMesh(mesh);
 		this.checkName(key, mesh);
@@ -109,7 +125,6 @@ TestMesh : UnitTest {
 		this.checkMeshExists(key);
 		this.checkNewGetsMesh(key);
 	}
-
 
 	nextNewName {
 		var meshNumber = Mesh.all.size + 1;
@@ -135,7 +150,6 @@ TestMesh : UnitTest {
 	countStack {
 		^ Mesh.stack.size
 	}
-
 
 	meshIsAMesh {|mesh|
 		if (Mesh.exists(mesh.name).not) {	^ List.new };
@@ -228,7 +242,12 @@ TestMesh : UnitTest {
 
 	checkOnStack {|key|
 		this.assert( Mesh.onStack(key),
-			"Mesh(key) returns mesh as expected");
+			"Mesh is on stack as expected");
+	}
+
+	checkNotOnStack {|key|
+		this.assert( Mesh.onStack(key).not,
+			"Mesh is NOT on stack as expected");
 	}
 
 	checkPrevious{|previous|
