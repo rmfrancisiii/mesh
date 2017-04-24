@@ -1,5 +1,5 @@
 Mesh {
-	classvar <>all, <>stack, <thisHost;
+	classvar <>all, <>stack, <thisHost, <>broadcastAddr;
 	var <>name, <>environment, <>hosts, <>vertexes, <>window;
 
 	// test
@@ -8,6 +8,7 @@ Mesh {
 		all = IdentityDictionary.new;
 		thisHost = thisHost.as(MeshHost);
 		Vertex.initVertexTypeDict;
+		broadcastAddr = MeshHostAddr("255.255.255.255", 57120 + (0..7));
 	}
 
 	*at {|key| ^ all.at(key) }
@@ -103,7 +104,7 @@ Mesh {
 	}
 
 	initializeInstanceVariables {
-		hosts = MeshHosts.new(this, thisHost);
+		hosts = MeshHostsManager.new(this, thisHost);
 		vertexes = VertexDict.new;
 		window = MeshView(this);
 	}

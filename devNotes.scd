@@ -1,5 +1,6 @@
 
 Mesh.test;
+MeshHostsManager.test;
 Mesh(\mesh1).push;
 Mesh.current.postln;
 Mesh.current.hosts;
@@ -7,6 +8,7 @@ Mesh.stack.postln;
 Mesh.all.postln;
 
 		Mesh.all.removeAt(\mesh1);
+
 
 /* Development notes
 

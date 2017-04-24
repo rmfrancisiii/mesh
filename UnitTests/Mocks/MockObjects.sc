@@ -11,3 +11,22 @@ MockMesh {
 	}
 
 }
+
+MockBeacon {
+	var <>name;
+
+	*new {|name|
+		^ super.new.init(name)
+	}
+
+	init {|name|
+		name = name;
+		postf("Mock Beacon Created: % \n", (name));
+	}
+
+	fakeHostAdd {|mgr, host|
+
+
+	}
+
+}

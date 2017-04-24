@@ -139,7 +139,7 @@ TestMesh : UnitTest {
 	meshInitialized {|key, mesh|
 		this.meshIsAMesh(mesh);
 		this.checkName(key, mesh);
-		this.hostsIsMeshHosts(mesh);
+		this.hostsIsMeshHostsManager(mesh);
 		this.vertexesIsVertexDict(mesh);
 		this.windowIsMeshView(mesh);
 		this.meshEnvironmentInitialized(mesh);
@@ -183,8 +183,8 @@ TestMesh : UnitTest {
 			"New Mesh has the right name" );
 	}
 
-	hostsIsMeshHosts {|mesh|
-		this.assert( mesh.hosts.isKindOf(MeshHosts),
+	hostsIsMeshHostsManager {|mesh|
+		this.assert( mesh.hosts.isKindOf(MeshHostsManager),
 			"New Mesh has a host manager" );
 	}
 

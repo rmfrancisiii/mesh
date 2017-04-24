@@ -1,4 +1,4 @@
-MeshHosts {
+MeshHostsManager {
 	var <all, <>timeouts, <>beacon;
 
 	*new {|mesh, thisHost| ^ super.new.init(mesh, thisHost) }

@@ -4,7 +4,7 @@ categories:: Mesh, Live Coding
 related:: Guides/Mesh, Classes/Mesh, Classes/MeshHostManager, Classes/Meshall, Classes/MeshHost, Classes/MeshHostAddr, Guides/OSC_Communication
 
 DESCRIPTION::
-MeshHostManager is the interface class for MeshHosts.
+MeshHostManager is the interface class for MeshHostsManager.
 
 CLASSMETHODS::
 

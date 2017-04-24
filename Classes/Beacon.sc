@@ -1,6 +1,6 @@
 Beacon {
 
-	var oscPath, <pollPeriod, <broadcastAddr, beaconKeeper, inDefName, outDefName;
+	var oscPath, <pollPeriod, beaconKeeper, inDefName, outDefName;
 
 	*new {|mesh, host| ^ super.new.init(mesh, host) }
 
@@ -20,11 +20,6 @@ Beacon {
 		// globally, eg after creating a mesh, try: OSCdef.all;
 		this.makeOSCdefs(mesh, host);
 
-		// Set a broadcast address.
-		// Use the IP address 255.255.255.255 to send a message to
-		// all other nodes on the local network
-		broadcastAddr = MeshHostAddr("255.255.255.255", 57120 + (0..7));
-
 		// set the broadcast flag (whether or not broadcast messages can be sent)
 		MeshHostAddr.broadcastFlag = true;
 
@@ -34,7 +29,7 @@ Beacon {
 		// Start a function that periodically checks whether hosts are still online.
 		// This continues running, even after Cmd+Period
 		beaconKeeper = SkipJack({
-			try { broadcastAddr.sendMsg(oscPath, host.name)}
+			try { Mesh.broadcastAddr.sendMsg(oscPath, host.name)}
 			{|error| this.networkError(error)};
 			mesh.hosts.checkTimeouts;
 		}, pollPeriod, false);
@@ -71,7 +66,7 @@ Beacon {
 
 		OSCdef(\ping, {|msg, time, addr, recvPort|
 			(msg[1] ++ " pinged on " ++ mesh.name).postln;
-			broadcastAddr.sendMsg("/pingReply", host.name);
+			Mesh.broadcastAddr.sendMsg("/pingReply", host.name);
 		}, '/ping', recvPort: host.addr.port);
 
 		OSCdef(\chat, {|msg, time, addr, recvPort|
@@ -84,7 +79,7 @@ Beacon {
 
 	}
 
-	ping { |host| broadcastAddr.sendMsg("/ping", host.name) }
+	ping { |host| Mesh.broadcastAddr.sendMsg("/ping", host.name) }
 
 	start {
 		beaconKeeper.start;
