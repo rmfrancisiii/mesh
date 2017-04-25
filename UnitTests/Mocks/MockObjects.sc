@@ -25,7 +25,8 @@ MockBeacon {
 	}
 
 	fakeHostAdd {|mgr, host|
-
+//	addr = addr.as(MeshHostAddr);
+//	mesh.hosts.checkHost(key, addr);
 
 	}
 

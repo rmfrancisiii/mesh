@@ -10,7 +10,6 @@ TestMeshHostsManager : UnitTest {
 	tearDown {
 	}
 
-
 	test_hostsManager{
 		this.hostsManagerInitialization(hosts);
 		hosts.beacon = MockBeacon.new(\testBeacon);

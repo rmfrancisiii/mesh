@@ -92,6 +92,11 @@ Beacon {
 	free {
 		OSCdef(inDefName).free;
 		OSCdef(outDefName).free;
+		OSCdef(\ping).free;
+		OSCdef(\pingReply).free;
+		OSCdef(\chat).free;
+
+
 	}
 
 }

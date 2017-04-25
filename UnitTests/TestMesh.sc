@@ -7,7 +7,7 @@ TestMesh : UnitTest {
 	}
 
 	test_mesh{
-		var number = 20;
+		var number = 6;
 		this.classInitialized;
 		this.makeMeshes(number);
 		this.pushAll;
