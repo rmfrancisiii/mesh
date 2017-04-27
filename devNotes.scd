@@ -7,8 +7,10 @@ Mesh.current.hosts;
 Mesh.stack.postln;
 Mesh.all.postln;
 
+UnitTest
 		Mesh.all.removeAt(\mesh1);
 
+NetAddr.langPort;
 
 /* Development notes
 

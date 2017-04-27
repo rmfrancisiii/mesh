@@ -24,10 +24,13 @@ MockBeacon {
 		postf("Mock Beacon Created: % \n", (name));
 	}
 
-	fakeHostAdd {|mgr, host|
-//	addr = addr.as(MeshHostAddr);
-//	mesh.hosts.checkHost(key, addr);
-
+	fakeHostAdd {|mgr, key|
+		var addr = MeshHostAddr("localhost", 57110);
+		addr.postln;
+		addr.class.postln;
+  /*  var addr = MeshHostAddr.new(key, NetAddr.langPort);*/
+  mgr.checkHost(key, addr);
+	"Adding a fake Host".postln;
 	}
 
 }
