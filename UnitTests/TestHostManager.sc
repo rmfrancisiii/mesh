@@ -13,21 +13,26 @@ TestMeshHostsManager : UnitTest {
 	test_hostsManager{
 		this.hostsManagerInitialization(hosts);
 		hosts.beacon.stop;
-		hosts.beacon = MockBeacon.new(\testBeacon);
+		hosts.beacon = MockBeacon.new(\testBeacon, hosts);
 		beacon = hosts.beacon;
-		this.addFakeHost;
-		hosts.names.postln;
+		this.addManyFakeHosts(5);
+		hosts.postln;
+	}
+
+	nextFakeHostName{
+		^ ("fakeHost" ++ hosts.all.size).asSymbol;
 	}
 
 	addFakeHost{
-//		var fakeHostAddr = MeshHostAddr.new(\testHost1, NetAddr.langPort);
-	  var fakeHost = "fakehost";
-		//MeshHost.new(\testHost1, fakeHostAddr);
-		// verify beacon is FAKE beacon;
-	//	hostsMgr.beacon.fakeHostAdd(hostsMgr, fakeHost);
-		/*hosts.postln;*/
-		hosts.beacon.fakeHostAdd(hosts, fakeHost );
+		hosts.beacon.fakeHostAdd(this.nextFakeHostName);
 	}
+
+	addManyFakeHosts{|num|
+		num.do({
+			hosts.beacon.fakeHostAdd(this.nextFakeHostName)
+		}.defer(5.0))
+	}
+
 
 	hostsManagerInitialization {|obj|
 		this.meshHostsManagerIsMeshHostsManager(obj);

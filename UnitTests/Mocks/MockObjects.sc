@@ -13,24 +13,28 @@ MockMesh {
 }
 
 MockBeacon {
-	var <>name;
+	var <>name, <>manager;
 
-	*new {|name|
-		^ super.new.init(name)
+	*new {|name, mgr|
+		^ super.new.init(name, mgr)
 	}
 
-	init {|name|
+	init {|nname, mgr|
 		name = name;
+		manager = mgr;
 		postf("Mock Beacon Created: % \n", (name));
 	}
 
-	fakeHostAdd {|mgr, key|
-		var addr = MeshHostAddr("localhost", 57110);
-		addr.postln;
-		addr.class.postln;
-  /*  var addr = MeshHostAddr.new(key, NetAddr.langPort);*/
-  mgr.checkHost(key, addr);
-	"Adding a fake Host".postln;
+	nextFakeIp {
+		^ "192.168.0." ++ (manager.all.size + 101)
+	}
+
+	fakeHostAdd {|key|
+		var ip = this.nextFakeIp;
+		var addr = MeshHostAddr(ip, 57110);
+		ip.postln;
+  	manager.checkHost(key, addr);
+		"Adding a fake Host".postln;
 	}
 
 }
