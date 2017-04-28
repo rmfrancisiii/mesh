@@ -10,14 +10,14 @@ Mesh.all.postln;
 UnitTest
 		Mesh.all.removeAt(\mesh1);
 
-NetAddr.langPort;
-
+~nad = NetAddr.localAddr; //new();
+n = NetAddr("localhost", 57110);
+n.ip;
 /* Development notes
 
 TODO:
 
 Make Offline otion for new Mesh?
-
 
 
 Ideas:

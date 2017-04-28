@@ -15,7 +15,7 @@ TestMeshHostsManager : UnitTest {
 		hosts.beacon.stop;
 		hosts.beacon = MockBeacon.new(\testBeacon, hosts);
 		beacon = hosts.beacon;
-		this.addManyFakeHosts(5);
+		this.addManyFakeHosts(15, 3);
 		hosts.postln;
 	}
 
@@ -27,12 +27,14 @@ TestMeshHostsManager : UnitTest {
 		hosts.beacon.fakeHostAdd(this.nextFakeHostName);
 	}
 
-	addManyFakeHosts{|num|
-		num.do({
-			hosts.beacon.fakeHostAdd(this.nextFakeHostName)
-		}.defer(5.0))
-	}
+	addManyFakeHosts{|num, delay|
+		num.do({|i|
+			{
+				hosts.beacon.fakeHostAdd(this.nextFakeHostName)
+			}.defer(i*delay)
 
+		})
+	}
 
 	hostsManagerInitialization {|obj|
 		this.meshHostsManagerIsMeshHostsManager(obj);
