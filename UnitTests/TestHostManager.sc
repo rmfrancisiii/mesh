@@ -13,27 +13,25 @@ TestMeshHostsManager : UnitTest {
 	test_hostsManager{
 		this.hostsManagerInitialization(hosts);
 		hosts.beacon.stop;
-		hosts.beacon = MockBeacon.new(\testBeacon, hosts);
+		hosts.beacon = MockBeacon.new(hosts, 1.0);
 		beacon = hosts.beacon;
-		this.addManyFakeHosts(15, 3);
-		hosts.postln;
+		this.addManyFakeHosts(5, 3);
 	}
 
 	nextFakeHostName{
-		^ ("fakeHost" ++ hosts.all.size).asSymbol;
+		^ ("fakeHost" ++ (hosts.names.size)).asSymbol;
 	}
 
 	addFakeHost{
+		var newHost = this.nextFakeHostName;
+		this.hostNotExists(newHost);
 		hosts.beacon.fakeHostAdd(this.nextFakeHostName);
+		this.hostExists(newHost);
+		this.hostOnline(newHost);
 	}
 
 	addManyFakeHosts{|num, delay|
-		num.do({|i|
-			{
-				hosts.beacon.fakeHostAdd(this.nextFakeHostName)
-			}.defer(i*delay)
-
-		})
+		num.do({|i|{ this.addFakeHost}.defer(i*delay)})
 	}
 
 	hostsManagerInitialization {|obj|
@@ -67,15 +65,34 @@ TestMeshHostsManager : UnitTest {
 		"Beacon is a Mock Beacon");
 	}
 
-	/*thisHostExists
+	hostExists {|host|
+		this.assert( hosts.exists(host),
+		"Host Exists");
+	}
 
-	thisHostIsOnline
+	hostNotExists {|host|
+		this.assert( hosts.exists(host).not,
+		"Host Does Not Exist");
+	}
+
+	hostOnline {|host|
+		this.assert( hosts.isOnline(host),
+		"Host is online");
+	}
+
+	hostNotOnline {|host|
+		this.assert( hosts.isOnline(host).not,
+		"Host is Not online");
+	}
+
+/*
 
 	thisHostIsMeshHost
 
 	timeoutsHasThisHost
 
-	timeoutsHasTime*/
+	timeoutsHasTime
+	*/
 
 
 

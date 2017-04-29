@@ -13,16 +13,16 @@ MockMesh {
 }
 
 MockBeacon {
-	var <>name, <>manager;
+	var <>manager, beaconKeeper, <>pollPeriod;
 
-	*new {|name, mgr|
-		^ super.new.init(name, mgr)
+	*new {|mgr|
+		^ super.new.init(mgr)
 	}
 
-	init {|nname, mgr|
-		name = name;
+	init {|mgr|
 		manager = mgr;
-		postf("Mock Beacon Created: % \n", (name));
+		beaconKeeper = this.fakeBeaconAdd(1.0);
+		"Mock Beacon Created".postln;
 	}
 
 	nextFakeIp {
@@ -36,5 +36,13 @@ MockBeacon {
   	manager.checkHost(key, addr);
 		"Adding a fake Host".postln;
 	}
+
+	fakeBeaconAdd {|poll = 1.0|
+		pollPeriod = poll;
+		^ SkipJack({
+			manager.checkTimeouts;
+			}, poll, false);
+		}
+
 
 }

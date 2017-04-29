@@ -11,7 +11,6 @@ MeshHostAddr : NetAddr {
 		if(item.isKindOf(this)) { ^item };
 		if(item.isKindOf(NetAddr)) {
 			^this.new(item.ip, item.port)};
-		//if(item.isKindOf(Symbol)) { ^this.new(item, NetAddr.langPort) };
 		^ "I dont know what to do with this!".error;
 	}
 

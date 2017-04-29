@@ -90,15 +90,23 @@ MeshHostsManager {
 	}
 
 	checkHost {|key, addr|
+		// If it's new:
 		if (this.exists(key).not)
 		{ this.makeNewHost(key, addr) }
-		{
-			var host = all.at(key);
-			if (host.addr.matches(addr).not)
-			{ this.changeHostAddr(host, addr) }
 
-			{ if (host.online == false)
-					{ this.setOnline(host) };
+		// otherwise get the old host info
+		{
+			// var host = all.at(key);
+			// using this prevents inlining the function.
+			// not sure if this really matters, but its a pretty active fn... more research is needed.
+
+			// If the address changed
+			if (all.at(key).addr.matches(addr).not)
+			{ this.changeHostAddr(all.at(key), addr) }
+
+			// otherwise, welcome back.
+			{ if (all.at(key).online == false)
+					{ this.setOnline(all.at(key)) };
 				this.resetTimeout(key);
 			};
 		}

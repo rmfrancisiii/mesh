@@ -1,4 +1,7 @@
 
+UnitTest.gui;
+
+
 Mesh.test;
 MeshHostsManager.test;
 Mesh(\mesh1).push;
@@ -8,7 +11,7 @@ Mesh.stack.postln;
 Mesh.all.postln;
 
 UnitTest
-		Mesh.all.removeAt(\mesh1);
+Mesh.all.removeAt(\mesh1);
 
 ~nad = NetAddr.localAddr; //new();
 n = NetAddr("localhost", 57110);
