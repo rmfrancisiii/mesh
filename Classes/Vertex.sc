@@ -19,12 +19,12 @@ Vertex {
 
 		//need to look at this bit closer, if arg has an unknown Mesh, it just creates it.
 
-		if (meshName.isNil) {meshName = Mesh.peek.name};
+		if (meshName.isNil) {meshName = Mesh.current.name};
 		if (meshName.isNil) {"nil Mesh".error; ^ Error};
 
 
 		// TODO: Handle nil or wrong VertexType
-		^ Mesh(name).vertexDict[name] ?? {
+		^ Mesh(name).vertexes[name] ?? {
 			vertexTypeDict[type.asSymbol].vertexRequestor( name, Mesh(name)[hostName], Mesh(name), *passArgs);
 			^ "New Vertex Requested".inform
 		}

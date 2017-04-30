@@ -1,21 +1,35 @@
+Mesh(\mesh1).push;
+Vertex(\Vertex1, \VertexServer);
+
+
 
 UnitTest.gui;
-
-
 Mesh.test;
 MeshHostsManager.test;
-Mesh(\mesh1).push;
+Vertex.test;
+
 Mesh.current.postln;
 Mesh.current.hosts;
 Mesh.stack.postln;
 Mesh.all.postln;
+Mesh.thisHost.name.postln;
+Vertex.vertexTypeDict.postln;
 
-UnitTest
+
+
+
+
+
+
+
+
+
+
 Mesh.all.removeAt(\mesh1);
 
-~nad = NetAddr.localAddr; //new();
-n = NetAddr("localhost", 57110);
-n.ip;
+
+
+
 /* Development notes
 
 TODO:
