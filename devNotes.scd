@@ -1,12 +1,16 @@
+Vertex.test;
+
+MeshHostsManager.test;
+Mesh.test;
+
+
+
 Mesh(\mesh1).push;
 Vertex(\Vertex1, \VertexServer);
 
 
 
 UnitTest.gui;
-Mesh.test;
-MeshHostsManager.test;
-Vertex.test;
 
 Mesh.current.postln;
 Mesh.current.hosts;
@@ -17,11 +21,11 @@ Vertex.vertexTypeDict.postln;
 
 
 
+Mesh.all.postln;
 
 
 
-
-
+Mesh.current.hosts;
 
 
 
