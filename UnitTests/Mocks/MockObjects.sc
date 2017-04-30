@@ -13,15 +13,17 @@ MockMesh {
 }
 
 MockBeacon {
-	var <>manager, beaconKeeper, <>pollPeriod;
+	var <>manager, <>beaconKeeper, <>fakeHosts, <>pollPeriod;
 
-	*new {|mgr|
-		^ super.new.init(mgr)
+	*new {|mgr, poll|
+		^ super.new.init(mgr, poll)
 	}
 
-	init {|mgr|
+	init {|mgr, poll|
 		manager = mgr;
-		beaconKeeper = this.fakeBeaconAdd(1.0);
+		pollPeriod = poll;
+		beaconKeeper = this.fakeBeaconAdd;
+		fakeHosts = IdentityDictionary.new;
 		"Mock Beacon Created".postln;
 	}
 
@@ -31,17 +33,31 @@ MockBeacon {
 
 	fakeHostAdd {|key|
 		var ip = this.nextFakeIp;
-		var addr = MeshHostAddr(ip, 57110);
-		ip.postln;
-  	manager.checkHost(key, addr);
-		"Adding a fake Host".postln;
+		var port = 57110;
+		var addr = MeshHostAddr(ip, port);
+		var arry = Array.with(addr, true);
+		manager.checkHost(key, addr);
+		fakeHosts.put(key, arry);
 	}
 
-	fakeBeaconAdd {|poll = 1.0|
-		pollPeriod = poll;
+	fakeHostSetOffline{|key|
+		key.postln;
+		fakeHosts.at(key).postln; //put(1,false);
+
+
+		//fakeHosts.at(key).put(1,false);
+	}
+
+	fakeBeaconAdd {
 		^ SkipJack({
+
+			fakeHosts.keysValuesDo({|key, arry|
+				 if (arry[1])
+					{ manager.checkHost(key, arry[0]) };
+					});
+
 			manager.checkTimeouts;
-			}, poll, false);
+			}, pollPeriod, false);
 		}
 
 

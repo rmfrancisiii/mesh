@@ -1,5 +1,5 @@
 TestMeshHostsManager : UnitTest {
-	var dummyMesh, thisHost, hosts, beacon;
+	var <>dummyMesh, <>thisHost, <>hosts;
 
 	setUp {
 		thisHost = Mesh.thisHost;
@@ -11,15 +11,45 @@ TestMeshHostsManager : UnitTest {
 	}
 
 	test_hostsManager{
-		this.hostsManagerInitialization(hosts);
+		this.hostsManagerInitialization;
 		hosts.beacon.stop;
 		hosts.beacon = MockBeacon.new(hosts, 1.0);
-		beacon = hosts.beacon;
 		this.addManyFakeHosts(5, 3);
+		this.setAllFakeHostOffline(5);
+	}
+
+	setAllFakeHostOffline {|delay|
+
+		{	"check all hosts offline".postln;
+			this.checkAllHostOffline;
+			}.defer(delay + ((hosts.all.size) * delay));
+
+		hosts.all.keysDo({|key, i|
+			{
+				"setting host offline".postln;
+				this.setFakeHostOffline(key);
+				}.defer(delay + (i*delay));
+			})
+	}
+
+	checkAllHostOffline {
+		hosts.all.keysDo({|key| this.hostNotOnline(key)});
+	}
+
+
+	setFakeHostOffline {|key|
+		hosts.beacon.fakeHostSetOffline(key);
+	}
+
+	hostsManagerInitialization {
+		this.meshHostsManagerIsMeshHostsManager;
+		this.allIsIdentityDictionary;
+		this.timeoutsIsIdentityDictionary;
+		this.beaconIsBeacon;
 	}
 
 	nextFakeHostName{
-		^ ("fakeHost" ++ (hosts.names.size)).asSymbol;
+		^ ("fakeHost" ++ (hosts.all.size)).asSymbol;
 	}
 
 	addFakeHost{
@@ -31,37 +61,33 @@ TestMeshHostsManager : UnitTest {
 	}
 
 	addManyFakeHosts{|num, delay|
-		num.do({|i|{ this.addFakeHost}.defer(i*delay)})
+		num.do({|i|
+			{this.addFakeHost}.defer(i*delay)
+		})
 	}
 
-	hostsManagerInitialization {|obj|
-		this.meshHostsManagerIsMeshHostsManager(obj);
-		this.allIsIdentityDictionary(obj);
-		this.timeoutsIsIdentityDictionary(obj);
-	}
-
-	meshHostsManagerIsMeshHostsManager{|obj|
-		this.assert( obj.isKindOf(MeshHostsManager),
+	meshHostsManagerIsMeshHostsManager{
+		this.assert( hosts.isKindOf(MeshHostsManager),
 		"MeshHostManager is a MeshHostManager");
 	}
 
-	allIsIdentityDictionary{|obj|
-		this.assert( obj.all.isKindOf(IdentityDictionary),
+	allIsIdentityDictionary{
+		this.assert( hosts.all.isKindOf(IdentityDictionary),
 		"HostDict is an IdentityDictionary");
 	}
 
-	timeoutsIsIdentityDictionary{|obj|
-		this.assert( obj.timeouts.isKindOf(IdentityDictionary),
+	timeoutsIsIdentityDictionary{
+		this.assert( hosts.timeouts.isKindOf(IdentityDictionary),
 		"timeouts is an IdentityDictionary");
 	}
 
-	beaconIsBeacon{|obj|
-		this.assert( obj.beacon.isKindOf(Beacon),
+	beaconIsBeacon{
+		this.assert( hosts.beacon.isKindOf(Beacon),
 		"Beacon is a beacon");
 	}
 
 	beaconIsMockBeacon{|obj|
-		this.assert( obj.beacon.isKindOf(MockBeacon),
+		this.assert( hosts.beacon.isKindOf(MockBeacon),
 		"Beacon is a Mock Beacon");
 	}
 
@@ -84,6 +110,7 @@ TestMeshHostsManager : UnitTest {
 		this.assert( hosts.isOnline(host).not,
 		"Host is Not online");
 	}
+
 
 /*
 
