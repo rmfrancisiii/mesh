@@ -13,32 +13,9 @@ TestMeshHostsManager : UnitTest {
 	test_hostsManager{
 		this.hostsManagerInitialization;
 		hosts.beacon.stop;
-		hosts.beacon = MockBeacon.new(hosts, 1.0);
-		this.addManyFakeHosts(5, 3);
-		this.setAllFakeHostOffline(5);
-	}
-
-	setAllFakeHostOffline {|delay|
-
-		{	"check all hosts offline".postln;
-			this.checkAllHostOffline;
-			}.defer(delay + ((hosts.all.size) * delay));
-
-		hosts.all.keysDo({|key, i|
-			{
-				"setting host offline".postln;
-				this.setFakeHostOffline(key);
-				}.defer(delay + (i*delay));
-			})
-	}
-
-	checkAllHostOffline {
-		hosts.all.keysDo({|key| this.hostNotOnline(key)});
-	}
-
-
-	setFakeHostOffline {|key|
-		hosts.beacon.fakeHostSetOffline(key);
+		hosts.beacon = MockBeacon.new(hosts, thisHost, poll: 1.0);
+  	this.addManyFakeHosts(count: 5, delay: 3);
+		//theres a timing bug in the test here, and its slow in execution. //this.setAllFakeHostOffline(2);
 	}
 
 	hostsManagerInitialization {
@@ -60,10 +37,30 @@ TestMeshHostsManager : UnitTest {
 		this.hostOnline(newHost);
 	}
 
-	addManyFakeHosts{|num, delay|
-		num.do({|i|
-			{this.addFakeHost}.defer(i*delay)
-		})
+	addManyFakeHosts{ |count, delay|
+		count.do({|i| {this.addFakeHost}.defer(i * delay)})
+	}
+
+	checkAllHostOffline {
+		hosts.all.keysDo({ |key| this.hostNotOnline(key)});
+	}
+
+	setAllFakeHostOffline {|delay|
+
+	  {	"check all hosts offline".postln;
+	    this.checkAllHostOffline;
+	    }.defer(30);
+
+	  hosts.all.keysDo({|key, i|
+	    {
+	      "setting host offline".postln;
+	      this.setFakeHostOffline(key);
+	      }.defer(i*delay);
+	    })
+	}
+
+	setFakeHostOffline { |key|
+		hosts.beacon.fakeHostSetOffline(key);
 	}
 
 	meshHostsManagerIsMeshHostsManager{
@@ -86,41 +83,29 @@ TestMeshHostsManager : UnitTest {
 		"Beacon is a beacon");
 	}
 
-	beaconIsMockBeacon{|obj|
+	beaconIsMockBeacon{
 		this.assert( hosts.beacon.isKindOf(MockBeacon),
 		"Beacon is a Mock Beacon");
 	}
 
-	hostExists {|host|
+	hostExists { |host|
 		this.assert( hosts.exists(host),
 		"Host Exists");
 	}
 
-	hostNotExists {|host|
+	hostNotExists { |host|
 		this.assert( hosts.exists(host).not,
 		"Host Does Not Exist");
 	}
 
-	hostOnline {|host|
+	hostOnline { |host|
 		this.assert( hosts.isOnline(host),
 		"Host is online");
 	}
 
-	hostNotOnline {|host|
+	hostNotOnline { |host|
 		this.assert( hosts.isOnline(host).not,
 		"Host is Not online");
 	}
-
-
-/*
-
-	thisHostIsMeshHost
-
-	timeoutsHasThisHost
-
-	timeoutsHasTime
-	*/
-
-
 
 }

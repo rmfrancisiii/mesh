@@ -15,20 +15,20 @@ MockMesh {
 MockBeacon {
 	var <>manager, <>beaconKeeper, <>fakeHosts, <>pollPeriod;
 
-	*new {|mgr, poll|
-		^ super.new.init(mgr, poll)
+	*new {|mgr, thisHost, poll|
+		^ super.new.init(mgr, thisHost, poll)
 	}
 
-	init {|mgr, poll|
+	init {|mgr, thisHost, poll|
 		manager = mgr;
 		pollPeriod = poll;
 		beaconKeeper = this.fakeBeaconAdd;
 		fakeHosts = IdentityDictionary.new;
-		"Mock Beacon Created".postln;
+		this.fakeHostAdd(thisHost.name);
 	}
 
 	nextFakeIp {
-		^ "192.168.0." ++ (manager.all.size + 101)
+		^ "192.168.0." ++ (manager.all.size + 100)
 	}
 
 	fakeHostAdd {|key|
@@ -41,23 +41,25 @@ MockBeacon {
 	}
 
 	fakeHostSetOffline{|key|
-		key.postln;
-		fakeHosts.at(key).postln; //put(1,false);
-
-
-		//fakeHosts.at(key).put(1,false);
+		fakeHosts.at(key).put(1,false);
 	}
+
+	isOnline { |host|	^	host[1]	}
+
+	hostAddr { |host|	^	host[0] }
 
 	fakeBeaconAdd {
 		^ SkipJack({
 
-			fakeHosts.keysValuesDo({|key, arry|
-				 if (arry[1])
-					{ manager.checkHost(key, arry[0]) };
-					});
+			fakeHosts.keysValuesDo({|key, host|
+				 if (this.isOnline(host))
+					{ manager.checkHost(key, this.hostAddr(host)) };
+			});
 
 			manager.checkTimeouts;
+
 			}, pollPeriod, false);
+
 		}
 
 
