@@ -7,7 +7,7 @@ Mesh {
 		stack = [];
 		all = IdentityDictionary.new;
 		thisHost = thisHost.as(MeshHost);
-		Vertex.initVertexTypeDict;
+		Vertex.initVertexTypes;
 		broadcastAddr = MeshHostAddr("255.255.255.255", 57120 + (0..7));
 	}
 

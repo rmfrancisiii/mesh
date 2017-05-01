@@ -1,32 +1,39 @@
 Vertex {
 	classvar <vertexTypeDict;
 
-	// This is the interface for creating and controlling vertexes and vertexTypes,
-	// any method calls get passed to the vertex type OR vertex Proxy object in the vertexDict
-
-	*initVertexTypeDict { // called by Mesh.initClass
-		vertexTypeDict = VertexAbstract.subclasses.collectAs({|item|
-			var key = item.name.asString.drop(6);
-			key[0] = key.first.toLower;
-			key.asSymbol -> item;
-		}, IdentityDictionary);
-
-		// For all vertex types, try initializing their OSCdefs:
-		vertexTypeDict.keysValuesDo({|key, value| value.tryPerform(\makeOSCDefs)});
+	*initVertexTypes { // called by Mesh.initClass
+		vertexTypeDict = this.collectVertexTypes;
+		this.initTypeOSCdefs;
 	}
 
-	*new {| vertexname, type, hostName, meshName ... passArgs|
+	*collectVertexTypes{
+		var allTypes = VertexAbstract.subclasses;
+		var dict = allTypes.collectAs(
+				{ |vertexType|
+					var key = this.trimClassName(vertexType.name);
+		 			key -> vertexType },
+				IdentityDictionary);
+		^ dict;
+	}
 
-		//need to look at this bit closer, if arg has an unknown Mesh, it just creates it.
 
-		if (meshName.isNil) {meshName = Mesh.current.name};
+	*trimClassName{ |key|
+		key = key.asString.drop(6);
+		key[0] = key.first.toLower;
+		^ key.asSymbol;
+	}
+
+	*initTypeOSCdefs{
+		vertexTypeDict.keysValuesDo({|key, value| value.tryPerform(\makeOSCDefs)
+		})
+	}
+
+	*new {| vertexName, type, hostName, meshName ... passArgs|
+		if (meshName.isNil) { meshName = Mesh.current.name };
 		if (meshName.isNil) {"nil Mesh".error; ^ Error};
 
-
-		// TODO: Handle nil or wrong VertexType
-		^ Mesh(name).vertexes[name] ?? {
-			vertexTypeDict[type.asSymbol].vertexRequestor( name, Mesh(name)[hostName], Mesh(name), *passArgs);
-			^ "New Vertex Requested".inform
+		^ Mesh.at(meshName).vertexes[vertexName] ?? {
+			vertexTypeDict[type.asSymbol].vertexRequestor( name, Mesh.at(meshName)[hostName], Mesh(meshName), *passArgs);
 		}
 	}
 }
