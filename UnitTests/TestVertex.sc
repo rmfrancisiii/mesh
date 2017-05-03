@@ -22,8 +22,8 @@ TestVertex : UnitTest {
 			"Vertex Type Dictionary created");
 	}
 
-	makeVertex { |name, type, host|
-		Vertex.new(name, type, host);
+	makeVertex { |name, type, hostName|
+		Vertex.new(name, type, hostName);
 	}
 
 	vertexExists{ |mesh, key|

@@ -6,9 +6,15 @@ Mesh.test;
 
 
 Mesh(\mesh1).push;
-Vertex(\Vertex1, \VertexServer);
+Mesh.at(\mesh1)[\rose].postln;
+Mesh.at(\mesh1).vertexes.postln;
+
+Vertex(\server1, \server, \rose);
+Vertex(\server1).setOptions(maxLogins: 12);
+Vertex(\server1).boot;
 
 
+Vertex.vertexTypeDict.postln;
 
 UnitTest.gui;
 

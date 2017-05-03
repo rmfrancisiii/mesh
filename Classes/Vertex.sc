@@ -16,7 +16,6 @@ Vertex {
 		^ dict;
 	}
 
-
 	*trimClassName{ |key|
 		key = key.asString.drop(6);
 		key[0] = key.first.toLower;
@@ -29,11 +28,34 @@ Vertex {
 	}
 
 	*new {| vertexName, type, hostName, meshName ... passArgs|
-		if (meshName.isNil) { meshName = Mesh.current.name };
-		if (meshName.isNil) {"nil Mesh".error; ^ Error};
 
-		^ Mesh.at(meshName).vertexes[vertexName] ?? {
-			vertexTypeDict[type.asSymbol].vertexRequestor( name, Mesh.at(meshName)[hostName], Mesh(meshName), *passArgs);
-		}
+		var mesh = this.getMesh(meshName); // add TRY
+		var vertex = this.getVertex(vertexName, mesh);
+		var host = mesh[hostName];
+		var vertexType = vertexTypeDict[type.asSymbol];
+
+		if (vertex == List.new)
+			{	vertexType.vertexRequestor( vertexName, host, mesh, *passArgs) }
+
+		^ vertex
+	}
+
+	*getMesh{|meshName|
+		if (meshName.isNil)
+				{	^ this.currentMesh };
+		^ Mesh.at(meshName)
+	}
+
+	*currentMesh {
+		if (Mesh.hasCurrent)
+				{^ Mesh.current};
+		"nil Mesh".error; ^ Error;
+	}
+
+	*getVertex {|vertexName, mesh|
+		var vertex = mesh.vertexes.at(vertexName);
+		if (vertex.isNil)
+				{^ List.new};
+		^ vertex
 	}
 }
