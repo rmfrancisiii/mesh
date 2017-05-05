@@ -35,7 +35,7 @@ Vertex {
 		var vertexType = vertexTypeDict[type.asSymbol];
 
 		if (vertex == List.new)
-			{	vertexType.vertexRequestor( vertexName, host, mesh, *passArgs) }
+			{	vertexType.requestor( vertexName, host, mesh, *passArgs) }
 
 		^ vertex
 	}

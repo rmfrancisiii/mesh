@@ -44,6 +44,15 @@ Mesh.all.removeAt(\mesh1);
 
 TODO:
 
+new:
+Vertex(\name, \type, \host, \mesh)
+
+method/modify:
+Vertex(\name).method(parameters)
+
+
+
+
 Make Offline otion for new Mesh?
 
 

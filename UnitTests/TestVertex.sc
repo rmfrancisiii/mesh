@@ -1,11 +1,13 @@
 TestVertex : UnitTest {
-	var mesh;
+	var mesh, thisHost, hostName;
 
 	setUp {
 			"Testing Vertexes".postln;
-			this.makeOSCdefs;
+			//this.makeOSCdefs;
 			mesh = TestMesh.new.makeMesh;
 			mesh.push;
+			thisHost = Mesh.thisHost;
+			hostName = thisHost.name.asSymbol;
 	}
 
 	tearDown {
@@ -13,7 +15,7 @@ TestVertex : UnitTest {
 
 	test_vertex {
 		this.vertexInitialized;
-		this.makeVertex(\vertex1, \server, \rose);
+		this.makeVertex(\vertex1, \server, hostName);
 		this.vertexExists(mesh, \vertex1);
 	}
 
