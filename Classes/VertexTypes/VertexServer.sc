@@ -1,14 +1,13 @@
 VertexServer : VertexAbstract {
+	*makePath {
+		^ "/" ++ this.asSymbol ++ "/request/"
+	}
 
 	*requestor { |vertexName, vertexHost, mesh ...passArgs|
 
 		var requestor = (this.makePath ++ "new");
 		vertexHost.sendMsg(requestor, vertexName, mesh.name, *passArgs);
 		^ ("OSC message sent to " ++ requestor).postln;
-	}
-
-	*makePath {
-		^ "/" ++ this.asSymbol ++ "/request/"
 	}
 
 	*makeOSCDefs {
@@ -75,6 +74,14 @@ VertexServer : VertexAbstract {
 	}
 	// all additional instance/interface methods
 	// are calls to the proxy, and can direct requests to the server
+
+	/*doesNotUnderstand {|selector ... args|
+		// TODO: need to check order?
+		var result = nil;
+		(result = server.tryPerform(selector, *args)) !? { ^ result };
+		(result = server.options.tryPerform(selector, *args)) !? { ^ result };
+		(result = server.addr.tryPerform(selector, *args)) !? { ^ result };
+	}*/
 
 
 
