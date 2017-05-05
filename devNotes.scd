@@ -1,9 +1,6 @@
 Vertex.test;
-
 MeshHostsManager.test;
 Mesh.test;
-
-
 
 Mesh(\mesh1).push;
 Mesh.at(\mesh1)[\rose].postln;
@@ -13,9 +10,7 @@ Vertex(\server1, \server, \rose);
 Vertex(\server1).setOptions(maxLogins: 12);
 Vertex(\server1).boot;
 
-
 Vertex.vertexTypeDict.postln;
-
 UnitTest.gui;
 
 Mesh.current.postln;
@@ -24,23 +19,37 @@ Mesh.stack.postln;
 Mesh.all.postln;
 Mesh.thisHost.name.postln;
 Vertex.vertexTypeDict.postln;
-
-
-
 Mesh.all.postln;
-
-
-
 Mesh.current.hosts;
-
-
-
 Mesh.all.removeAt(\mesh1);
+NetAddr.localAddr.postln;
+NetAddr.localAddr.sendMsg("/x");
+r = OSCFunc({ "message arrived".postln }, '/x');
+n = NetAddr("127.0.0.1", 57120);
+n.sendMsg("/x")
 
-
+("hostname".unixCmdGetStdOut.split($.)[0]).stripWhiteSpace.asSymbol
 
 
 /* Development notes
+General practices for Vertexes:
+
+- invocation -
+1. Vertex.new(\name, \type, \args)
+2. VertexType.requestor
+3. OSC msg to Vertex Host
+4. OSC -> OSCdef(VertexType.requestHandler)
+5. VertexServer.newServer
+   b. makes new server, stores reference somewhere?
+   c. returns notification or exceptions
+6. Broadcast proxy requestor with reference to 5.b.
+7. Proxy Request Handler adds proxy to Mesh.Vertexes
+- done -
+
+
+
+all activity @Vertex is -> proxy.
+
 
 TODO:
 

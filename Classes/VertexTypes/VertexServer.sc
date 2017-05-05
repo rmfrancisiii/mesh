@@ -3,23 +3,24 @@ VertexServer : VertexAbstract {
 		^ "/" ++ this.asSymbol ++ "/request/"
 	}
 
-	*requestor { |vertexName, vertexHost, mesh ...passArgs|
 
-		var requestor = (this.makePath ++ "new");
-		vertexHost.sendMsg(requestor, vertexName, mesh.name, *passArgs);
-		^ ("OSC message sent to " ++ requestor).postln;
-	}
 
 	*makeOSCDefs {
+
+
 		OSCdef(\VertexServerRequestHandler, {|msg, time, addr, recvPort|
-			"New Server Request Handler".postln;
-			// does it exist?
+			// TRY TO MOVE INTO VertexAbstract
+			// parse message for \name, \vertexType
+			// might need to reverse the adress:
+			// eg.  /VertexRequest/new/vertexType
+
+			"New Vertex Request Handler".postln;
+			// does \name exist?
 				// no?
-					this.newServer(msg);
-					this.proxyRequestor;
-					this.confirmServer;
+					// \vertexType.newServer(msg);
 				// yes?
-					// ignore
+					// ignore? Send Exception?
+					
 		}, '/VertexServer/request/new');
 
 		OSCdef(\VertexServerProxyRequestHandler, {|msg, time, addr, recvPort|
@@ -49,6 +50,8 @@ VertexServer : VertexAbstract {
 
 	*newServer {
 		// new server on THIS machine
+		this.proxyRequestor;
+		this.confirmServer;
 
 	}
 
