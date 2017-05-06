@@ -1,4 +1,6 @@
 Vertex.test;
+
+
 MeshHostsManager.test;
 Mesh.test;
 
@@ -30,8 +32,16 @@ n.sendMsg("/x")
 
 ("hostname".unixCmdGetStdOut.split($.)[0]).stripWhiteSpace.asSymbol
 
-
+OSCdef.all;
 /* Development notes
+
+next:
+Add ...args passthrough for extra arguments in Vertex.new(name, type, mesh, host, *ARGS)
+
+
+5/6/17: created skeleton for messages for VertexAbstract
+
+
 General practices for Vertexes:
 
 - invocation -
@@ -390,3 +400,4 @@ TODO: Check to be sure the following are for a local server.
 	}
 
 */
+ggg

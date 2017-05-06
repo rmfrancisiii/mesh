@@ -12,14 +12,14 @@ VertexServer : VertexAbstract {
 
 	}
 
-	*makeVertex{ |vertexName, mesh|
+	*makeVertex{ |vertexName, mesh ...passArgs|
 		"adding vertex".postln;
 		mesh.vertexes.put(vertexName, this.asSymbol);
 		^ true
 	}
 
-	*makeProxy{ |vertexName, mesh|
-		"adding vertex".postln;
+	*makeProxy{ |vertexName, mesh ...passArgs|
+		"adding Proxy".postln;
 		//mesh.vertexes.put(vertexName, this.asSymbol);
 		^ true
 	}
