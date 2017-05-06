@@ -16,7 +16,7 @@ TestVertex : UnitTest {
 	test_vertex {
 		this.vertexInitialized;
 		this.makeVertex(\vertex1, \server, hostName);
-		this.vertexExists(mesh, \vertex1);
+		{this.vertexExists(mesh, \vertex1)}.defer(3);
 	}
 
 	vertexInitialized {
@@ -29,7 +29,7 @@ TestVertex : UnitTest {
 	}
 
 	vertexExists{ |mesh, key|
-		this.assert( mesh.vertexes.includes(key),
+		this.assert( mesh.vertexes.includesKey(key),
 			"Key Exists in mesh.vertexes");
 
 	}

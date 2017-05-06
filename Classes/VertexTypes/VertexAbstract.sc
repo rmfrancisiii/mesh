@@ -1,22 +1,16 @@
 VertexAbstract {
-
-  *requestor { |vertexName, vertexHost, mesh ...passArgs|
-
-    var requestor = (this.makePath ++ "new");
-    vertexHost.sendMsg(requestor, vertexName, mesh.name, *passArgs);
-    ^ ("OSC message sent to " ++ requestor).postln;
+  *makeRequestPath {
+    ^ "/" ++ this.asSymbol ++ "/request/"
   }
 
-	/**vertexRequestHandler {|msg|
-		if (super.new.init(*msg)) {
-			^ "Broadcast Vertex Proxy Request message now!".postln
-			// TODO: This!!!
-			// this.vertexProxyRequestor(arguments)
+  *makeConfirmPath {
+    ^ "/" ++ this.asSymbol ++ "/confirm/"
+  }
 
-		}
-		{^ "Not added, Failed, return error to requesting host!".postln
-			// TODO: This!!!
-		};
-	}*/
+  *requestor { |vertexName, vertexHost, mesh ...passArgs|
+    var path = (this.makeRequestPath ++ "vertex");
+    vertexHost.sendMsg(path, vertexName, mesh.name, *passArgs);
+    ^ ("OSC message sent to " ++ path).postln;
+  }
 
 }

@@ -124,6 +124,8 @@ Mesh {
 		});
 	}
 
+	includesVertex {|key| ^ this.vertexes.includesKey(key)}
+
 	hideCurrentWindow { Mesh.current.window.deactivate }
 
 	showCurrentWindow { Mesh.current.window.activate }

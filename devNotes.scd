@@ -62,7 +62,7 @@ Vertex(\name).method(parameters)
 
 
 
-Make Offline otion for new Mesh?
+Make Offline option for new Mesh?
 
 
 Ideas:
