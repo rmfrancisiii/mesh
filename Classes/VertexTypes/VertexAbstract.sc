@@ -4,6 +4,9 @@ VertexAbstract {
 
     typeName = this.name;
 
+    // refactor these into a .makeHandler method?
+    // make (msg,time,addr,recvPort) into a collection?
+
     OSCdef(\VertexServerRequestHandler, {|msg, time, addr, recvPort|
       VertexServer.tryMakeVertex(msg);
     }, '/' ++ typeName ++ '/request/vertex');
@@ -37,6 +40,8 @@ VertexAbstract {
   }
 
   *tryMakeVertex { |msg|
+    // refactor msg into a collection?
+
 		var oscAddr = msg[0];
 		var vertexName = msg[1];
 		var mesh = Mesh(msg[2]);
@@ -62,7 +67,7 @@ VertexAbstract {
 
   *tryMakeProxy { |msg|
     var oscAddr = msg[0];
-    var vertexName = msg[1];
+    var vertexName = msg[1]++'proxy';
     var mesh = Mesh(msg[2]);
     var host = Mesh.thisHost;
     "Make Proxy request received".postln;

@@ -1,4 +1,12 @@
+
 Vertex.test;
+Mesh.at(\mesh1).vertexes.postln;
+Mesh.at(\mesh1).vertexes.at(\vertex1).postln;
+Vertex(\vertex1).setOptions(maxLogins: 12);
+Vertex(\vertex1).boot;
+Vertex(\vertex1).postln;
+.class.postln;
+
 
 
 MeshHostsManager.test;
@@ -6,7 +14,6 @@ Mesh.test;
 
 Mesh(\mesh1).push;
 Mesh.at(\mesh1)[\rose].postln;
-Mesh.at(\mesh1).vertexes.postln;
 
 Vertex(\server1, \server, \rose);
 Vertex(\server1).setOptions(maxLogins: 12);

@@ -12,9 +12,15 @@ VertexServer : VertexAbstract {
 
 	}
 
+	init{
+		"initializing server".postln;
+		^ this
+	}
+
 	*makeVertex{ |vertexName, mesh ...passArgs|
+		var server = super.new.init;
 		"adding vertex".postln;
-		mesh.vertexes.put(vertexName, this.asSymbol);
+		mesh.vertexes.put(vertexName, server);
 		^ true
 	}
 
@@ -24,7 +30,9 @@ VertexServer : VertexAbstract {
 		^ true
 	}
 
-
+	boot {
+		"booting server".postln;
+	}
 
 
 	// all additional instance/interface methods
