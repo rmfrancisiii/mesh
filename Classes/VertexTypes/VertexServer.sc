@@ -1,5 +1,5 @@
 VertexServer : VertexAbstract {
-	var server;
+	var server, host;
 
 	*makeOSCDefs {
 		//generate generic OSCdefs for this vertexType
@@ -17,12 +17,14 @@ VertexServer : VertexAbstract {
 		"initializing server".postln;
 		args.postln;
 		server = Server.local;
+		host = Mesh.thisHost;
 	}
 
 	initProxy {|args|
 		"initializing server proxy".postln;
 		args.postln;
 		server = Server.remote(\test);
+		host = Mesh
 	}
 
 	*makeVertex{ |vertexName, mesh, args|
@@ -33,7 +35,7 @@ VertexServer : VertexAbstract {
 		^ true
 	}
 
-	*makeProxy{ |vertexName, mesh, args|
+	*makeProxy{ |vertexName, mesh, host, args|
 		var proxy = super.new.initProxy(args);
 		"adding Proxy".postln;
 		mesh.vertexes.put(vertexName, proxy);

@@ -68,13 +68,13 @@ VertexAbstract {
     var oscAddr = msg[0];
     var vertexName = msg[1];
     var mesh = Mesh(msg[2]);
-    var host = \host; //host msg rc'd from;
+    var host = \anotherHost; //host msg rc'd from;
     var args = msg[3..];
     "Make Proxy request received".postln;
 
     if (mesh.includesVertex(vertexName).not)
       {
-        if (this.makeProxy(vertexName, mesh))
+        if (this.makeProxy(vertexName, mesh, host, args))
           { "Proxy added, sending Proxy Confirmation".postln;
             this.sendProxyConfirmation(vertexName, mesh.name, host);
           }{
