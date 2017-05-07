@@ -1,11 +1,7 @@
 VertexAbstract {
 
-  *makeAbstractOSCDefs {| typeName |
-
-    typeName = this.name;
-
-    // refactor these into a .makeHandler method?
-    // make (msg,time,addr,recvPort) into a collection?
+  *makeAbstractOSCDefs {
+    var typeName = this.name;
 
     OSCdef(\VertexServerRequestHandler, {|msg, time, addr, recvPort|
       VertexServer.tryMakeVertex(msg);
@@ -46,12 +42,13 @@ VertexAbstract {
 		var vertexName = msg[1];
 		var mesh = Mesh(msg[2]);
 		var host = Mesh.thisHost;
+    var args = msg[3..];
 
 		"Make Vertex Request Received".postln;
 
 		if (mesh.includesVertex(vertexName).not)
 			{
-				if (this.makeVertex(vertexName, mesh))
+				if (this.makeVertex(vertexName, mesh, args))
 					{ "Vertex added, sending Vertex Confirmation".postln;
 						this.sendVertexConfirmation(vertexName, mesh.name, host);
 						"sending Proxy request".postln;

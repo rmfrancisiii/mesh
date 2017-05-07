@@ -2,6 +2,7 @@ VertexServer : VertexAbstract {
 
 
 	*makeOSCDefs {
+		//generate generic OSCdefs for this vertexType
 		this.makeAbstractOSCDefs;
 
 		// add or overload any UNIQUE OSCdefs here, eg.
@@ -17,14 +18,15 @@ VertexServer : VertexAbstract {
 		^ this
 	}
 
-	*makeVertex{ |vertexName, mesh ...passArgs|
+	*makeVertex{ |vertexName, mesh, args|
 		var server = super.new.init;
+		args.postln;
 		"adding vertex".postln;
 		mesh.vertexes.put(vertexName, server);
 		^ true
 	}
 
-	*makeProxy{ |vertexName, mesh ...passArgs|
+	*makeProxy{ |vertexName, mesh, args|
 		"adding Proxy".postln;
 		//mesh.vertexes.put(vertexName, this.asSymbol);
 		^ true

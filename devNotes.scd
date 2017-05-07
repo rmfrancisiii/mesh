@@ -15,7 +15,7 @@ Mesh.test;
 Mesh(\mesh1).push;
 Mesh.at(\mesh1)[\rose].postln;
 
-Vertex(\server1, \server, \rose);
+Vertex(\server2, \server, \rose, \mesh1, \arg1, \arg2, \arg3);
 Vertex(\server1).setOptions(maxLogins: 12);
 Vertex(\server1).boot;
 
