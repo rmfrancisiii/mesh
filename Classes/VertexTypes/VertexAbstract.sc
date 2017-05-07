@@ -3,19 +3,20 @@ VertexAbstract {
   *makeAbstractOSCDefs {
     var typeName = this.name;
 
-    OSCdef(\VertexServerRequestHandler, {|msg, time, addr, recvPort|
-      VertexServer.tryMakeVertex(msg);
+    OSCdef((typeName++'RequestHandler').asSymbol, {|msg, time, addr, recvPort|
+      this.tryMakeVertex(msg);
     }, '/' ++ typeName ++ '/request/vertex');
 
-    OSCdef(\VertexServerProxyRequestHandler, {|msg, time, addr, recvPort|
-      VertexServer.tryMakeProxy(msg);
+    OSCdef((typeName++'ProxyRequestHandler').asSymbol, {|msg, time, addr, recvPort|
+      //var remoteHost = NetAddr.new(addr, recvPort);
+      this.tryMakeProxy(msg, \remoteHost);
       }, '/' ++ typeName ++ '/request/proxy');
 
-    OSCdef(\VertexServerConfirmationHandler, {|msg, time, addr, recvPort|
+    OSCdef((typeName++'ConfirmationHandler').asSymbol, {|msg, time, addr, recvPort|
       this.confirmVertex(msg);
       }, '/' ++ typeName ++ '/confirm/vertex');
 
-    OSCdef(\VertexServerProxyConfirmationHandler, {|msg, time, addr, recvPort|
+    OSCdef((typeName++'ProxyConfirmationHandler').asSymbol, {|msg, time, addr, recvPort|
       this.confirmProxy(msg);
       }, '/' ++ typeName ++ '/confirm/proxy');
 
@@ -48,6 +49,7 @@ VertexAbstract {
 
 		if (mesh.includesVertex(vertexName).not)
 			{
+        mesh.postln;
 				if (this.makeVertex(vertexName, mesh, args))
 					{ "Vertex added, sending Vertex Confirmation".postln;
 						this.sendVertexConfirmation(vertexName, mesh.name, host);
@@ -64,14 +66,15 @@ VertexAbstract {
 
   *tryMakeProxy { |msg|
     var oscAddr = msg[0];
-    var vertexName = msg[1]++'proxy';
+    var vertexName = msg[1];
     var mesh = Mesh(msg[2]);
-    var host = Mesh.thisHost;
+    var host = \host; //host msg rc'd from;
+    var args = msg[3..];
     "Make Proxy request received".postln;
 
     if (mesh.includesVertex(vertexName).not)
       {
-        if (this.makeVertex(vertexName, mesh))
+        if (this.makeProxy(vertexName, mesh))
           { "Proxy added, sending Proxy Confirmation".postln;
             this.sendProxyConfirmation(vertexName, mesh.name, host);
           }{

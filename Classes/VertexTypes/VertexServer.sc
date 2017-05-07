@@ -1,34 +1,42 @@
 VertexServer : VertexAbstract {
-
+	var server;
 
 	*makeOSCDefs {
 		//generate generic OSCdefs for this vertexType
 		this.makeAbstractOSCDefs;
 
 		// add or overload any UNIQUE OSCdefs here, eg.
-		//
-		// OSCdef(\VertexServerRequestHandler, {|msg, time, addr, recvPort|
-		//	VertexServer.makeVertex(msg);
-		// }, '/VertexServer/request/vertex');
+
+		 OSCdef(\bootServerHandler, {|msg, time, addr, recvPort|
+			 this.boot;
+		 }, '/VertexServer/boot/');
 
 	}
 
-	init{
+	initVertex{|args|
 		"initializing server".postln;
-		^ this
+		args.postln;
+		server = Server.local;
+	}
+
+	initProxy {|args|
+		"initializing server proxy".postln;
+		args.postln;
+		server = Server.remote(\test);
 	}
 
 	*makeVertex{ |vertexName, mesh, args|
-		var server = super.new.init;
-		args.postln;
+		var vertex = super.new.initVertex(args);
+		mesh.postln;
 		"adding vertex".postln;
-		mesh.vertexes.put(vertexName, server);
+		mesh.vertexes.put(vertexName, vertex);
 		^ true
 	}
 
 	*makeProxy{ |vertexName, mesh, args|
+		var proxy = super.new.initProxy(args);
 		"adding Proxy".postln;
-		//mesh.vertexes.put(vertexName, this.asSymbol);
+		mesh.vertexes.put(vertexName, proxy);
 		^ true
 	}
 
@@ -36,6 +44,9 @@ VertexServer : VertexAbstract {
 		"booting server".postln;
 	}
 
+	setOptions {
+		"setting options".postln;
+	}
 
 	// all additional instance/interface methods
 	// are calls to the proxy, and can direct requests to the server
