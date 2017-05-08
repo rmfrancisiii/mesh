@@ -36,7 +36,6 @@ Vertex {
 
 		if (vertex == List.new)
 			{	vertexType.requestor( vertexName, host, mesh, *passArgs) }
-
 		^ vertex
 	}
 

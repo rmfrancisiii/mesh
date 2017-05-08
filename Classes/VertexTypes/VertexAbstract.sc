@@ -8,6 +8,8 @@ VertexAbstract {
     }, '/' ++ typeName ++ '/request/vertex');
 
     OSCdef((typeName++'ProxyRequestHandler').asSymbol, {|msg, time, addr, recvPort|
+
+      addr.postln;
       //var remoteHost = NetAddr.new(addr, recvPort);
       this.tryMakeProxy(msg, \remoteHost);
       }, '/' ++ typeName ++ '/request/proxy');

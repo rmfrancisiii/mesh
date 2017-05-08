@@ -1,5 +1,5 @@
 VertexServer : VertexAbstract {
-	var server, host;
+	var <>server, <>host;
 
 	*makeOSCDefs {
 		//generate generic OSCdefs for this vertexType

@@ -1,21 +1,30 @@
 
 Vertex.test;
+
+Mesh(\mesh1).push;
+
+Vertex(\server2, \server, \rose, \mesh1, \arg1, \arg2, \arg3);
+Vertex(\server3, \server, \river, \mesh1, \arg1, \arg2, \arg3);
+
 Mesh.at(\mesh1).vertexes.postln;
+
+
+
+
+
 Mesh.at(\mesh1).vertexes.at(\vertex1).postln;
 Vertex(\vertex1).setOptions(maxLogins: 12);
 Vertex(\vertex1).boot;
 Vertex(\vertex1).postln;
-.class.postln;
 
 
 
 MeshHostsManager.test;
 Mesh.test;
 
-Mesh(\mesh1).push;
 Mesh.at(\mesh1)[\rose].postln;
 
-Vertex(\server2, \server, \rose, \mesh1, \arg1, \arg2, \arg3);
+
 Vertex(\server1).setOptions(maxLogins: 12);
 Vertex(\server1).boot;
 
