@@ -7,8 +7,8 @@ Vertex(\server2, \server, \rose, \mesh1, \arg1, \arg2, \arg3);
 Vertex(\server3, \server, \river, \mesh1, \arg1, \arg2, \arg3);
 
 Mesh.at(\mesh1).vertexes.postln;
-
-
+Vertex(\server1).host.postln;
+Vertex(\server2).host.postln;
 
 
 
@@ -414,6 +414,28 @@ TODO: Check to be sure the following are for a local server.
 	notifyMesh {
 		"Spread the word!!".postln;
 	}
+  // all additional instance/interface methods
+  // are calls to the proxy, and can direct requests to the server
+
+  /*doesNotUnderstand {|selector ... args|
+    // TODO: need to check order?
+    var result = nil;
+    (result = server.tryPerform(selector, *args)) !? { ^ result };
+    (result = server.options.tryPerform(selector, *args)) !? { ^ result };
+    (result = server.addr.tryPerform(selector, *args)) !? { ^ result };
+  }*/
+
+  /**vertexRequestHandler {|msg|
+    if (super.new.init(*msg)) {
+      ^ "Broadcast Vertex Proxy Request message now!".postln
+      // TODO: This!!!
+      // this.vertexProxyRequestor(arguments)
+
+    }
+    {^ "Not added, Failed, return error to requesting host!".postln
+      // TODO: This!!!
+    };
+  }*/
+
 
 */
-ggg

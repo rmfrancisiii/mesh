@@ -15,8 +15,8 @@ TestVertex : UnitTest {
 
 	test_vertex {
 		this.vertexInitialized;
-		this.makeVertex(\vertex1, \server, hostName);
-		{this.vertexExists(mesh, \vertex1)}.defer(3);
+		this.makeVertex(\server1, \server, hostName);
+		{this.vertexExists(mesh, \server1)}.defer(2);
 	}
 
 	vertexInitialized {

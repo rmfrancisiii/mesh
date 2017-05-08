@@ -8,10 +8,7 @@ VertexAbstract {
     }, '/' ++ typeName ++ '/request/vertex');
 
     OSCdef((typeName++'ProxyRequestHandler').asSymbol, {|msg, time, addr, recvPort|
-
-      addr.postln;
-      //var remoteHost = NetAddr.new(addr, recvPort);
-      this.tryMakeProxy(msg, \remoteHost);
+      this.tryMakeProxy(msg, addr);
       }, '/' ++ typeName ++ '/request/proxy');
 
     OSCdef((typeName++'ConfirmationHandler').asSymbol, {|msg, time, addr, recvPort|
@@ -35,19 +32,14 @@ VertexAbstract {
   *requestor { |vertexName, vertexHost, mesh ...passArgs|
     var path = (this.makeRequestPath ++ "vertex");
     vertexHost.sendMsg(path, vertexName, mesh.name, *passArgs);
-    ^ ("OSC message sent to " ++ path).postln;
   }
 
   *tryMakeVertex { |msg|
-    // refactor msg into a collection?
-
 		var oscAddr = msg[0];
 		var vertexName = msg[1];
 		var mesh = Mesh(msg[2]);
 		var host = Mesh.thisHost;
     var args = msg[3..];
-
-		"Make Vertex Request Received".postln;
 
 		if (mesh.includesVertex(vertexName).not)
 			{
@@ -66,13 +58,12 @@ VertexAbstract {
 
 	}
 
-  *tryMakeProxy { |msg|
+  *tryMakeProxy { |msg, remoteHost|
     var oscAddr = msg[0];
     var vertexName = msg[1];
     var mesh = Mesh(msg[2]);
-    var host = \anotherHost; //host msg rc'd from;
+    var host = remoteHost;
     var args = msg[3..];
-    "Make Proxy request received".postln;
 
     if (mesh.includesVertex(vertexName).not)
       {
@@ -91,29 +82,24 @@ VertexAbstract {
   *sendProxyRequest{ |vertexName, meshName, vertexHost|
 			var path = (this.makeRequestPath ++ "proxy");
 			Mesh.broadcastAddr.sendMsg(path, vertexName, meshName);
-			^ ("OSC message sent to " ++ path).postln;
 	}
 
 	*sendVertexConfirmation { |vertexName, meshName, vertexHost|
 			var path = (this.makeConfirmPath ++ "vertex");
 			Mesh.broadcastAddr.sendMsg(path, vertexName, meshName);
-			^ ("OSC message sent to " ++ path).postln;
 		}
 
 	*sendProxyConfirmation { |vertexName, meshName, vertexHost|
 			var path = (this.makeConfirmPath ++ "proxy");
 			Mesh.broadcastAddr.sendMsg(path, vertexName, meshName);
-			^ ("OSC message sent to " ++ path).postln;
 		}
 
 	*confirmProxy {
 		"proxy Created".postln;
-		// send a rexponse acknowledging that proxy was created.
 	}
 
 	*confirmVertex {
 		"Vertex Created".postln;
-    // send a rexponse acknowledging that vertex was created.
 	}
 
 }
