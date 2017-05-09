@@ -1,23 +1,26 @@
 VertexAbstract {
+  var <>name, <>mesh;
 
   *makeAbstractOSCDefs {
     var typeName = this.name;
 
+
+    // make thes this.makeRequestPath ++ "whatevs"
     OSCdef((typeName++'RequestHandler').asSymbol, {|msg, time, addr, recvPort|
       this.tryMakeVertex(msg);
-    }, '/' ++ typeName ++ '/request/vertex');
+    }, this.makeRequestPath ++ "vertex");
 
     OSCdef((typeName++'ProxyRequestHandler').asSymbol, {|msg, time, addr, recvPort|
       this.tryMakeProxy(msg, addr);
-      }, '/' ++ typeName ++ '/request/proxy');
+      }, this.makeRequestPath ++ "proxy");
 
     OSCdef((typeName++'ConfirmationHandler').asSymbol, {|msg, time, addr, recvPort|
       this.confirmVertex(msg);
-      }, '/' ++ typeName ++ '/confirm/vertex');
+      }, this.makeConfirmPath ++ "vertex");
 
     OSCdef((typeName++'ProxyConfirmationHandler').asSymbol, {|msg, time, addr, recvPort|
       this.confirmProxy(msg);
-      }, '/' ++ typeName ++ '/confirm/proxy');
+      }, this.makeConfirmPath ++ "proxy");
 
   }
 

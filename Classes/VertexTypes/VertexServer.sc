@@ -1,19 +1,23 @@
 VertexServer : VertexAbstract {
-	var <>server, <>host;
+	var <>server, <>host, <>isOnline;
 
 	*makeOSCDefs {
 		this.makeAbstractOSCDefs;
 
 		// add or overload any UNIQUE OSCdefs here, eg.
-		 OSCdef(\bootServerHandler, {|msg, time, addr, recvPort|
-			 this.boot;
-		 }, '/VertexServer/boot/');
+		 OSCdef(\bootServerResponder, {|msg, time, addr, recvPort|
+			 this.bootHandler;
+			 }, this.makeRequestPath ++ name ++ "/boot");
 
 	}
 
-	initVertex{|args|
+	initVertex{|vertexName, vertexMesh, args|
+
 		server = Server.local;
 		host = Mesh.thisHost;
+		name = vertexName;
+		mesh = vertexMesh;
+
 	}
 
 	initProxy {|thatHost, args|
@@ -22,7 +26,7 @@ VertexServer : VertexAbstract {
 	}
 
 	*makeVertex{ |vertexName, mesh, args|
-		var vertex = super.new.initVertex(args);
+		var vertex = super.new.initVertex(vertexName, mesh, args);
 		mesh.vertexes.put(vertexName, vertex);
 		^ true
 	}
@@ -34,7 +38,15 @@ VertexServer : VertexAbstract {
 	}
 
 	boot {
+    var path = (this.makeRequestPath ++ name ++"/boot");
+    host.sendMsg(path);
+	}
+
+	bootHandler{
 		"booting server".postln;
+		server.boot;
+		isOnline = true;
+		this.notifyIsOnline;
 	}
 
 }

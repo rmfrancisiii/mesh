@@ -1,6 +1,6 @@
 Mesh {
 	classvar <>all, <>stack, <thisHost, <>broadcastAddr;
-	var <>name, <>environment, <>hosts, <>vertexes, <>window;
+	var <>name, <>environment, <>hosts, <>vertexes, <>proxies, <>window;
 
 	// test
 	*initClass {
@@ -106,6 +106,7 @@ Mesh {
 	initializeInstanceVariables {
 		hosts = MeshHostsManager.new(this, thisHost);
 		vertexes = VertexDict.new;
+		proxies = VertexDict.new;
 		window = MeshView(this);
 	}
 
