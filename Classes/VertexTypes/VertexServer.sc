@@ -10,7 +10,7 @@ VertexServer : VertexAbstract {
 
 	}
 
-	initVertex{|vertexName, vertexMesh, args|
+	initVertex{|vertexName, vertexMesh...args|
 
 		server = Server.local;
 		host = Mesh.thisHost;
@@ -19,22 +19,12 @@ VertexServer : VertexAbstract {
 
 	}
 
-	initProxy {|vertexHost, args|
+	initProxy {|vertexHost...args|
 		server = Server.remote(\test);
 		host = vertexHost;
 	}
 
-	*makeVertex{ |vertexName, mesh, args|
-		var vertex = super.new.initVertex(vertexName, mesh, args);
-		mesh.vertexes.put(vertexName, vertex);
-		^ true
-	}
 
-	*makeProxy{ |vertexName, mesh, host, args|
-		var proxy = super.new.initProxy(host, args);
-		mesh.vertexes.put(vertexName, proxy);
-		^ true
-	}
 
 	boot {
     var path = (this.makeRequestPath ++ name ++"/boot");

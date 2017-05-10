@@ -27,15 +27,14 @@ Vertex {
 		})
 	}
 
-	*new {| vertexName, type, hostName, meshName ... passArgs|
-
+	*new {| vertexName, vertexType, vertexHost, meshName ...passArgs|
 		var mesh = this.getMesh(meshName); // add TRY
 		var vertex = this.getVertex(vertexName, mesh);
-		var host = mesh[hostName];
-		var vertexType = vertexTypeDict[type.asSymbol];
+		vertexHost = mesh[vertexHost];
+		vertexType = vertexTypeDict[vertexType];
 
 		if (vertex == List.new)
-			{	vertexType.requestor( vertexName, host, mesh, *passArgs) }
+			{	vertexType.requestor( vertexHost, vertexName, mesh.name, *passArgs) }
 		^ vertex
 	}
 
