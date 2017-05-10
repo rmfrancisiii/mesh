@@ -1,5 +1,5 @@
 VertexServer : VertexAbstract {
-	var <>server, <>host, <>isOnline;
+	var <>server, <>host, <>isRunning;
 
 	*makeOSCDefs {
 		this.makeAbstractOSCDefs;
@@ -16,12 +16,15 @@ VertexServer : VertexAbstract {
 		host = Mesh.thisHost;
 		name = vertexName;
 		mesh = vertexMesh;
-
+		isProxy = false;
 	}
 
-	initProxy {|vertexHost...args|
+	initProxy {|vertexName, vertexMesh, vertexHost...args|
 		server = Server.remote(\test);
+		name = vertexName;
 		host = vertexHost;
+		mesh = vertexMesh;
+		isProxy = true;
 	}
 
 
@@ -34,16 +37,16 @@ VertexServer : VertexAbstract {
 	bootHandler{
 		"booting server".postln;
 		server.boot;
-		isOnline = true;
+		isRunning = true;
 		this.bootNotify;
 	}
 
 	bootNotify {
-		this.notifyIsOnline;
+		this.notifyIsRunning;
 	}
 
-	notifyIsOnline{
-		isOnline = true;
+	notifyIsRunning{
+		isRunning = true;
 	}
 
 }

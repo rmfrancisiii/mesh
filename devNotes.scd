@@ -1,14 +1,32 @@
 
 Vertex.test;
 
+Mesh(\mesh1).vertexes.postln;
+
+Vertex(\server1).name.postln;
+Vertex(\server1).mesh.postln;
+Vertex(\server1).isProxy.postln;
+Vertex(\server1).server.postln;
+Vertex(\server1).host.postln;
+Vertex(\server1).isRunning.postln;
+
+Vertex(\server1p).name.postln;
+Vertex(\server1p).mesh.postln;
+Vertex(\server1p).isProxy.postln;
+Vertex(\server1p).server.postln;
+Vertex(\server1p).host.postln;
+Vertex(\server1p).isRunning.postln;
+
+OSCdef.all
+
 Mesh(\mesh1).push;
 
 Vertex(\server2, \server, \rose, \mesh1, \arg1, \arg2, \arg3);
 Vertex(\server3, \server, \river, \mesh1, \arg1, \arg2, \arg3);
 
 Mesh.at(\mesh1).vertexes.postln;
-Vertex(\server1).host.postln;
 Vertex(\server2).host.postln;
+Vertex(\server3).host.postln;
 
 
 

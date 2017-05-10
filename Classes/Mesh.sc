@@ -8,7 +8,9 @@ Mesh {
 		all = IdentityDictionary.new;
 		thisHost = thisHost.as(MeshHost);
 		Vertex.initVertexTypes;
-		broadcastAddr = MeshHostAddr("255.255.255.255", 57120 + (0..7));
+
+	broadcastAddr = MeshHostAddr("255.255.255.255", 57120 + (0..7));
+
 	}
 
 	*at {|key| ^ all.at(key) }
