@@ -98,7 +98,7 @@ VertexAbstract {
 
     if (mesh.includesVertex(vertexName ++ 'p').not)
       {
-        if (this.makeProxy(vertexName ++ 'p', mesh, vertexHost, args))
+        if (this.makeProxy((vertexName ++ 'p').asSymbol, mesh, vertexHost, args))
           { "Proxy added, sending Proxy Confirmation".postln;
             this.sendProxyConfirmation(vertexName, mesh.name, proxyHost, vertexHost);
           }{

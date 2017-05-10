@@ -20,11 +20,12 @@ VertexServer : VertexAbstract {
 	}
 
 	initProxy {|vertexName, vertexMesh, vertexHost...args|
-		server = Server.remote(\test);
 		name = vertexName;
 		host = vertexHost;
 		mesh = vertexMesh;
 		isProxy = true;
+		server = Server.remote(name, host);
+
 	}
 
 
