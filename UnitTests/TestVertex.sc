@@ -8,16 +8,16 @@ TestVertex : UnitTest {
 			mesh.push;
 			thisHost = Mesh.thisHost;
 			hostName = thisHost.name.asSymbol;
-			// for local only (eg. on the bus)
-			" switching to local LOOPBACK ONLY".warn;
-			Mesh.broadcastAddr = MeshHostAddr("127.0.0.1", 57120 + (0..7));
 	}
 
 	tearDown {
 	}
 
-	test_vertex {
+	test_vertex {|local = true|
 		this.vertexInitialized;
+		if (local == true)
+			{"Resetting broadcast address. \n local loopback testing only!".warn;
+				Mesh.broadcastAddr = MeshHostAddr("127.0.0.1", 57120 + (0..7))};
 		this.makeVertex(\server1, \server, hostName);
 		{this.vertexExists(mesh, \server1)}.defer(2);
 	}

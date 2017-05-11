@@ -15,8 +15,9 @@ VertexAbstract {
     }, this.requestPath("Vertex"));
 
     OSCdef(this.requestName("Proxy"), {|msg, time, vertexHost, recvPort|
-      "received proxy request".postln;
-      this.tryMakeProxy(vertexHost, msg);
+      if (vertexHost.ip != Mesh.thisHost.ip)
+        { "received proxy request".postln;
+          this.tryMakeProxy(vertexHost, msg)};
       }, this.requestPath("Proxy"));
 
     OSCdef(this.confirmName("Vertex"), {|msg, time, vertexHost, recvPort|
@@ -99,7 +100,7 @@ VertexAbstract {
           }
       }
 
-      {	"error, proxy exists".postln}
+      {	"Vertex exists".postln}
 
   }
 
