@@ -9,8 +9,8 @@ TestVertex : UnitTest {
 			thisHost = Mesh.thisHost;
 			hostName = thisHost.name.asSymbol;
 			// for local only (eg. on the bus)
-			" switching to local LOOPBACK ONLY".warn;
-			Mesh.broadcastAddr = MeshHostAddr("127.0.0.1", 57120 + (0..7));
+			/*" switching to local LOOPBACK ONLY".warn;
+			Mesh.broadcastAddr = MeshHostAddr("127.0.0.1", 57120 + (0..7));*/
 	}
 
 	tearDown {

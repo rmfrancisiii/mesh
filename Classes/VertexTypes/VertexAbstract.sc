@@ -24,7 +24,6 @@ VertexAbstract {
       }, this.confirmPath("Vertex"));
 
     OSCdef(this.confirmName("Proxy"), {|msg, time, requestingHost, recvPort|
-      "confirming proxy".postln;
       this.confirmProxy(requestingHost, msg);
       }, this.confirmPath("Proxy"));
   }
@@ -73,7 +72,7 @@ VertexAbstract {
     ^ true
   }
 
-  *sendVertexConfirmation { |vertexName, meshName,  requestingHost|
+  *sendVertexConfirmation { |vertexName, meshName, requestingHost|
 			var path = (this.confirmPath("Vertex"));
 			requestingHost.sendMsg(path, vertexName, meshName);
 		}
@@ -84,21 +83,15 @@ VertexAbstract {
   	}
 
   *tryMakeProxy { |vertexHost, msg|
+    var proxyHost = Mesh.thisHost;
     var oscAddr = msg[0];
     var vertexName = msg[1];
     var mesh = Mesh(msg[2]);
-    var proxyHost = Mesh.thisHost;
     var args = msg[3..];
 
-    oscAddr.postln;
-    vertexName.postln;
-    mesh.postln;
-    proxyHost.postln;
-    args.postln;
-
-    if (mesh.includesVertex(vertexName ++ 'p').not)
+    if (mesh.includesVertex(vertexName).not)
       {
-        if (this.makeProxy((vertexName ++ 'p').asSymbol, mesh, vertexHost, args))
+        if (this.makeProxy(vertexName, mesh, vertexHost, args))
           { "Proxy added, sending Proxy Confirmation".postln;
             this.sendProxyConfirmation(vertexName, mesh.name, proxyHost, vertexHost);
           }{
@@ -116,17 +109,28 @@ VertexAbstract {
       ^ true
     }
 
-	*sendProxyConfirmation { |vertexName, meshName, proxyHost, vertexHost|
-			var path = (this.confirmPath("proxy"));
-			vertexHost.sendMsg(path, vertexName, meshName, proxyHost);
-		}
 
-	*confirmProxy {
-		"proxy Created".postln;
+    *sendProxyConfirmation { |vertexName, meshName, proxyHost, vertexHost|
+        var path = (this.confirmPath("Proxy"));
+        vertexHost.sendMsg(path, vertexName, meshName);
+      }
+
+	*confirmProxy {|proxyHost, msg|
+      msg.postln;
+
+      /*(proxyHost ++ " reports a proxy for " ++ msg[1].asSymbol ++ " was added to Mesh(" ++ msg[2] ++ ")").postln;*/
+     // VertexServer/confirm/Proxy, server1, mesh1
+
+
+  	"Proxy Confirmed".postln;
+    //      /VertexServer/confirm/Proxy, server1, mesh1
+
 	}
 
-	*confirmVertex {
-		"Vertex Created".postln;
+	*confirmVertex {|vertexHost, msg|
+    vertexHost.postln;
+    msg.postln;
+		"Vertex Confirmed".postln;
 	}
 
 }
