@@ -10,6 +10,13 @@ Vertex(\server1).server.postln;
 Vertex(\server1).host.postln;
 Vertex(\server1).isRunning.postln;
 
+Vertex(\server1).server.status.postln;
+Vertex(\server2).server.status.postln;
+Vertex(\server3).server.status.postln;
+
+
+
+
 Vertex(\server1p).name.postln;
 Vertex(\server1p).mesh.postln;
 Vertex(\server1p).isProxy.postln;
@@ -18,6 +25,8 @@ Vertex(\server1p).host.postln;
 Vertex(\server1p).isRunning.postln;
 
 OSCdef.all
+
+Server.all.postln;
 
 Mesh(\mesh1).push;
 

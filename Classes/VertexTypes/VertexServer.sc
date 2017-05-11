@@ -10,6 +10,7 @@ VertexServer : VertexAbstract {
 	}
 
 	initVertex{|vertexName, vertexMesh...args|
+		// use args for optional ServerOptions
 		name = vertexName;
 		host = Mesh.thisHost;
 		mesh = vertexMesh;
@@ -18,12 +19,12 @@ VertexServer : VertexAbstract {
 		server.options.protocol_(\tcp);
 		server.options.maxLogins_(8);
 		server.options.protocol_(\tcp);
-		server.addr.connect;
+		/*server.addr.connect;
 		server.startAliveThread( 0 );
 		server.doWhenBooted({
 			"remote tcp server started".postln;
 			server.notify;
-			server.initTree });
+			server.initTree });*/
 	}
 
 	initProxy {|vertexName, vertexMesh, vertexHost...args|
