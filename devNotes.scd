@@ -1,7 +1,16 @@
 
 Vertex.test;
 
+	// for local only (eg. on the bus)
+Vertex.test;
+Vertex(\server1).boot;
+
+
+UnitTest.gui;
+
 Mesh(\mesh1).vertexes.postln;
+Vertex(\server1).server.options.maxLogins.postln;
+
 
 Vertex(\server1).name.postln;
 Vertex(\server1).mesh.postln;

@@ -6,25 +6,16 @@ VertexServer : VertexAbstract {
 
 		OSCdef(\bootServerResponder, {|msg, time, addr, recvPort|
 			this.bootHandler;
-		}, this.requestPath("boot"));
+		}, this.requestPath(name ++"/boot"));
 	}
 
 	initVertex{|vertexName, vertexMesh...args|
-		// use args for optional ServerOptions
 		name = vertexName;
 		host = Mesh.thisHost;
 		mesh = vertexMesh;
 		isProxy = false;
 		server = Server.local;
-		server.options.protocol_(\tcp);
-		server.options.maxLogins_(8);
-		server.options.protocol_(\tcp);
-		/*server.addr.connect;
-		server.startAliveThread( 0 );
-		server.doWhenBooted({
-			"remote tcp server started".postln;
-			server.notify;
-			server.initTree });*/
+		this.setServerOptions(args);
 	}
 
 	initProxy {|vertexName, vertexMesh, vertexHost...args|
@@ -36,7 +27,7 @@ VertexServer : VertexAbstract {
 	}
 
 	boot {
-    var path = (this.makeRequestPath ++ name ++"/boot");
+    var path = (this.class.requestPath(name ++"/boot"));
     host.sendMsg(path);
 	}
 
@@ -52,6 +43,19 @@ VertexServer : VertexAbstract {
 
 	notifyIsRunning{
 		isRunning = true;
+	}
+
+	setServerOptions{ |args|
+		// use args for optional ServerOptions
+		server.options.protocol_(\tcp);
+		server.options.maxLogins_(8);
+		server.options.protocol_(\tcp);
+		/*server.addr.connect;
+		server.startAliveThread( 0 );
+		server.doWhenBooted({
+			"remote tcp server started".postln;
+			server.notify;
+			server.initTree });*/
 	}
 
 }
