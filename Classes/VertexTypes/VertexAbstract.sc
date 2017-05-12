@@ -58,14 +58,16 @@ VertexAbstract {
 						this.sendVertexConfirmation(vertexName, mesh.name, requestingHost);
 						this.sendProxyRequest(vertexName, mesh.name)
 					}{
-            // TODO: Could not construct Vertex Error Message
-            this.sendVertexError(vertexName, mesh.name, requestingHost); // add caught error?
+					var error;
+            // TODO: construct Vertex Error Message
+            this.sendVertexError(vertexName, mesh.name, requestingHost, error); // add caught error?
 					}
 			}
 
 			{
-        // TODO: return duplicate Vertex Error Message
-        this.sendVertexError(vertexName, mesh.name, requestingHost);
+       var error;
+            // TODO: construct Vertex Error Message
+        this.sendVertexError(vertexName, mesh.name, requestingHost, error);
         // add caught error?
       }
 
@@ -108,16 +110,16 @@ VertexAbstract {
           if (this.makeProxy(vertexName, mesh, vertexHost, args))
             { "Proxy added, sending Proxy Confirmation".postln;
               this.sendProxyConfirmation(vertexName, mesh.name, proxyHost, vertexHost);
-            }{
-              // TODO:  return Proxy Creation Failed Error Message
-              this.sendProxyError(vertexName, mesh.name, vertexHost);
+            }{ var error;
+              // TODO:  construct Proxy Creation Failed Error Message
+              this.sendProxyError(vertexName, mesh.name, vertexHost, error);
               // add caught error?
             }
         }
 
-        {
-          // TODO: return duplicate Proxy Creation Error Message
-          this.sendProxyError(vertexName, mesh.name, vertexHost);
+        {var error;
+          // TODO:  construct Proxy Creation Error Message
+          this.sendProxyError(vertexName, mesh.name, vertexHost, error);
           // add caught error?
         }
     }
