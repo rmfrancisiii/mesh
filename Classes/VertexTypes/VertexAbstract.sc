@@ -27,9 +27,12 @@ VertexAbstract {
     this.makeOSCdef("Confirm", "Proxy",
         { |vertexHost, msg| this.confirmProxy(vertexHost, msg) });
 
-    // TODO: Add OSCdef for generic Vertex Error
+    this.makeOSCdef("Error", "Vertex",
+        { |vertexHost, msg| this.confirmProxy(vertexHost, msg) });
 
-    // TODO: Add OSCdef for generic proxy Error
+    this.makeOSCdef("Error", "Proxy",
+        { |vertexHost, msg| this.confirmProxy(vertexHost, msg) });
+
   }
 
   *makeOSCdefPath {|transaction, object|
@@ -133,7 +136,7 @@ VertexAbstract {
   }
 
   *sendProxyError { |vertexName, meshName, vertexHost|
-  	var path = (this.errorPath("Proxy"));
+  	var path = (this.makeOSCdefPath("Error", "Proxy"));
   	vertexHost.sendMsg(path, vertexName, meshName);
   }
 
