@@ -6,7 +6,7 @@ VertexServer : VertexAbstract {
 
 		OSCdef(\bootServerResponder, {|msg, time, addr, recvPort|
 			this.bootHandler;
-		}, this.requestPath(name ++"/boot"));
+		}, this.makeOSCdefPath("Request", "Boot"));
 	}
 
 	initVertex{|vertexName, vertexMesh...args|
@@ -27,7 +27,7 @@ VertexServer : VertexAbstract {
 	}
 
 	boot {
-    var path = (this.class.requestPath(name ++"/boot"));
+    var path = (this.class.makeOSCdefPath("Request", "Boot"));
     host.sendMsg(path);
 	}
 
