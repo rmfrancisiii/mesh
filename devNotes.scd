@@ -1,8 +1,5 @@
 
 Vertex.test;
-
-	// for local only (eg. on the bus)
-Vertex.test;
 Vertex(\server1).boot;
 
 
@@ -96,12 +93,23 @@ Add ...args passthrough for extra arguments in Vertex.new(name, type, mesh, host
 
 General practices for Vertexes:
 
-- invocation -
-1. Vertex.new(\name, \type, \args)
-2. VertexType.requestor
-3. OSC msg to Vertex Host
-4. OSC -> OSCdef(VertexType.requestHandler)
-5. VertexServer.newServer
+- invocation process:
+
+On Requesting Host;
+ 1. Vertex.new(\name, \type, \args)
+ 2. VertexType.requestor, inherits from VertexAbstract
+ 3. sends OSC msg to Vertex Host
+
+---
+On Vertex Host
+ 4. OSCdef VertexTypeRequestVertex
+ 5. VertexType.tryMakeVertex
+ 6. checks Mesh for vertex,
+    7. makes proxy and initializes it.
+    8. puts name -> this vertex into Mesh(\thisMesh).vertexes
+    9. sendVertexConfirmation back to Requesting Host
+    10. sendProxyRequest to Broadcast address (all hosts)
+
    b. makes new server, stores reference somewhere?
    c. returns notification or exceptions
 6. Broadcast proxy requestor with reference to 5.b.

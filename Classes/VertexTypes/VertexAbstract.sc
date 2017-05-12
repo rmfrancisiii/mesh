@@ -27,6 +27,11 @@ VertexAbstract {
     OSCdef(this.confirmName("Proxy"), {|msg, time, requestingHost, recvPort|
       this.confirmProxy(requestingHost, msg);
       }, this.confirmPath("Proxy"));
+
+    // TODO: Add OSCdef for ErrorVertex
+
+    // TODO: Add OSCdef for ErrorProxy
+
   }
 
   *requestPath {|method|
@@ -37,12 +42,20 @@ VertexAbstract {
     ^ "/" ++ this.asSymbol ++ "/confirm/" ++ method
   }
 
+  *errorPath {|method|
+    ^ "/" ++ this.asSymbol ++ "/error/" ++ method
+  }
+
   *requestName {|method|
     ^ (this.asSymbol ++ "Request" ++ method).asSymbol
   }
 
   *confirmName {|method|
     ^ (this.asSymbol ++ "Confirm" ++ method).asSymbol
+  }
+
+  *errorName {|method|
+    ^ (this.asSymbol ++ "Error" ++ method).asSymbol
   }
 
   *tryMakeVertex { |requestingHost, msg|
@@ -53,17 +66,22 @@ VertexAbstract {
     var args = msg[3..];
 
 		if (mesh.includesVertex(vertexName).not)
-			{
+			{ // TODO: add Try... Catch
 				if (this.makeVertex(vertexName, mesh, args))
 					{ "Vertex added, sending Vertex Confirmation".postln;
 						this.sendVertexConfirmation(vertexName, mesh.name, requestingHost);
 						this.sendProxyRequest(vertexName, mesh.name)
 					}{
-						"failed to add Vertex".postln;
+            // TODO: Could not construct Vertex Error Message
+            this.sendVertexError(vertexName, mesh.name, requestingHost); // add caught error?
 					}
 			}
 
-			{	"error, vertex exists".postln}
+			{
+        // TODO: return duplicate Vertex Error Message
+        this.sendVertexError(vertexName, mesh.name, requestingHost);
+        // add caught error?
+      }
 
 	}
 
@@ -77,6 +95,11 @@ VertexAbstract {
 			var path = (this.confirmPath("Vertex"));
 			requestingHost.sendMsg(path, vertexName, meshName);
 		}
+
+  *sendVertexError { |vertexName, meshName, requestingHost|
+  			var path = (this.errorPath("Vertex"));
+  			requestingHost.sendMsg(path, vertexName, meshName);
+  		}
 
   *sendProxyRequest{ |vertexName, meshName|
   			var path = (this.requestPath("Proxy"));
@@ -96,41 +119,41 @@ VertexAbstract {
           { "Proxy added, sending Proxy Confirmation".postln;
             this.sendProxyConfirmation(vertexName, mesh.name, proxyHost, vertexHost);
           }{
-            "failed to add Proxy".postln;
+            // TODO:  return Proxy Creation Failed Error Message
+            this.sendProxyError(vertexName, mesh.name, vertexHost);
+            // add caught error?
           }
       }
 
-      {	"Vertex exists".postln}
+      {
+        // TODO: return duplicate Proxy Creation Error Message
+        this.sendProxyError(vertexName, mesh.name, vertexHost);
+        // add caught error?
+      }
 
   }
 
-    *makeProxy{ |vertexName, mesh, vertexHost, args|
-      var proxy = super.new.initProxy(vertexName, mesh, vertexHost, args);
-      mesh.vertexes.put(vertexName, proxy);
-      ^ true
-    }
+  *makeProxy{ |vertexName, mesh, vertexHost, args|
+    var proxy = super.new.initProxy(vertexName, mesh, vertexHost, args);
+    mesh.vertexes.put(vertexName, proxy);
+    ^ true
+  }
 
+  *sendProxyConfirmation { |vertexName, meshName, proxyHost, vertexHost|
+    var path = (this.confirmPath("Proxy"));
+    vertexHost.sendMsg(path, vertexName, meshName);
+  }
 
-    *sendProxyConfirmation { |vertexName, meshName, proxyHost, vertexHost|
-        var path = (this.confirmPath("Proxy"));
-        vertexHost.sendMsg(path, vertexName, meshName);
-      }
+  *sendProxyError { |vertexName, meshName, vertexHost|
+  	var path = (this.errorPath("Proxy"));
+  	vertexHost.sendMsg(path, vertexName, meshName);
+  }
 
 	*confirmProxy {|proxyHost, msg|
-      msg.postln;
-
-      /*(proxyHost ++ " reports a proxy for " ++ msg[1].asSymbol ++ " was added to Mesh(" ++ msg[2] ++ ")").postln;*/
-     // VertexServer/confirm/Proxy, server1, mesh1
-
-
   	"Proxy Confirmed".postln;
-    //      /VertexServer/confirm/Proxy, server1, mesh1
-
 	}
 
 	*confirmVertex {|vertexHost, msg|
-    vertexHost.postln;
-    msg.postln;
 		"Vertex Confirmed".postln;
 	}
 
