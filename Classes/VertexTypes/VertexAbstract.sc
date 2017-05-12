@@ -28,11 +28,10 @@ VertexAbstract {
         { |vertexHost, msg| this.confirmProxy(vertexHost, msg) });
 
     this.makeOSCdef("Error", "Vertex",
-        { |vertexHost, msg| this.confirmProxy(vertexHost, msg) });
+        { |requestingHost, msg| this.errorVertex(vertexHost, msg) });
 
     this.makeOSCdef("Error", "Proxy",
-        { |vertexHost, msg| this.confirmProxy(vertexHost, msg) });
-
+        { |vertexHost, msg| this.errorProxy(vertexHost, msg) });
   }
 
   *makeOSCdefPath {|transaction, object|
@@ -83,9 +82,9 @@ VertexAbstract {
 			requestingHost.sendMsg(path, vertexName, meshName);
 		}
 
-  *sendVertexError { |vertexName, meshName, requestingHost|
+  *sendVertexError { |vertexName, meshName, requestingHost, error|
   			var path = (this.makeOSCdefPath("Error", "Vertex"));
-  			requestingHost.sendMsg(path, vertexName, meshName);
+  			requestingHost.sendMsg(path, vertexName, meshName, error);
   		}
 
   *sendProxyRequest{ |vertexName, meshName|
@@ -135,9 +134,9 @@ VertexAbstract {
     vertexHost.sendMsg(path, vertexName, meshName);
   }
 
-  *sendProxyError { |vertexName, meshName, vertexHost|
+  *sendProxyError { |vertexName, meshName, vertexHost, error|
   	var path = (this.makeOSCdefPath("Error", "Proxy"));
-  	vertexHost.sendMsg(path, vertexName, meshName);
+  	vertexHost.sendMsg(path, vertexName, meshName, error);
   }
 
 	*confirmProxy {|proxyHost, msg|
@@ -147,5 +146,14 @@ VertexAbstract {
 	*confirmVertex {|vertexHost, msg|
 		"Vertex Confirmed".postln;
 	}
+
+	*errorProxy {|proxyHost, msg|
+  	"Proxy Error".postln;
+	}
+
+	*errorVertex {|vertexHost, msg|
+		"Vertex Error".postln;
+	}
+
 
 }
