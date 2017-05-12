@@ -27,24 +27,9 @@ VertexAbstract {
     this.makeOSCdef("Confirm", "Proxy",
         { |vertexHost, msg| this.confirmProxy(vertexHost, msg) });
 
-    /*OSCdef(this.requestName("Proxy"), {|msg, time, vertexHost, recvPort|
-      if (vertexHost.ip != Mesh.thisHost.ip)
-        { "received proxy request".postln;
-          this.tryMakeProxy(vertexHost, msg)};
-      }, this.requestPath("Proxy"));
+    // TODO: Add OSCdef for generic Vertex Error
 
-    OSCdef(this.confirmName("Vertex"), {|msg, time, vertexHost, recvPort|
-      this.confirmVertex(vertexHost, msg);
-      }, this.confirmPath("Vertex"));
-
-    OSCdef(this.confirmName("Proxy"), {|msg, time, requestingHost, recvPort|
-      this.confirmProxy(requestingHost, msg);
-      }, this.confirmPath("Proxy"));*/
-
-    // TODO: Add OSCdef for ErrorVertex
-
-    // TODO: Add OSCdef for ErrorProxy
-
+    // TODO: Add OSCdef for generic proxy Error
   }
 
   *makeOSCdefPath {|transaction, object|
@@ -54,32 +39,6 @@ VertexAbstract {
   *makeOSCdefName {|transaction, object|
     ^ (this.asSymbol ++ transaction ++ object).asSymbol
   }
-
-
-
-  /**requestPath {|method|
-    ^ "/" ++ this.name ++ "/request/" ++ method
-  }
-
-  *confirmPath {|method|
-    ^ "/" ++ this.asSymbol ++ "/confirm/" ++ method
-  }
-
-  *errorPath {|method|
-    ^ "/" ++ this.asSymbol ++ "/error/" ++ method
-  }
-
-  *requestName {|method|
-    ^ (this.asSymbol ++ "Request" ++ method).asSymbol
-  }
-
-  *confirmName {|method|
-    ^ (this.asSymbol ++ "Confirm" ++ method).asSymbol
-  }
-
-  *errorName {|method|
-    ^ (this.asSymbol ++ "Error" ++ method).asSymbol
-  }*/
 
   *tryMakeVertex { |requestingHost, msg|
 		var oscAddr = msg[0];
