@@ -28,7 +28,7 @@ VertexAbstract {
         { |vertexHost, msg| this.confirmProxy(vertexHost, msg) });
 
     this.makeOSCdef("Error", "Vertex",
-        { |requestingHost, msg| this.errorVertex(vertexHost, msg) });
+        { |requestingHost, msg| this.errorVertex(requestingHost, msg) });
 
     this.makeOSCdef("Error", "Proxy",
         { |vertexHost, msg| this.errorProxy(vertexHost, msg) });
