@@ -6,27 +6,33 @@ VertexMessage {
   }
 
   init {|requestingHost, msg|
-    arry=Array.with(requestingHost, *msg)
+    arry=Array.with(requestingHost, Mesh.thisHost, *msg)
   }
 
   requestingHost {
     ^ arry[0]
   }
 
-  path {
+  vertexHost {
     ^ arry[1]
   }
 
-  vertexName {
+  path {
     ^ arry[2]
   }
 
-  mesh {
+  vertexName {
     ^ arry[3]
   }
 
+  mesh {
+    ^ Mesh(arry[4])
+  }
+
+
+// maybe do something (with a dictionary?) for these?
   args {
-    ^ Array.with(arry[3..])
+    ^ Array.with(arry[4..])
   }
 
 }

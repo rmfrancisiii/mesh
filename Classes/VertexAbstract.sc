@@ -7,39 +7,27 @@ VertexAbstract {
   }
 
   *makeOSCdef {|transaction, object, action|
-    OSCdef(this.makeOSCdefName(transaction, object), {|msg, time, host, recvPort|
-        action.value(host, msg);
+    OSCdef(this.makeOSCdefName(transaction, object), {
+      |msg, time, host, recvPort|
+        msg = this.oscMsgToVertexMessage(host, msg);
+        this.tryPerform(action, msg);
     }, this.makeOSCdefPath(transaction, object));
   }
 
-
-  *msgToVertexMessage {|requestingHost, msg|
+  *oscMsgToVertexMessage {|requestingHost, msg|
     ^ VertexMessage.new(requestingHost, msg)
   }
 
   *makeAbstractOSCDefs {
-    var typeName = this.name;
 
-    this.makeOSCdef("Request", "Vertex",
-        { |requestingHost, msg|
-          var vertexMessage = this.msgToVertexMessage(requestingHost, msg);
-          this.tryMakeVertex(requestingHost, msg)
-          });
+    this.makeOSCdef("Request", "Vertex", \tryMakeVertex);
+    this.makeOSCdef("Confirm", "Vertex", \confirmVertex);
+    this.makeOSCdef("Error", "Vertex", \errorVertex);
 
-    this.makeOSCdef("Request", "Proxy",
-        { |vertexHost, msg| this.tryMakeProxy(vertexHost, msg) });
+    this.makeOSCdef("Request", "Proxy", \tryMakeProxy);
+    this.makeOSCdef("Confirm", "Proxy", \confirmProxy);
+    this.makeOSCdef("Error", "Proxy", \errorProxy);
 
-    this.makeOSCdef("Confirm", "Vertex",
-        { |requestingHost, msg| this.confirmVertex(requestingHost, msg) });
-
-    this.makeOSCdef("Confirm", "Proxy",
-        { |vertexHost, msg| this.confirmProxy(vertexHost, msg) });
-
-    this.makeOSCdef("Error", "Vertex",
-        { |requestingHost, msg| this.errorVertex(requestingHost, msg) });
-
-    this.makeOSCdef("Error", "Proxy",
-        { |vertexHost, msg| this.errorProxy(vertexHost, msg) });
   }
 
   *makeOSCdefPath {|transaction, object|
@@ -50,47 +38,50 @@ VertexAbstract {
     ^ (this.asSymbol ++ transaction ++ object).asSymbol
   }
 
-  *tryMakeVertex { |requestingHost, msg|
-		var oscAddr = msg[0];
-		var vertexName = msg[1];
-		var mesh = Mesh(msg[2]);
-		var vertexHost = Mesh.thisHost;
-    var args = msg[3..];
+  *tryMakeVertex { |msg|
+    "trying".postln;
 
-    if (mesh.includesVertex(vertexName))
-      { this.sendVertexError(vertexName, mesh.name, requestingHost, "Vertex name already in use")}
-    // otherwise
-      { "received vertex request".postln;
-        try { this.makeVertex(vertexName, mesh, args) }
-          { |error| this.sendVertexError(requestingHost, vertexName, mesh.name, error)}
-    }
+      if (this.vertexExists(msg))
+        { this.sendVertexError(msg, "Vertex name already in use") }
+
+        { "received vertex request".postln;
+          try { this.makeVertex(msg) }
+              { |error| this.sendVertexError(msg, error)};
+
+          this.sendVertexConfirmation(msg);
+        };
   }
 
-  *makeVertex{ |requestingHost, vertexName, mesh...args|
-    var vertex = super.new.initVertex(vertexName, mesh, args);
+  *vertexExists {|msg|
+    ^ (msg.mesh).includesVertex(msg.vertexName)
+  }
+
+  *makeVertex{ |msg|
+    /*var vertex = super.new.initVertex(vertexName, mesh, args);
     // Error("This is a basic error.").throw;
     mesh.vertexes.put(vertexName, vertex);
-    this.sendVertexConfirmation(vertexName, mesh.name, requestingHost);
+    this.sendVertexConfirmation(vertexName, mesh.name, requestingHost);*/
   }
 
-  *sendVertexConfirmation { |vertexName, meshName, requestingHost|
+  *sendVertexConfirmation { |msg|
 			var path = (this.makeOSCdefPath("Confirm", "Vertex"));
-			requestingHost.sendMsg(path, vertexName, meshName);
+      "confirming".postln;
+			msg.requestingHost.sendMsg(path, msg.vertexName, msg.mesh.name);
 		}
 
-  *sendVertexError { |requestingHost, vertexName, meshName, error|
+  *sendVertexError { |msg, error|
   			var path = (this.makeOSCdefPath("Error", "Vertex"));
         var errorString = error.errorString;
-        requestingHost.sendMsg(path, vertexName, meshName, errorString);
+        msg.requestingHost.sendMsg(path, msg.vertexName, msg.mesh.name, errorString);
   		}
 
-  *sendProxyRequest{ |vertexName, meshName|
-  			var path = (this.makeOSCdefPath("Request", "Proxy"));
-  			Mesh.broadcastAddr.sendMsg(path, vertexName, meshName);
+  *sendProxyRequest{ |msg|
+  			/*var path = (this.makeOSCdefPath("Request", "Proxy"));
+  			Mesh.broadcastAddr.sendMsg(path, vertexName, meshName);*/
   	}
 
-  *tryMakeProxy { |vertexHost, msg|
-    var proxyHost = Mesh.thisHost;
+  *tryMakeProxy { |msg|
+    /*var proxyHost = Mesh.thisHost;
     var oscAddr = msg[0];
     var vertexName = msg[1];
     var mesh = Mesh(msg[2]);
@@ -117,42 +108,42 @@ VertexAbstract {
           this.sendProxyError(vertexName, mesh.name, vertexHost, error);
           // add caught error?
         }
-    }
+    }*/
   }
 
-  *makeProxy{ |vertexName, mesh, vertexHost, args|
-    var proxy = super.new.initProxy(vertexName, mesh, vertexHost, args);
+  *makeProxy{ |msg|
+    /*var proxy = super.new.initProxy(vertexName, mesh, vertexHost, args);
     mesh.vertexes.put(vertexName, proxy);
-    ^ true
+    ^ true*/
   }
 
-  *sendProxyConfirmation { |vertexName, meshName, proxyHost, vertexHost|
-    var path = (this.makeOSCdefPath("Confirm", "Proxy"));
-    vertexHost.sendMsg(path, vertexName, meshName);
+  *sendProxyConfirmation { |msg|
+    /*var path = (this.makeOSCdefPath("Confirm", "Proxy"));
+    vertexHost.sendMsg(path, vertexName, meshName);*/
   }
 
-  *sendProxyError { |vertexName, meshName, vertexHost, error|
-  	var path = (this.makeOSCdefPath("Error", "Proxy"));
-  	vertexHost.sendMsg(path, vertexName, meshName, error);
+  *sendProxyError { |msg, error|
+  	/*var path = (this.makeOSCdefPath("Error", "Proxy"));
+  	vertexHost.sendMsg(path, vertexName, meshName, error);*/
   }
 
-	*confirmProxy {|proxyHost, msg|
-  	"Proxy Confirmed".postln;
+	*confirmProxy {|msg|
+  	/*"Proxy Confirmed".postln;*/
 	}
 
-	*confirmVertex {|vertexHost, msg|
+	*confirmVertex {|msg|
 		"Vertex Confirmed".postln;
 	}
 
-	*errorProxy {|proxyHost, msg|
-  	"Proxy Error".postln;
+	*errorProxy {|msg|
+  	/*"Proxy Error".postln;*/
 	}
 
-	*errorVertex {|vertexHost, msg|
-    var vertexName = msg[1];
+	*errorVertex {|msg|
+    /*var vertexName = msg[1];
     var meshName = msg[2];
     var errorString = msg[3];
-		("Vertex " ++ vertexName ++ "reports error in " ++ meshName).postln; errorString.postln;
+		("Vertex " ++ vertexName ++ "reports error in " ++ meshName).postln; errorString.postln;*/
 	}
 
 
