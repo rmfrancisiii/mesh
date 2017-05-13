@@ -12,11 +12,19 @@ VertexAbstract {
     }, this.makeOSCdefPath(transaction, object));
   }
 
+
+  *msgToVertexMessage {|requestingHost, msg|
+    ^ VertexMessage.new(requestingHost, msg)
+  }
+
   *makeAbstractOSCDefs {
     var typeName = this.name;
 
     this.makeOSCdef("Request", "Vertex",
-        { |requestingHost, msg| this.tryMakeVertex(requestingHost, msg) });
+        { |requestingHost, msg|
+          var vertexMessage = this.msgToVertexMessage(requestingHost, msg);
+          this.tryMakeVertex(requestingHost, msg)
+          });
 
     this.makeOSCdef("Request", "Proxy",
         { |vertexHost, msg| this.tryMakeProxy(vertexHost, msg) });
@@ -52,8 +60,8 @@ VertexAbstract {
     if (mesh.includesVertex(vertexName))
       { this.sendVertexError(vertexName, mesh.name, requestingHost, "Vertex name already in use")}
     // otherwise
-    { "received vertex request".postln;
-      try { this.makeVertex(vertexName, mesh, args) }
+      { "received vertex request".postln;
+        try { this.makeVertex(vertexName, mesh, args) }
           { |error| this.sendVertexError(requestingHost, vertexName, mesh.name, error)}
     }
   }
