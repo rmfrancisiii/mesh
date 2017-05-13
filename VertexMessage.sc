@@ -1,5 +1,5 @@
 VertexMessage {
-  var arry;
+  var <>arry;
 
   *new {|requestingHost, msg|
     ^ super.new.init(requestingHost, msg)
