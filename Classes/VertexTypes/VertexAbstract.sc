@@ -54,16 +54,15 @@ VertexAbstract {
     // otherwise
     { "received vertex request".postln;
       try { this.makeVertex(vertexName, mesh, args) }
-          { |error| this.sendVertexError(vertexName, mesh.name, requestingHost, error)
-          }
+          { |error| this.sendVertexError(requestingHost, vertexName, mesh.name, error)}
     }
   }
 
-  *makeVertex{ |vertexName, mesh...args|
+  *makeVertex{ |requestingHost, vertexName, mesh...args|
     var vertex = super.new.initVertex(vertexName, mesh, args);
+    // Error("This is a basic error.").throw;
     mesh.vertexes.put(vertexName, vertex);
-    Error("This is a basic error.").throw;
-    ^ true
+    this.sendVertexConfirmation(vertexName, mesh.name, requestingHost);
   }
 
   *sendVertexConfirmation { |vertexName, meshName, requestingHost|
@@ -71,10 +70,10 @@ VertexAbstract {
 			requestingHost.sendMsg(path, vertexName, meshName);
 		}
 
-  *sendVertexError { |vertexName, meshName, requestingHost, error|
+  *sendVertexError { |requestingHost, vertexName, meshName, error|
   			var path = (this.makeOSCdefPath("Error", "Vertex"));
         var errorString = error.errorString;
-  			requestingHost.sendMsg(path, vertexName, meshName, errorString);
+        requestingHost.sendMsg(path, vertexName, meshName, errorString);
   		}
 
   *sendProxyRequest{ |vertexName, meshName|
@@ -145,9 +144,7 @@ VertexAbstract {
     var vertexName = msg[1];
     var meshName = msg[2];
     var errorString = msg[3];
-    // OR?:  Error(msg[3]).throw;
 		("Vertex " ++ vertexName ++ "reports error in " ++ meshName).postln; errorString.postln;
-
 	}
 
 
