@@ -49,33 +49,20 @@ VertexAbstract {
 		var vertexHost = Mesh.thisHost;
     var args = msg[3..];
 
-    "received vertex request".postln;
-
-		if (mesh.includesVertex(vertexName).not)
-			{ // TODO: add Try... Catch
-				if (this.makeVertex(vertexName, mesh, args))
-					{ "Vertex added, sending Vertex Confirmation".postln;
-						this.sendVertexConfirmation(vertexName, mesh.name, requestingHost);
-						this.sendProxyRequest(vertexName, mesh.name)
-					}{
-					var error;
-            // TODO: construct Vertex Error Message
-            this.sendVertexError(vertexName, mesh.name, requestingHost, error); // add caught error?
-					}
-			}
-
-			{
-       var error;
-            // TODO: construct Vertex Error Message
-        this.sendVertexError(vertexName, mesh.name, requestingHost, error);
-        // add caught error?
-      }
-
-	}
+    if (mesh.includesVertex(vertexName))
+      { this.sendVertexError(vertexName, mesh.name, requestingHost, "Vertex name already in use")}
+    // otherwise
+    { "received vertex request".postln;
+      try { this.makeVertex(vertexName, mesh, args) }
+          { |error| this.sendVertexError(vertexName, mesh.name, requestingHost, error)
+          }
+    }
+  }
 
   *makeVertex{ |vertexName, mesh...args|
     var vertex = super.new.initVertex(vertexName, mesh, args);
     mesh.vertexes.put(vertexName, vertex);
+    Error("This is a basic error.").throw;
     ^ true
   }
 
@@ -86,7 +73,8 @@ VertexAbstract {
 
   *sendVertexError { |vertexName, meshName, requestingHost, error|
   			var path = (this.makeOSCdefPath("Error", "Vertex"));
-  			requestingHost.sendMsg(path, vertexName, meshName, error);
+        var errorString = error.errorString;
+  			requestingHost.sendMsg(path, vertexName, meshName, errorString);
   		}
 
   *sendProxyRequest{ |vertexName, meshName|
@@ -154,7 +142,12 @@ VertexAbstract {
 	}
 
 	*errorVertex {|vertexHost, msg|
-		"Vertex Error".postln;
+    var vertexName = msg[1];
+    var meshName = msg[2];
+    var errorString = msg[3];
+    // OR?:  Error(msg[3]).throw;
+		("Vertex " ++ vertexName ++ "reports error in " ++ meshName).postln; errorString.postln;
+
 	}
 
 
