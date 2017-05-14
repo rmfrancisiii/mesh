@@ -1,10 +1,34 @@
+/*
+VertexRequestMessage {
+
+// path, requestingHost, vertexHost, meshName, vertexName, vertexType, arguments
+
+// maybe better?: RequestMessage
+// Change to named list, enforce data and populate empty stuff with nils...,
+
+//eg in Vertex.new call something like: VertexMessag.makeMessage(named arguments)
+
+
+
+}*/
+
+/*
+VertexResponseMessage {
+
+\Success or
+errorText
+
+in
+// error OR Confirmation
+
+}*/
+
+
+
 VertexMessage {
   var arry;
 
-// maybe better?: RequestMessage
-  // Change to named list, enforce data and populate empty stuff with nils...,
 
-  //eg in Vertex.new ccall something live VertexMessag.makeMessage(named arguments)
 
 
 

@@ -20,8 +20,13 @@ VertexAbstract {
 
   *makeAbstractOSCDefs {
     this.makeOSCdef("Request", "Vertex", \tryMakeVertex);
+    // combine these:
+    // this.makeOSCdef("Response", "Vertex", \requestResponse);
+
     this.makeOSCdef("Confirm", "Vertex", \confirmVertex);
     this.makeOSCdef("Error", "Vertex", \errorVertex);
+
+
     this.makeOSCdef("Request", "Proxy", \tryMakeProxy);
     this.makeOSCdef("Confirm", "Proxy", \confirmProxy);
     this.makeOSCdef("Error", "Proxy", \errorProxy);
