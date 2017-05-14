@@ -44,7 +44,6 @@ VertexAbstract {
          try { this.makeVertex(msg) }
              { |error| this.sendVertexError(msg, error)};
 
-         this.sendVertexConfirmation(msg);
        };
   }
 
@@ -53,10 +52,12 @@ VertexAbstract {
   }
 
   *makeVertex{ |msg|
-    var vertex = super.new.initVertex(msg.vertexName, msg.mesh, msg.args);
+    var vertexName = msg.vertexName;
+    var mesh = msg.mesh;
+    var vertex = super.new.initVertex(vertexName, mesh, msg);
     Error("This is a basic error.").throw;
-  //  msg.mesh.vertexes.put(msg.vertexName, vertex);
-  //  this.sendVertexConfirmation(msg);
+    mesh.vertexes.put(vertexName, vertex);
+    this.sendVertexConfirmation(msg);
   }
 
   *sendVertexConfirmation { |msg|

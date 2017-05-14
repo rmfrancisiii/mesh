@@ -1,5 +1,12 @@
 VertexMessage {
-  var <>arry;
+  var arry;
+
+// maybe better?: RequestMessage
+  // Change to named list, enforce data and populate empty stuff with nils...,
+
+  //eg in Vertex.new ccall something live VertexMessag.makeMessage(named arguments)
+
+
 
   *new {|requestingHost, msg|
     ^ super.new.init(requestingHost, msg)
@@ -34,5 +41,6 @@ VertexMessage {
   args {
     ^ Array.with(arry[4..])
   }
+
 
 }
