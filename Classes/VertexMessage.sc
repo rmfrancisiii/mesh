@@ -15,7 +15,11 @@ VertexRequestMessage {
   }
 
   asErrorResponse{|responsePath, error|
-    ^ Array.with(responsePath, name, type, vertexHost.name, requestingHost.name,  mesh.name, error)
+    ^ Array.with(responsePath, name, type, vertexHost.name, requestingHost.name, mesh.name, \error, error)
+  }
+
+  asConfirmation{|responsePath|
+    ^ Array.with(responsePath, name, type, vertexHost.name, requestingHost.name,  mesh.name, \confirmed)
   }
 
   asObjectArray {
@@ -33,7 +37,11 @@ VertexRequestMessage {
     requestingHost.sendMsg(*response);
   }
 
-  sendConfirmation {}
+  sendConfirmation { |responsePath|
+    var response = this.asConfirmation(responsePath);
+    requestingHost.sendMsg(*response);
+
+  }
 
   sendProxyRequest {}
 

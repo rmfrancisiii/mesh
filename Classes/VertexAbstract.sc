@@ -41,11 +41,25 @@ VertexAbstract {
 
        { "received vertex request".postln;
          try { this.makeVertex(msg) }
-             { |error|
-               var errorString = error.errorString;
-               var path = this.makeOSCdefPath("Response", "Vertex");
-               msg.sendError(path, errorString)};
+             { |error| this.sendError(msg, error)};
        };
+  }
+
+  *sendError { |msg, error|
+    var errorString = error.errorString;
+    var path = this.makeOSCdefPath("Response", "Vertex");
+    msg.sendError(path, errorString)
+
+  }
+
+  *sendConfirmation{ |msg|
+    var path = this.makeOSCdefPath("Response", "Vertex");
+    msg.sendConfirmation(path);
+  }
+
+  *sendProxyRequest{ |msg|
+      var path = this.makeOSCdefPath("Request", "Proxy");
+      msg.sendProxyRequest(path);
   }
 
   *vertexExists {|msg|
@@ -56,14 +70,14 @@ VertexAbstract {
     var vertex = super.new.initVertex(msg);
     var name = msg.name;
     var vertexes = msg.mesh.vertexes;
+    //Error("This is a basic error.").throw;
     vertexes.put(name, vertex);
-    Error("This is a basic error.").throw;
-    msg.sendConfirmation;
-    msg.sendProxyRequest;
+    this.sendConfirmation(msg);
+    this.sendProxyRequest(msg);
   }
 
 
-	*vertexResponse {|msg|
+	*vertexResponse { |msg|
     "Vertex Response!".postln;
     msg.args.postln
 	}
