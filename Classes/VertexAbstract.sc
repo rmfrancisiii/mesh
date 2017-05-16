@@ -82,13 +82,15 @@ VertexAbstract {
   }
 
   *proxyResponseHandler { |msg|
+
+    "proxy response received".postln;
+
     /* from vertexResponseHandler
 
     should track that all mesh hosts confirm proxy request
     and resend if necessary?*/
 
   }
-
 
   *sendError { |msg, error|
     var errorString = error.errorString;
@@ -114,9 +116,5 @@ VertexAbstract {
   *vertexExists {|msg|
     ^ (msg.mesh).includesVertex(msg.name)
   }
-
-
-
-
 
 }
