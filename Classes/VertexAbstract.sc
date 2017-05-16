@@ -21,10 +21,8 @@ VertexAbstract {
   *makeAbstractOSCDefs {
     this.makeOSCdef("Request", "Vertex", \tryMakeVertex);
     this.makeOSCdef("Response", "Vertex", \vertexResponseHandler);
-
     this.makeOSCdef("Request", "Proxy", \tryMakeProxy);
-    this.makeOSCdef("Response", "Proxy", \proxyResponse);
-
+    this.makeOSCdef("Response", "Proxy", \proxyResponseHandler);
   }
 
   *makeOSCdefPath {|transaction, object|
@@ -55,6 +53,43 @@ VertexAbstract {
     this.sendProxyRequest(msg);
   }
 
+  *vertexResponseHandler { |msg|
+    var response = msg.args[0];
+    var result = case
+        { response == \error }   {
+          (msg.name ++ " Vertex Error:  " ++ msg.args[1]).postln }
+        { response == \confirmed } {
+          (msg.name ++ " Vertex Confirmed!").postln };
+    result.value;
+	}
+
+  *tryMakeProxy{ |msg|
+   if (this.vertexExists(msg))
+       { this.sendError(msg, Error("VertexName already in use."))}
+
+       { "received proxy request".postln;
+         try { this.makeProxy(msg) }
+             { |error| this.sendError(msg, error)};
+       };
+  }
+
+  *makeProxy{ |msg|
+    var proxy = super.new.initProxy(msg);
+    var vertexes = msg.mesh.vertexes;
+    //Error("This is a basic error.").throw;
+    vertexes.put(name, proxy);
+    this.sendProxyConfirmation(msg);
+  }
+
+  *proxyResponseHandler { |msg|
+    /* from vertexResponseHandler
+
+    should track that all mesh hosts confirm proxy request
+    and resend if necessary?*/
+
+  }
+
+
   *sendError { |msg, error|
     var errorString = error.errorString;
     var path = this.makeOSCdefPath("Response", "Vertex");
@@ -80,35 +115,7 @@ VertexAbstract {
     ^ (msg.mesh).includesVertex(msg.name)
   }
 
-	*vertexResponseHandler { |msg|
-    var response = msg.args[0];
-    var result = case
-        { response == \error }   {
-          (msg.name ++ " Vertex Error:  " ++ msg.args[1]).postln }
-        { response == \confirmed } {
-          (msg.name ++ " Vertex Confirmed!").postln };
 
-    result.value;
-	}
-
-  *tryMakeProxy{ |msg|
-
-   if (this.vertexExists(msg))
-       { this.sendError(msg, Error("VertexName already in use."))}
-
-       { "received proxy request".postln;
-         try { this.makeProxy(msg) }
-             { |error| this.sendError(msg, error)};
-       };
-  }
-
-  *makeProxy{ |msg|
-    var proxy = super.new.initProxy(msg);
-    var vertexes = msg.mesh.vertexes;
-    //Error("This is a basic error.").throw;
-    //vertexes.put(name, proxy);
-    this.sendProxyConfirmation(msg);
-  }
 
 
 
