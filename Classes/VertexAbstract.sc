@@ -69,7 +69,7 @@ VertexAbstract {
     var vertex = super.new.initVertex(msg);
     var name = msg.name;
     var vertexes = msg.mesh.vertexes;
-    Error("This is a basic error.").throw;
+    //Error("This is a basic error.").throw;
     vertexes.put(name, vertex);
     this.sendConfirmation(msg);
     this.sendProxyRequest(msg);
@@ -80,9 +80,9 @@ VertexAbstract {
     var response = msg.args[0];
     var result = case
         { response == \error }   {
-          ("Vertex Error:  " ++ msg.args[1]).postln }
+          (msg.name ++ " Vertex Error:  " ++ msg.args[1]).postln }
         { response == \confirmed } {
-          "Vertex Confirmed!".postln };
+          (msg.name ++ " Vertex Confirmed!").postln };
 
     result.value;
 	}
