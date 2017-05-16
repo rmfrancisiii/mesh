@@ -9,19 +9,19 @@ VertexServer : VertexAbstract {
 		}, this.makeOSCdefPath("Request", "Boot"));
 	}
 
-	initVertex{|vertexName, vertexMesh...args|
-		name = vertexName;
-		host = Mesh.thisHost;
-		mesh = vertexMesh;
+	initVertex{|msg|
+		name = msg.name;
+		host = msg.vertexHost;
+		mesh = msg.mesh;
 		isProxy = false;
 		server = Server.local;
-		this.setServerOptions(args);
+		this.setServerOptions(msg.args);
 	}
 
-	initProxy {|vertexName, vertexMesh, vertexHost...args|
-		name = vertexName;
-		host = vertexHost;
-		mesh = vertexMesh;
+	initProxy {|msg|
+		name = msg.ame;
+		host = msg.vertexHost;
+		mesh = msg.mesh;
 		isProxy = true;
 		server = Server.remote(name, host);
 	}
@@ -46,6 +46,7 @@ VertexServer : VertexAbstract {
 	}
 
 	setServerOptions{ |args|
+		"Setting server Options".postln;
 		// use args for optional ServerOptions
 		server.options.protocol_(\tcp);
 		server.options.maxLogins_(8);

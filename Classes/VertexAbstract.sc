@@ -3,7 +3,7 @@ VertexAbstract {
 
   *requestor { |vertexName, vertexType, vertexHost, meshName...args|
     var path = this.makeOSCdefPath("Request", "Vertex");
-    var msg = VertexRequestMessage.newRequest(path, vertexName, vertexType, vertexHost, meshName, args);
+    var msg = VertexMessage.newRequest(path, vertexName, vertexType, vertexHost, meshName, args);
     msg.sendRequest;
   }
 
@@ -13,7 +13,7 @@ VertexAbstract {
 
     OSCdef(name, {
       |msg, time, host, recvPort|
-        msg = VertexRequestMessage.decode(host, msg);
+        msg = VertexMessage.decode(host, msg);
         this.tryPerform(method, msg);
     }, path);
   }
@@ -71,6 +71,11 @@ VertexAbstract {
       msg.sendProxyRequest(path);
   }
 
+  *sendProxyConfirmation{ |msg|
+      var path = this.makeOSCdefPath("Response", "Proxy");
+      msg.sendProxyResponse(path);
+  }
+
   *vertexExists {|msg|
     ^ (msg.mesh).includesVertex(msg.name)
   }
@@ -86,10 +91,24 @@ VertexAbstract {
     result.value;
 	}
 
-  *tryMakeProxy{
-    "Make Proxy!".postln;
+  *tryMakeProxy{ |msg|
+
+   if (this.vertexExists(msg))
+       { this.sendError(msg, Error("VertexName already in use."))}
+
+       { "received proxy request".postln;
+         try { this.makeProxy(msg) }
+             { |error| this.sendError(msg, error)};
+       };
   }
 
+  *makeProxy{ |msg|
+    var proxy = super.new.initProxy(msg);
+    var vertexes = msg.mesh.vertexes;
+    //Error("This is a basic error.").throw;
+    //vertexes.put(name, proxy);
+    this.sendProxyConfirmation(msg);
+  }
 
 
 

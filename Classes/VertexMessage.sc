@@ -1,8 +1,7 @@
-VertexRequestMessage {
+VertexMessage {
   var <>path, <>name, <>type, <>vertexHost, <>requestingHost, <>mesh, <>args;
 
-
-// maybe convert this to a NamedList, send key->value pairs
+// maybe convert this to a NamedList, send key->value pairs in message? more network overhead but easier to manage named arguments
 
   *newRequest {|path, name, type, host, mesh, args|
     ^ super.newCopyArgs(path, name, type, host, Mesh.thisHost, Mesh(mesh), args)
@@ -11,7 +10,6 @@ VertexRequestMessage {
   *decode {|host, msg|
     ^  super.newCopyArgs(msg[0], msg[1], msg[2], Mesh(msg[5])[msg[3]], Mesh(msg[5])[msg[4]], Mesh(msg[5]), msg[6..])
   }
-
 
   sendRequest {
     var request = this.asVertexRequest;
@@ -32,6 +30,11 @@ VertexRequestMessage {
     var request = this.asProxyRequest(requestPath);
     var broadcastAddr = Mesh.broadcastAddr;
     broadcastAddr.sendMsg(*request)
+  }
+
+  sendProxyConfirmation { |responsePath|
+    var response = this.asConfirmation(responsePath);
+    requestingHost.sendMsg(*response);
   }
 
   asVertexRequest {
