@@ -49,7 +49,6 @@ VertexAbstract {
     var errorString = error.errorString;
     var path = this.makeOSCdefPath("Response", "Vertex");
     msg.sendError(path, errorString)
-
   }
 
   *sendConfirmation{ |msg|
@@ -70,7 +69,7 @@ VertexAbstract {
     var vertex = super.new.initVertex(msg);
     var name = msg.name;
     var vertexes = msg.mesh.vertexes;
-    //Error("This is a basic error.").throw;
+    Error("This is a basic error.").throw;
     vertexes.put(name, vertex);
     this.sendConfirmation(msg);
     this.sendProxyRequest(msg);
@@ -78,8 +77,14 @@ VertexAbstract {
 
 
 	*vertexResponse { |msg|
-    "Vertex Response!".postln;
-    msg.args.postln
+    var response = msg.args[0];
+    var result = case
+        { response == \error }   {
+          ("Vertex Error:  " ++ msg.args[1]).postln }
+        { response == \confirmed } {
+          "Vertex Confirmed!".postln };
+
+    result.value;
 	}
 
 
