@@ -1,70 +1,40 @@
-/*
 VertexRequestMessage {
-
-// path, requestingHost, vertexHost, meshName, vertexName, vertexType, arguments
-
-// maybe better?: RequestMessage
-// Change to named list, enforce data and populate empty stuff with nils...,
-
-//eg in Vertex.new call something like: VertexMessag.makeMessage(named arguments)
+  var <>path, <>name, <>type, <>vertexHost, <>requestingHost, <>mesh, <>args;
 
 
-
-}*/
-
-/*
-VertexResponseMessage {
-
-\Success or
-errorText
-
-in
-// error OR Confirmation
-
-}*/
-
-
-
-VertexMessage {
-  var arry;
-
-
-
-
-
-  *new {|requestingHost, msg|
-    ^ super.new.init(requestingHost, msg)
+  *newRequest {|path, name, type, host, mesh, args|
+    ^ super.newCopyArgs(path, name, type, host, Mesh.thisHost, Mesh(mesh), args)
   }
 
-  init {|requestingHost, msg|
-    arry=Array.with(requestingHost, Mesh.thisHost, *msg)
+  sendRequest {
+    vertexHost.sendMsg(*this.asOSCMsgArray)
   }
 
-  requestingHost {
-    ^ arry[0]
+  asOSCMsgArray {
+    ^ Array.with(path, name, type, vertexHost.name, requestingHost.name,  mesh.name, *args)
   }
 
-  vertexHost {
-    ^ arry[1]
+  asErrorResponse{|responsePath, error|
+    ^ Array.with(responsePath, name, type, vertexHost.name, requestingHost.name,  mesh.name, error)
   }
 
-  path {
-    ^ arry[2]
+  asObjectArray {
+    ^ Array.with(path, name, type, vertexHost, requestingHost,  mesh, *args)
   }
 
-  vertexName {
-    ^ arry[3]
+  *decode {|host, msg|
+    ^  super.newCopyArgs(msg[0], msg[1], msg[2], Mesh(msg[5])[msg[3]], Mesh(msg[5])[msg[4]], Mesh(msg[5]), msg[6..])
   }
 
-  mesh {
-    ^ Mesh(arry[4])
+  printOn { |stream| stream << this.class.name << "(" << this.asObjectArray << ")" }
+
+  sendError { |responsePath, error|
+    var response = this.asErrorResponse(responsePath, error);
+    requestingHost.sendMsg(*response);
   }
 
+  sendConfirmation {}
 
-// maybe do something (with a dictionary?) for these?
-  args {
-    ^ Array.with(arry[4..])
-  }
-
+  sendProxyRequest {}
 
 }

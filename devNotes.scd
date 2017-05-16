@@ -1,7 +1,6 @@
-
 Vertex.test;
 Vertex(\server1).boot;
-
+OSCdef.all;
 
 UnitTest.gui;
 
@@ -482,4 +481,78 @@ TODO: Check to be sure the following are for a local server.
   }*/
 
 
-*/
+
+
+/*
+
+*sendVertexConfirmation { |msg|
+  var path = (this.makeOSCdefPath("Confirm", "Vertex"));
+  this.relayMsg(path, msg);
+}
+
+*sendProxyRequest{ |msg|
+  var path = (this.makeOSCdefPath("Request", "Proxy"));
+  this.relayMsg(path, msg);
+}
+
+*relayMsg {|path, msg, error|
+  msg.requestingHost.sendMsg(path, msg, error);
+}
+
+*tryMakeProxy { |msg|
+  /*var proxyHost = Mesh.thisHost;
+  var oscAddr = msg[0];
+  var vertexName = msg[1];
+  var mesh = Mesh(msg[2]);
+  var args = msg[3..];
+
+  if (vertexHost.ip != Mesh.thisHost.ip){
+
+    "received proxy request".postln;
+
+    if (mesh.includesVertex(vertexName).not)
+      {
+        if (this.makeProxy(vertexName, mesh, vertexHost, args))
+          { "Proxy added, sending Proxy Confirmation".postln;
+            this.sendProxyConfirmation(vertexName, mesh.name, proxyHost, vertexHost);
+          }{ var error;
+            // TODO:  construct Proxy Creation Failed Error Message
+            this.sendProxyError(vertexName, mesh.name, vertexHost, error);
+            // add caught error?
+          }
+      }
+
+      {var error;
+        // TODO:  construct Proxy Creation Error Message
+        this.sendProxyError(vertexName, mesh.name, vertexHost, error);
+        // add caught error?
+      }
+  }*/
+}
+
+/**makeProxy{ |msg|
+  /*var proxy = super.new.initProxy(vertexName, mesh, vertexHost, args);
+  mesh.vertexes.put(vertexName, proxy);
+  ^ true
+}
+
+*sendProxyConfirmation { |msg|
+  var path = (this.makeOSCdefPath("Confirm", "Proxy"));
+  this.relayMsg(path, msg);
+  }
+
+*sendProxyError { |msg, error|
+  var path = (this.makeOSCdefPath("Error", "Proxy"));
+  this.relayMsg(path, msg, error);
+  }
+
+  *proxyResponse {|msg|
+  	"Proxy Error".postln;
+    /*var vertexName = msg[1];
+    var meshName = msg[2];
+    var errorString = msg[3];
+		("Vertex " ++ msg.vertexName ++ "reports error in " ++ msg.mesh.name).postln; errorString.postln;
+	}
+
+
+  */

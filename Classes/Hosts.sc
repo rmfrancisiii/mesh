@@ -96,10 +96,6 @@ MeshHostsManager {
 
 		// otherwise get the old host info
 		{
-			// var host = all.at(key);
-			// using this prevents inlining the function.
-			// not sure if this really matters, but its a pretty active fn... more research is needed.
-
 			// If the address changed
 			if (all.at(key).addr.matches(addr).not)
 			{ this.changeHostAddr(all.at(key), addr) }
