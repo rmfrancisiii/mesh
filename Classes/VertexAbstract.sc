@@ -20,7 +20,7 @@ VertexAbstract {
 
   *makeAbstractOSCDefs {
     this.makeOSCdef("Request", "Vertex", \tryMakeVertex);
-    this.makeOSCdef("Response", "Vertex", \vertexResponse);
+    this.makeOSCdef("Response", "Vertex", \vertexResponseHandler);
 
     this.makeOSCdef("Request", "Proxy", \tryMakeProxy);
     this.makeOSCdef("Response", "Proxy", \proxyResponse);
@@ -37,12 +37,22 @@ VertexAbstract {
 
   *tryMakeVertex { |msg|
     if (this.vertexExists(msg))
-       { this.sendVertexError(msg, "Vertex name already in use") }
+       { this.sendError(msg, Error("VertexName already in use."))}
 
        { "received vertex request".postln;
          try { this.makeVertex(msg) }
              { |error| this.sendError(msg, error)};
        };
+  }
+
+  *makeVertex{ |msg|
+    var vertex = super.new.initVertex(msg);
+    var name = msg.name;
+    var vertexes = msg.mesh.vertexes;
+    //Error("This is a basic error.").throw;
+    vertexes.put(name, vertex);
+    this.sendConfirmation(msg);
+    this.sendProxyRequest(msg);
   }
 
   *sendError { |msg, error|
@@ -65,18 +75,7 @@ VertexAbstract {
     ^ (msg.mesh).includesVertex(msg.name)
   }
 
-  *makeVertex{ |msg|
-    var vertex = super.new.initVertex(msg);
-    var name = msg.name;
-    var vertexes = msg.mesh.vertexes;
-    //Error("This is a basic error.").throw;
-    vertexes.put(name, vertex);
-    this.sendConfirmation(msg);
-    this.sendProxyRequest(msg);
-  }
-
-
-	*vertexResponse { |msg|
+	*vertexResponseHandler { |msg|
     var response = msg.args[0];
     var result = case
         { response == \error }   {
@@ -86,6 +85,10 @@ VertexAbstract {
 
     result.value;
 	}
+
+  *tryMakeProxy{
+    "Make Proxy!".postln;
+  }
 
 
 

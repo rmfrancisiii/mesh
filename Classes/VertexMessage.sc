@@ -2,15 +2,39 @@ VertexRequestMessage {
   var <>path, <>name, <>type, <>vertexHost, <>requestingHost, <>mesh, <>args;
 
 
+// maybe convert this to a NamedList, send key->value pairs
+
   *newRequest {|path, name, type, host, mesh, args|
     ^ super.newCopyArgs(path, name, type, host, Mesh.thisHost, Mesh(mesh), args)
   }
 
-  sendRequest {
-    vertexHost.sendMsg(*this.asOSCMsgArray)
+  *decode {|host, msg|
+    ^  super.newCopyArgs(msg[0], msg[1], msg[2], Mesh(msg[5])[msg[3]], Mesh(msg[5])[msg[4]], Mesh(msg[5]), msg[6..])
   }
 
-  asOSCMsgArray {
+
+  sendRequest {
+    var request = this.asVertexRequest;
+    vertexHost.sendMsg(*request)
+  }
+
+  sendError { |responsePath, error|
+    var response = this.asErrorResponse(responsePath, error);
+    requestingHost.sendMsg(*response);
+  }
+
+  sendConfirmation { |responsePath|
+    var response = this.asConfirmation(responsePath);
+    requestingHost.sendMsg(*response);
+  }
+
+  sendProxyRequest {|requestPath|
+    var request = this.asProxyRequest(requestPath);
+    var broadcastAddr = Mesh.broadcastAddr;
+    broadcastAddr.sendMsg(*request)
+  }
+
+  asVertexRequest {
     ^ Array.with(path, name, type, vertexHost.name, requestingHost.name,  mesh.name, *args)
   }
 
@@ -22,27 +46,15 @@ VertexRequestMessage {
     ^ Array.with(responsePath, name, type, vertexHost.name, requestingHost.name,  mesh.name, \confirmed)
   }
 
-  asObjectArray {
-    ^ Array.with(path, name, type, vertexHost, requestingHost,  mesh, *args)
+  asProxyRequest{|responsePath|
+    ^ Array.with(responsePath, name, type, vertexHost.name, requestingHost.name,  mesh.name, *args)
   }
 
-  *decode {|host, msg|
-    ^  super.newCopyArgs(msg[0], msg[1], msg[2], Mesh(msg[5])[msg[3]], Mesh(msg[5])[msg[4]], Mesh(msg[5]), msg[6..])
+  asArray {
+    ^ Array.with(path, name, type, vertexHost, requestingHost,  mesh, *args)
   }
 
   printOn { |stream| stream << this.class.name << "(" << this.asObjectArray << ")" }
 
-  sendError { |responsePath, error|
-    var response = this.asErrorResponse(responsePath, error);
-    requestingHost.sendMsg(*response);
-  }
-
-  sendConfirmation { |responsePath|
-    var response = this.asConfirmation(responsePath);
-    requestingHost.sendMsg(*response);
-
-  }
-
-  sendProxyRequest {}
 
 }
