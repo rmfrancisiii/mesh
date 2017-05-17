@@ -3,18 +3,22 @@ VertexServer : VertexAbstract {
 
 	*makeOSCDefs {
 		this.makeAbstractOSCDefs;
-		this.makeTypeMethodOSCDefs;
-	}
-
-	*makeTypeMethodOSCDefs{
-		this.makeOSCdef("Boot", "Vertex", \tryBootServer);
 	}
 
 	initVertex{|msg|
+		this.makeOSCdefs;
 		this.setInstanceVars(msg);
 		isProxy = false;
 		server = Server.local;
 		this.setServerOptions(msg.args);
+	}
+
+	makeOSCdefs{
+		OSCdef(\VertexServerBootServer, {
+			|msg, time, msghost, recvPort|
+			this.bootHandler(msg);
+		}, "/VertexServer/Boot/Server");
+
 	}
 
 	initProxy {|msg|
@@ -29,11 +33,20 @@ VertexServer : VertexAbstract {
 		mesh = msg.mesh;
 	}
 
-
 	setServerOptions{ |args|
 		server.options.protocol_(\tcp);
 		server.options.maxLogins_(8);
-		server.options.protocol_(\tcp);
+	}
+
+	boot {
+		// interface
+		this.host.sendMsg("/VertexServer/Boot/Server", \bootServer)
+	}
+
+	bootHandler{ |msg|
+		// main thread
+		"Booting".postln;
+		msg.postln;
 	}
 
 }

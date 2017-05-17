@@ -1,5 +1,8 @@
 Vertex.test;
 Vertex(\server1).boot;
+Vertex(\server1).host.postln;
+Vertex(\server1).boot.class;
+
 OSCdef.all;
 
 UnitTest.gui;
