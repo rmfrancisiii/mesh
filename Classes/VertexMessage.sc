@@ -34,7 +34,7 @@ VertexMessage {
 
   sendProxyConfirmation { |responsePath|
     var response = this.asConfirmation(responsePath);
-    requestingHost.sendMsg(*response);
+    vertexHost.sendMsg(*response);
   }
 
   asVertexRequest {
