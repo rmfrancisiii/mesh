@@ -14,7 +14,8 @@ VertexServer : VertexAbstract {
 	}
 
 	makeInstanceInterfaces{
-		this.makeInstanceInterface("Boot", "Server", \bootHandler);
+		this.makeInstanceInterface("boot", "server", \bootHandler);
+		this.makeInstanceInterface("kill", "server", \killHandler);
 	}
 
 	makeInstanceInterface{|transaction, object, method|
@@ -23,7 +24,8 @@ VertexServer : VertexAbstract {
 	}
 
 	makeInstanceMethod{|transaction, object, method|
-		this.addUniqueMethod(\boot, {|...args|
+		var methodName = transaction.asSymbol;
+		this.addUniqueMethod(methodName, {|...args|
 				var path = ("/" ++ name ++ "/" ++ transaction ++ "/" ++ object);
 				host.sendMsg(path, *args) });
 	}
@@ -48,6 +50,12 @@ VertexServer : VertexAbstract {
 	bootHandler{ |msg|
 		// main thread
 		"Booting".postln;
+		msg.postln;
+	}
+
+	killHandler{ |msg|
+		// main thread
+		"Killing".postln;
 		msg.postln;
 	}
 
