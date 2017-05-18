@@ -14,8 +14,6 @@ VertexAbstract {
     this.makeClassOSCdef("Response", "Proxy", \proxyResponseHandler);
   }
 
-  // TODO: abstract out (transaction, object, method) into interfaceDef object?
-
   *makeClassOSCdef {|transaction, object, method|
     var defName = this.makeClassOSCdefName(transaction, object);
     var defPath = this.makeClassOSCdefPath(transaction, object);
@@ -39,41 +37,39 @@ VertexAbstract {
 
   // interfaceDef
   makeInstanceInterface{|transaction, object, method|
-				this.makeInstanceOSCdef(transaction, object, method);
-				this.makeInstanceMethod(transaction, object, method);
+    var interfaceDef = InterfaceDef(transaction, object, method);
+		this.makeInstanceOSCdef(interfaceDef);
+		this.makeInstanceMethod(interfaceDef);
 	}
 
   // interfaceDef
-	makeInstanceMethod{|transaction, object, method|
+	makeInstanceMethod{|interfaceDef|
     // Encode MSG into VertexMessage
-		var methodName = transaction.asSymbol;
+		var methodName = interfaceDef.transaction.asSymbol;
 		this.addUniqueMethod(methodName, {|...args|
-				var path = ("/" ++ name ++ "/" ++ transaction ++ "/" ++ object);
+				var path = ("/" ++ name ++ "/" ++ interfaceDef.transaction ++ "/" ++ interfaceDef.object);
         var vertexHost = this.getVertexHost;
 				vertexHost.sendMsg(path, *args) });
 	}
 
-  // interfaceDef
-  makeInstanceOSCdef {|transaction, object, method|
+  makeInstanceOSCdef {|interfaceDef|
 
     // Decode MSG from VertexMessage
-    var defName = this.makeInstanceOSCdefName(transaction, object);
-    var defPath = this.makeInstanceOSCdefPath(transaction, object);
+    var defName = this.makeInstanceOSCdefName(interfaceDef);
+    var defPath = this.makeInstanceOSCdefPath(interfaceDef);
 
     OSCdef(defName, {
       |msg, time, host, recvPort|
-        this.tryPerform(method, host, msg);
+        this.tryPerform(interfaceDef.method, host, msg);
     }, defPath);
   }
 
-  // interfaceDef
-  makeInstanceOSCdefPath {|transaction, object|
-    ^ "/" ++ name ++ "/" ++ transaction ++ "/" ++ object
+  makeInstanceOSCdefPath {|interfaceDef|
+    ^ "/" ++ name ++ "/" ++ interfaceDef.transaction ++ "/" ++ interfaceDef.object
   }
 
-  // interfaceDef
-  makeInstanceOSCdefName {|transaction, object|
-    ^ (name ++ transaction ++ object).asSymbol
+  makeInstanceOSCdefName {|interfaceDef|
+    ^ (name ++ interfaceDef.transaction ++ interfaceDef.object).asSymbol
   }
 
   *tryMakeVertex { |msg|

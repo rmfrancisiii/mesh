@@ -1,7 +1,9 @@
 VertexMessage {
   var <>path, <>name, <>type, <>vertexHost, <>requestingHost, <>mesh, <>args;
 
-// maybe convert this to a NamedList, send key->value pairs in message? more network overhead but easier to manage named arguments
+// maybe convert this to a NamedList, send key->value pairs in message? slightly? more network overhead but easier to manage named arguments?
+
+// do we need a dedicated instance Variable for method to execute?
 
   *newRequest {|path, name, type, host, mesh, args|
     ^ super.newCopyArgs(path, name, type, host, Mesh.thisHost, Mesh(mesh), args)
