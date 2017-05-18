@@ -2,25 +2,41 @@ VertexAbstract {
   var <>name, <>mesh, <>isProxy;
 
   *requestor { |vertexName, vertexType, vertexHost, meshName...args|
-    var path = this.makeOSCdefPath("Request", "Vertex");
+    var path = this.makeClassOSCdefPath("Request", "Vertex");
     var msg = VertexMessage.newRequest(path, vertexName, vertexType, vertexHost, meshName, args);
     msg.sendRequest;
   }
 
-  *makeAbstractOSCdef {|transaction, object, method|
-    var name = this.makeOSCdefName(transaction, object);
-    var path = this.makeOSCdefPath(transaction, object);
+  *makeClassOSCDefs {
+    this.makeClassOSCdef("Request", "Vertex", \tryMakeVertex);
+    this.makeClassOSCdef("Response", "Vertex", \vertexResponseHandler);
+    this.makeClassOSCdef("Request", "Proxy", \tryMakeProxy);
+    this.makeClassOSCdef("Response", "Proxy", \proxyResponseHandler);
+  }
 
-    OSCdef(name, {
+  *makeClassOSCdef {|transaction, object, method|
+    var defName = this.makeClassOSCdefName(transaction, object);
+    var defPath = this.makeClassOSCdefPath(transaction, object);
+
+    OSCdef(defName, {
       |msg, time, host, recvPort|
         msg = VertexMessage.decode(host, msg);
         this.tryPerform(method, msg);
-    }, path);
+    }, defPath);
   }
 
+  *makeClassOSCdefPath {|transaction, object|
+    ^ "/" ++ this.name ++ "/" ++ transaction ++ "/" ++ object
+  }
+
+  *makeClassOSCdefName {|transaction, object|
+    ^ (this.asSymbol ++ transaction ++ object).asSymbol
+  }
+
+
   makeInstanceOSCdef {|transaction, object, method|
-    var defName = (name ++ transaction ++ object).asSymbol;
-    var defPath = "/" ++ name ++ "/" ++ transaction ++ "/" ++ object;
+    var defName = this.makeInstanceOSCdefName(transaction, object);
+    var defPath = this.makeInstanceOSCdefPath(transaction, object);
 
     OSCdef(defName, {
       |msg, time, host, recvPort|
@@ -28,19 +44,12 @@ VertexAbstract {
     }, defPath);
   }
 
-  *makeAbstractOSCDefs {
-    this.makeAbstractOSCdef("Request", "Vertex", \tryMakeVertex);
-    this.makeAbstractOSCdef("Response", "Vertex", \vertexResponseHandler);
-    this.makeAbstractOSCdef("Request", "Proxy", \tryMakeProxy);
-    this.makeAbstractOSCdef("Response", "Proxy", \proxyResponseHandler);
+  makeInstanceOSCdefPath {|transaction, object|
+    ^ "/" ++ name ++ "/" ++ transaction ++ "/" ++ object
   }
 
-  *makeOSCdefPath {|transaction, object|
-    ^ "/" ++ this.name ++ "/" ++ transaction ++ "/" ++ object
-  }
-
-  *makeOSCdefName {|transaction, object|
-    ^ (this.asSymbol ++ transaction ++ object).asSymbol
+  makeInstanceOSCdefName {|transaction, object|
+    ^ (name ++ transaction ++ object).asSymbol
   }
 
   *tryMakeVertex { |msg|
@@ -104,22 +113,22 @@ VertexAbstract {
 
   *sendError { |msg, error|
     var errorString = error.errorString;
-    var path = this.makeOSCdefPath("Response", "Vertex");
+    var path = this.makeClassOSCdefPath("Response", "Vertex");
     msg.sendError(path, errorString)
   }
 
   *sendConfirmation{ |msg|
-    var path = this.makeOSCdefPath("Response", "Vertex");
+    var path = this.makeClassOSCdefPath("Response", "Vertex");
     msg.sendConfirmation(path);
   }
 
   *sendProxyRequest{ |msg|
-      var path = this.makeOSCdefPath("Request", "Proxy");
+      var path = this.makeClassOSCdefPath("Request", "Proxy");
       msg.sendProxyRequest(path);
   }
 
   *sendProxyConfirmation{ |msg|
-      var path = this.makeOSCdefPath("Response", "Proxy");
+      var path = this.makeClassOSCdefPath("Response", "Proxy");
       msg.sendProxyResponse(path);
   }
 

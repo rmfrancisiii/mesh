@@ -1,7 +1,9 @@
 Vertex.test;
-Vertex(\server1).boot;
+Vertex(\server1).boot(\test1, \test2, \test3);
 Vertex(\server1).host.postln;
 Vertex(\server1).boot.class;
+
+Mesh.thisHost.sendMsg(("/" ++ name ++ "/Boot/Server"), \bootServer)
 
 OSCdef.all;
 

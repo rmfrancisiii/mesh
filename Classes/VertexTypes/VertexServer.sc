@@ -2,7 +2,7 @@ VertexServer : VertexAbstract {
 	var <>server, <>host, <>isRunning;
 
 	*makeOSCDefs {
-		this.makeAbstractOSCDefs;
+		this.makeClassOSCDefs;
 	}
 
 	initVertex{|msg|
@@ -19,13 +19,13 @@ VertexServer : VertexAbstract {
 
 	makeInstanceInterface{|transaction, object, method|
 				this.makeInstanceOSCdef(transaction, object, method);
-				this.makeInstanceMethod;
+				this.makeInstanceMethod(transaction, object, method);
 	}
 
-	makeInstanceMethod{
-		this.addUniqueMethod(\boot, {
-				var path = ("/" ++ name ++ "/Boot/Server");
-				host.sendMsg(path, \bootHandler) });
+	makeInstanceMethod{|transaction, object, method|
+		this.addUniqueMethod(\boot, {|...args|
+				var path = ("/" ++ name ++ "/" ++ transaction ++ "/" ++ object);
+				host.sendMsg(path, *args) });
 	}
 
 	initProxy {|msg|
