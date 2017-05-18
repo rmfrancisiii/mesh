@@ -18,22 +18,14 @@ VertexServer : VertexAbstract {
 		this.makeInstanceInterface("kill", "server", \killHandler);
 	}
 
-	makeInstanceInterface{|transaction, object, method|
-				this.makeInstanceOSCdef(transaction, object, method);
-				this.makeInstanceMethod(transaction, object, method);
-	}
-
-	makeInstanceMethod{|transaction, object, method|
-		var methodName = transaction.asSymbol;
-		this.addUniqueMethod(methodName, {|...args|
-				var path = ("/" ++ name ++ "/" ++ transaction ++ "/" ++ object);
-				host.sendMsg(path, *args) });
-	}
-
 	initProxy {|msg|
 		this.setInstanceVars(msg);
 		isProxy = true;
 		server = Server.remote(name, host);
+	}
+
+	getVertexHost {
+		^ host;
 	}
 
 	setInstanceVars {|msg|
@@ -47,16 +39,20 @@ VertexServer : VertexAbstract {
 		server.options.maxLogins_(8);
 	}
 
-	bootHandler{ |msg|
+	bootHandler{ |requestingHost, msg|
 		// main thread
+		requestingHost.postln;
 		"Booting".postln;
 		msg.postln;
+		server.boot;
 	}
 
-	killHandler{ |msg|
+	killHandler{ |requestingHost, msg|
 		// main thread
+		requestingHost.postln;
 		"Killing".postln;
 		msg.postln;
+		server.quit;
 	}
 
 
