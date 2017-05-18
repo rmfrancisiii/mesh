@@ -7,7 +7,7 @@ VertexAbstract {
     msg.sendRequest;
   }
 
-  *makeOSCdef {|transaction, object, method|
+  *makeAbstractOSCdef {|transaction, object, method|
     var name = this.makeOSCdefName(transaction, object);
     var path = this.makeOSCdefPath(transaction, object);
 
@@ -18,11 +18,21 @@ VertexAbstract {
     }, path);
   }
 
+  makeInstanceOSCdef {|transaction, object, method|
+    var defName = (name ++ transaction ++ object).asSymbol;
+    var defPath = "/" ++ name ++ "/" ++ transaction ++ "/" ++ object;
+
+    OSCdef(defName, {
+      |msg, time, host, recvPort|
+        this.tryPerform(method, msg);
+    }, defPath);
+  }
+
   *makeAbstractOSCDefs {
-    this.makeOSCdef("Request", "Vertex", \tryMakeVertex);
-    this.makeOSCdef("Response", "Vertex", \vertexResponseHandler);
-    this.makeOSCdef("Request", "Proxy", \tryMakeProxy);
-    this.makeOSCdef("Response", "Proxy", \proxyResponseHandler);
+    this.makeAbstractOSCdef("Request", "Vertex", \tryMakeVertex);
+    this.makeAbstractOSCdef("Response", "Vertex", \vertexResponseHandler);
+    this.makeAbstractOSCdef("Request", "Proxy", \tryMakeProxy);
+    this.makeAbstractOSCdef("Response", "Proxy", \proxyResponseHandler);
   }
 
   *makeOSCdefPath {|transaction, object|

@@ -6,19 +6,15 @@ VertexServer : VertexAbstract {
 	}
 
 	initVertex{|msg|
-		this.makeOSCdefs;
 		this.setInstanceVars(msg);
 		isProxy = false;
 		server = Server.local;
 		this.setServerOptions(msg.args);
+		this.makeInstanceOSCdefs;
 	}
 
-	makeOSCdefs{
-		OSCdef(\VertexServerBootServer, {
-			|msg, time, msghost, recvPort|
-			this.bootHandler(msg);
-		}, "/VertexServer/Boot/Server");
-
+	makeInstanceOSCdefs{
+		this.makeInstanceOSCdef("Boot", "Server", \bootHandler);
 	}
 
 	initProxy {|msg|
@@ -39,8 +35,9 @@ VertexServer : VertexAbstract {
 	}
 
 	boot {
-		// interface
-		this.host.sendMsg("/VertexServer/Boot/Server", \bootServer)
+	// interface
+		var path = ("/" ++ name ++ "/Boot/Server");
+		host.sendMsg(path, \bootHandler)
 	}
 
 	bootHandler{ |msg|
