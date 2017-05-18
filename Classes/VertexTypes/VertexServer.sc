@@ -10,11 +10,22 @@ VertexServer : VertexAbstract {
 		isProxy = false;
 		server = Server.local;
 		this.setServerOptions(msg.args);
-		this.makeInstanceOSCdefs;
+		this.makeInstanceInterfaces;
 	}
 
-	makeInstanceOSCdefs{
-		this.makeInstanceOSCdef("Boot", "Server", \bootHandler);
+	makeInstanceInterfaces{
+		this.makeInstanceInterface("Boot", "Server", \bootHandler);
+	}
+
+	makeInstanceInterface{|transaction, object, method|
+				this.makeInstanceOSCdef(transaction, object, method);
+				this.makeInstanceMethod;
+	}
+
+	makeInstanceMethod{
+		this.addUniqueMethod(\boot, {
+				var path = ("/" ++ name ++ "/Boot/Server");
+				host.sendMsg(path, \bootHandler) });
 	}
 
 	initProxy {|msg|
@@ -34,16 +45,12 @@ VertexServer : VertexAbstract {
 		server.options.maxLogins_(8);
 	}
 
-	boot {
-	// interface
-		var path = ("/" ++ name ++ "/Boot/Server");
-		host.sendMsg(path, \bootHandler)
-	}
-
 	bootHandler{ |msg|
 		// main thread
 		"Booting".postln;
 		msg.postln;
 	}
+
+
 
 }
