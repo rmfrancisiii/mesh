@@ -45,7 +45,8 @@ VertexAbstract {
 		this.addUniqueMethod(methodName, {|...args|
 				var path = ("/" ++ name ++ "/" ++ interfaceDef.transaction ++ "/" ++ interfaceDef.object);
         var vertexHost = this.getVertexHost;
-        var msg = VertexMessage.newRequest(path, name, this.class, vertexHost, Mesh.current.name);
+        var msg = VertexMessage.newRequest(path, name, this.class.asSymbol, vertexHost, Mesh.current.name);
+        msg.args_(args);
         msg.sendRequest;
       })
 	}
@@ -58,7 +59,10 @@ VertexAbstract {
 
     OSCdef(defName, {
       |msg, time, host, recvPort|
+      "RESPONDER".postln;
       msg.postln;
+      msg.asArray.postln;
+
         //this.tryPerform(interfaceDef.method, host, msg);
     }, defPath);
   }
