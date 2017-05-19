@@ -40,7 +40,6 @@ VertexAbstract {
 	}
 
 	makeInstanceMethod{|interfaceDef|
-    // Encode MSG into VertexMessage
 		var methodName = interfaceDef.transaction.asSymbol;
 		this.addUniqueMethod(methodName, {|...args|
 				var path = ("/" ++ name ++ "/" ++ interfaceDef.transaction ++ "/" ++ interfaceDef.object);
@@ -52,14 +51,11 @@ VertexAbstract {
 	}
 
   makeInstanceOSCdef {|interfaceDef|
-
-    // Decode MSG from VertexMessage
     var defName = this.makeInstanceOSCdefName(interfaceDef);
     var defPath = this.makeInstanceOSCdefPath(interfaceDef);
 
     OSCdef(defName, {
       |msg, time, host, recvPort|
-
       msg = VertexMessage.decode(host, msg);
       this.tryPerform(interfaceDef.method, host, msg.args);
     }, defPath);

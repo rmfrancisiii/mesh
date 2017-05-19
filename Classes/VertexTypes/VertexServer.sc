@@ -40,18 +40,12 @@ VertexServer : VertexAbstract {
 	}
 
 	bootHandler{ |requestingHost, msg|
-		// main thread
-		requestingHost.postln;
 		"Booting".postln;
-		msg.postln;
 		server.boot;
 	}
 
 	killHandler{ |requestingHost, msg|
-		// main thread
-		requestingHost.postln;
 		"Killing".postln;
-		msg.postln;
 		server.quit;
 	}
 

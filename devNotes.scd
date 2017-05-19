@@ -1,5 +1,23 @@
 Vertex.test;
 Vertex(\server1).boot(\test1, \test2, \test3);
+
+(
+SynthDef("grain", {
+	    Out.ar(0, Line.kr(0.1, 0, 0.01, doneAction:2) * FSinOsc.ar([400,1000]))
+}).send(Vertex(\server1).server);
+)
+
+(
+Routine({
+    20.do({
+		        (Vertex(\server1).server).sendMsg("/s_new", "grain", -1);
+        0.01.wait;
+    })
+}).play;
+)
+
+
+Vertex(\server1).kill(\test1, \test2, \test3);
 Vertex(\server1).host.postln;
 Vertex(\server1).boot.class;
 
@@ -8,6 +26,20 @@ Mesh.thisHost.sendMsg(("/" ++ name ++ "/Boot/Server"), \bootServer)
 OSCdef.all;
 
 UnitTest.gui;
+
+Pbind(\freq, Prand([300, 500, 231.2, 399.2], inf), \dur, 0.1).play;
+Pbind(\freq, Prand([300, 500, 231.2, 399.2], inf), \dur, Prand([0.1, 0.3], inf)).play;
+
+
+n = Synth(\default, [\freq, 850]);
+n.set(\freq, 500)
+n.free;
+
+Vertex(\server1).boot(\test1, \test2, \test3);
+
+
+
+
 
 Mesh(\mesh1).vertexes.postln;
 Vertex(\server1).server.options.maxLogins.postln;
