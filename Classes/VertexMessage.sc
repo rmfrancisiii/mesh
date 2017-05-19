@@ -1,16 +1,12 @@
 VertexMessage {
-  var <>path, <>name, <>type, <>vertexHost, <>requestingHost, <>mesh, <>args;
+  var <>path, <>name, <>type, <>vertexHost, <>requestingHost, <>mesh, <>methodName, <>args;
 
-// maybe convert this to a NamedList, send key->value pairs in message? slightly? more network overhead but easier to manage named arguments?
-
-// do we need a dedicated instance Variable for method to execute?
-
-  *newRequest {|path, name, type, host, mesh, args|
-    ^ super.newCopyArgs(path, name, type, host, Mesh.thisHost, Mesh(mesh), args)
+  *newRequest {|path, name, type, host, mesh, methodName, args|
+    ^ super.newCopyArgs(path, name, type, host, Mesh.thisHost, Mesh(mesh), methodName, args)
   }
 
   *decode {|host, msg|
-    ^  super.newCopyArgs(msg[0], msg[1], msg[2], Mesh(msg[5])[msg[3]], Mesh(msg[5])[msg[4]], Mesh(msg[5]), msg[6..])
+    ^  super.newCopyArgs(msg[0], msg[1], msg[2], Mesh(msg[5])[msg[3]], Mesh(msg[5])[msg[4]], Mesh(msg[5]), msg[6], msg[7..])
   }
 
   sendRequest {
@@ -40,7 +36,7 @@ VertexMessage {
   }
 
   asVertexRequest {
-    ^ Array.with(path, name, type, vertexHost.name, requestingHost.name,  mesh.name, *args)
+    ^ Array.with(path, name, type, vertexHost.name, requestingHost.name,  mesh.name, methodName, *args)
   }
 
   asErrorResponse{|responsePath, error|
