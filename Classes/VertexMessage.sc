@@ -59,7 +59,7 @@ VertexMessage {
     ^ Array.with(path, name, type, vertexHost, requestingHost,  mesh, *args)
   }
 
-  printOn { |stream| stream << this.class.name << "(" << this.asObjectArray << ")" }
+  printOn { |stream| stream << this.class.name << "(" << this.asArray << ")" }
 
 
 }

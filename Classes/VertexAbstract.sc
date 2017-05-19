@@ -14,7 +14,7 @@ VertexAbstract {
     this.makeClassOSCdef("Response", "Proxy", \proxyResponseHandler);
   }
 
-  *makeClassOSCdef {|transaction, object, method|
+  *makeClassOSCdef { |transaction, object, method|
     var defName = this.makeClassOSCdefName(transaction, object);
     var defPath = this.makeClassOSCdefPath(transaction, object);
 
@@ -25,31 +25,29 @@ VertexAbstract {
     }, defPath);
   }
 
-// interfaceDef
-  *makeClassOSCdefPath {|transaction, object|
+  *makeClassOSCdefPath { |transaction, object|
     ^ "/" ++ this.name ++ "/" ++ transaction ++ "/" ++ object
   }
 
-  // interfaceDef
-  *makeClassOSCdefName {|transaction, object|
+  *makeClassOSCdefName { |transaction, object|
     ^ (this.asSymbol ++ transaction ++ object).asSymbol
   }
 
-  // interfaceDef
-  makeInstanceInterface{|transaction, object, method|
+  makeInstanceInterface { |transaction, object, method|
     var interfaceDef = InterfaceDef(transaction, object, method);
 		this.makeInstanceOSCdef(interfaceDef);
 		this.makeInstanceMethod(interfaceDef);
 	}
 
-  // interfaceDef
 	makeInstanceMethod{|interfaceDef|
     // Encode MSG into VertexMessage
 		var methodName = interfaceDef.transaction.asSymbol;
 		this.addUniqueMethod(methodName, {|...args|
 				var path = ("/" ++ name ++ "/" ++ interfaceDef.transaction ++ "/" ++ interfaceDef.object);
         var vertexHost = this.getVertexHost;
-				vertexHost.sendMsg(path, *args) });
+        var msg = VertexMessage.newRequest(path, name, this.class, vertexHost, Mesh.current.name);
+        msg.sendRequest;
+      })
 	}
 
   makeInstanceOSCdef {|interfaceDef|
@@ -60,7 +58,8 @@ VertexAbstract {
 
     OSCdef(defName, {
       |msg, time, host, recvPort|
-        this.tryPerform(interfaceDef.method, host, msg);
+      msg.postln;
+        //this.tryPerform(interfaceDef.method, host, msg);
     }, defPath);
   }
 
