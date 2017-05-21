@@ -1,6 +1,15 @@
 VertexAbstract {
   var <>name, <>mesh, <>isProxy;
 
+  *makeGenericClassInterface {
+    var interfaces = Array.with(
+    ["Request", "Vertex", \tryMakeVertex],
+    ["Response", "Vertex", \vertexResponseHandler],
+    ["Request", "Proxy", \tryMakeProxy],
+    ["Response", "Proxy", \proxyResponseHandler]
+    ).do({|args|  VertexTypeClassInterface.new(this, *args)});
+  }
+
   *requestor { |vertexName, vertexType, vertexHost, meshName...args|
     var path = this.makeClassOSCdefPath("Request", "Vertex");
     var msg = VertexMessage.newRequest(path, vertexName, vertexType, vertexHost, meshName, \new, args);
@@ -91,83 +100,8 @@ VertexAbstract {
     ^ (msg.mesh).includesVertex(msg.name)
   }
 
-
-
-
-
-
-
-
-  // into VertexTypeInstanceInterface
-
-  makeInstanceInterface { |transaction, object, method|
-    var interfaceDef = InterfaceDef(transaction, object, method);
-		this.makeInstanceOSCdef(interfaceDef);
-		this.makeInstanceMethod(interfaceDef);
-	}
-
-	makeInstanceMethod{|interfaceDef|
-		var methodName = interfaceDef.transaction.asSymbol;
-		this.addUniqueMethod(methodName, {|...args|
-				var path = ("/" ++ name ++ "/" ++ interfaceDef.transaction ++ "/" ++ interfaceDef.object);
-        var vertexHost = this.getVertexHost;
-        var msg = VertexMessage.newRequest(path, name, this.class.asSymbol, vertexHost, mesh.name, methodName);
-        msg.args_(args);
-        msg.sendRequest;
-      })
-	}
-
-  makeInstanceOSCdef {|interfaceDef|
-    var defName = this.makeInstanceOSCdefName(interfaceDef);
-    var defPath = this.makeInstanceOSCdefPath(interfaceDef);
-
-    OSCdef(defName, {
-      |msg, time, host, recvPort|
-      msg = VertexMessage.decode(host, msg);
-      this.tryPerform(interfaceDef.method, host, msg.args);
-    }, defPath);
+  *makeClassOSCdefPath {|transaction, object|
+    ^ "/" ++ this.name ++ "/" ++ transaction ++ "/" ++ object
   }
 
-  makeInstanceOSCdefPath {|interfaceDef|
-    ^ "/" ++ name ++ "/" ++ interfaceDef.transaction ++ "/" ++ interfaceDef.object
-  }
-
-  makeInstanceOSCdefName {|interfaceDef|
-    ^ (name ++ interfaceDef.transaction ++ interfaceDef.object).asSymbol
-  }
-
-
-
-
-
-
-
-
-
-  // into VertexTypeClassInterface
-    *makeClassOSCDefs {
-      this.makeClassOSCdef("Request", "Vertex", \tryMakeVertex);
-      this.makeClassOSCdef("Response", "Vertex", \vertexResponseHandler);
-      this.makeClassOSCdef("Request", "Proxy", \tryMakeProxy);
-      this.makeClassOSCdef("Response", "Proxy", \proxyResponseHandler);
-    }
-
-    *makeClassOSCdef { |transaction, object, method|
-      var defName = this.makeClassOSCdefName(transaction, object);
-      var defPath = this.makeClassOSCdefPath(transaction, object);
-
-      OSCdef(defName, {
-        |msg, time, host, recvPort|
-          msg = VertexMessage.decode(host, msg);
-          this.tryPerform(method, msg);
-      }, defPath);
-    }
-
-    *makeClassOSCdefPath { |transaction, object|
-      ^ "/" ++ this.name ++ "/" ++ transaction ++ "/" ++ object
-    }
-
-    *makeClassOSCdefName { |transaction, object|
-      ^ (this.asSymbol ++ transaction ++ object).asSymbol
-    }
 }

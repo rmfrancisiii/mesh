@@ -23,7 +23,7 @@ Vertex {
 	}
 
 	*initTypeOSCdefs{
-		vertexTypeDict.keysValuesDo({|key, value| value.tryPerform(\makeOSCDefs)
+		vertexTypeDict.keysValuesDo({|key, value| value.tryPerform(\makeClassInterface)
 		})
 	}
 

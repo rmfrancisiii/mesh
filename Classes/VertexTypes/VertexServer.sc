@@ -1,8 +1,8 @@
 VertexServer : VertexAbstract {
 	var <>server, <>host, <>isRunning;
 
-	*makeOSCDefs {
-		this.makeClassOSCDefs;
+	*makeClassInterface {
+		this.makeGenericClassInterface;
 	}
 
 	initVertex{|msg|
@@ -14,8 +14,10 @@ VertexServer : VertexAbstract {
 	}
 
 	makeInstanceInterfaces{
-		this.makeInstanceInterface("boot", "server", \bootHandler);
-		this.makeInstanceInterface("kill", "server", \killHandler);
+		var interfaces = Array.with(
+    ["boot", "server", \bootHandler],
+    ["kill", "server", \killHandler],
+    ).do({|args|  VertexTypeInstanceInterface.new(this, *args)});
 	}
 
 	initProxy {|msg|
