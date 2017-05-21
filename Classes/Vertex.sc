@@ -34,7 +34,9 @@ Vertex {
 		vertexType = vertexTypeDict[vertexType];
 
 		if (vertex == List.new)
-			{ vertexType.requestor( vertexName, vertexType.name, vertexHost, mesh.name, *passArgs) }
+			{	vertexType.requestor( vertexName, vertexType.name, vertexHost, mesh.name, *passArgs) 
+			}
+
 		^ vertex
 	}
 

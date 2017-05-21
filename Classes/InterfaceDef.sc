@@ -1,29 +1,18 @@
 VertexTypeClassInterface {
-
   var <>vertexType, <>transaction, <>object, <>method, <>oscDefName, <>oscDefpath;
 
-    *new { |vertexType, transaction, object, method|
+  *new { |vertexType, transaction, object, method|
     var oscDefName = (vertexType.asSymbol ++ transaction ++ object).asSymbol;
     var oscDefPath = "/" ++ vertexType.name ++ "/" ++ transaction ++ "/" ++ object;
+    ^ super.newCopyArgs(vertexType, transaction, object, method, oscDefName, oscDefPath).init;
+  }
 
-    "Transaction:  ".post; transaction.postln;
-    "object:  ".post; object.postln;
-    "method:  ".post; method.postln;
-    "Type:  ".post; vertexType.postln;
-
-
-    oscDefPath.postln;
-    oscDefName.postln;
-
-      ^ super.newCopyArgs(transaction, object, method, vertexType, oscDefName, oscDefPath).init;
-    }
-
-    init{
-      OSCdef(oscDefName, {|msg, time, host, recvPort|
-         msg = VertexMessage.decode(host, msg);
-         vertexType.tryPerform(method, msg);
-      }, oscDefpath);
-    }
+  init{
+    OSCdef(oscDefName, {|msg, time, host, recvPort|
+       msg = VertexMessage.decode(host, msg);
+       vertexType.tryPerform(method, msg);
+    }, oscDefpath);
+  }
 }
 
 VertexTypeInstanceInterface {
@@ -49,7 +38,7 @@ VertexTypeInstanceInterface {
 
   }
 
-	makeInstanceMethod{|def|
+	makeInstanceMethod{
 		var methodName = transaction.asSymbol;
 		this.addUniqueMethod(methodName,
       {|...args|

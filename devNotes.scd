@@ -1,4 +1,6 @@
 Vertex.test;
+Mesh.at(\mesh1).vertexes.postln;
+
 Vertex(\server1).boot(\test1, \test2, \test3);
 
 (
@@ -75,7 +77,6 @@ Mesh(\mesh1).push;
 Vertex(\server2, \server, \rose, \mesh1, \arg1, \arg2, \arg3);
 Vertex(\server3, \server, \river, \mesh1, \arg1, \arg2, \arg3);
 
-Mesh.at(\mesh1).vertexes.postln;
 Vertex(\server2).host.postln;
 Vertex(\server3).host.postln;
 
