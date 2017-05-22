@@ -15,8 +15,6 @@ VertexServer : VertexAbstract {
 
 	makeInstanceInterfaces{
 		var interfaces = Array.with(
-
-
     ["boot", "server", \bootHandler],
     ["kill", "server", \killHandler],
     ).do({|args|
@@ -47,11 +45,17 @@ VertexServer : VertexAbstract {
 	bootHandler{ |requestingHost, msg|
 		"Booting".postln;
 		server.boot;
+		//when booted:
+		// set isRunning to true
+		// send proxy update request (isRunning = true)
 	}
 
 	killHandler{ |requestingHost, msg|
 		"Killing".postln;
 		server.quit;
+		//when killed:
+		// set isRunning to false
+		// send proxy update request (isRunning = false)
 	}
 
 

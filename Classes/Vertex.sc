@@ -2,29 +2,7 @@ Vertex {
 	classvar <vertexTypeDict;
 
 	*initVertexTypes { // called by Mesh.initClass
-		vertexTypeDict = this.collectVertexTypes;
-		this.initTypeOSCdefs;
-	}
-
-	*collectVertexTypes{
-		var allTypes = VertexAbstract.subclasses;
-		var dict = allTypes.collectAs(
-				{ |vertexType|
-					var key = this.trimClassName(vertexType.name);
-		 			key -> vertexType },
-				IdentityDictionary);
-		^ dict;
-	}
-
-	*trimClassName{ |key|
-		key = key.asString.drop(6);
-		key[0] = key.first.toLower;
-		^ key.asSymbol;
-	}
-
-	*initTypeOSCdefs{
-		vertexTypeDict.keysValuesDo({|key, value| value.tryPerform(\makeClassInterface)
-		})
+		vertexTypeDict = VertexTypeDict.new;
 	}
 
 	*new {| vertexName, vertexType, vertexHost, meshName ...passArgs|
@@ -34,7 +12,7 @@ Vertex {
 		vertexType = vertexTypeDict[vertexType];
 
 		if (vertex == List.new)
-			{	vertexType.requestor( vertexName, vertexType.name, vertexHost, mesh.name, *passArgs) 
+			{	vertexType.requestor( vertexName, vertexType.name, vertexHost, mesh.name, *passArgs)
 			}
 
 		^ vertex

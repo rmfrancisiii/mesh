@@ -24,7 +24,6 @@ VertexTypeInstanceInterface {
   }
 
   init {
-
     name = (vertex.name ++ transaction ++ object).asSymbol;
     path = "/" ++ vertex.name ++ "/" ++ transaction ++ "/" ++ object;
 
