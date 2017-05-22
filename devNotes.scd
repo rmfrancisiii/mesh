@@ -1,7 +1,8 @@
 Vertex.test;
-Mesh.at(\mesh1).vertexes.postln;
 
 Vertex(\server1).boot(\test1, \test2, \test3);
+Mesh.at(\mesh1).vertexes.postln;
+
 
 (
 SynthDef("grain", {
@@ -26,6 +27,8 @@ Vertex(\server1).boot.class;
 Mesh.thisHost.sendMsg(("/" ++ name ++ "/Boot/Server"), \bootServer)
 
 OSCdef.all;
+VertexServer.methods.do({|args| args.name.postln});
+
 
 UnitTest.gui;
 

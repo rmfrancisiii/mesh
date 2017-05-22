@@ -15,9 +15,12 @@ VertexServer : VertexAbstract {
 
 	makeInstanceInterfaces{
 		var interfaces = Array.with(
+
+
     ["boot", "server", \bootHandler],
     ["kill", "server", \killHandler],
-    ).do({|args|  VertexTypeInstanceInterface.new(this, *args)});
+    ).do({|args|
+			VertexTypeInstanceInterface.new(this, *args)});
 	}
 
 	initProxy {|msg|

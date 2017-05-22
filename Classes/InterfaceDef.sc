@@ -40,7 +40,7 @@ VertexTypeInstanceInterface {
 
 	makeInstanceMethod{
 		var methodName = transaction.asSymbol;
-		this.addUniqueMethod(methodName,
+		vertex.addUniqueMethod(methodName,
       {|...args|
         var vertexHost = vertex.getVertexHost;
         var msg = VertexMessage.newRequest(path, name, vertex.class.asSymbol, vertexHost, vertex.mesh.name, methodName);
