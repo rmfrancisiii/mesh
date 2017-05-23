@@ -2,6 +2,7 @@ VertexServer : VertexAbstract {
 	var <>server, <>host, <>isRunning;
 
 	*makeClassInterface {
+		// add any unique class Interface objects here
 		this.makeGenericClassInterface;
 	}
 

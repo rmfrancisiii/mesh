@@ -2,6 +2,7 @@ VertexAbstract {
   var <>name, <>mesh, <>isProxy;
 
   *makeGenericClassInterface {
+    //each VertexType class interface 
     var interfaces = Array.with(
     ["Request", "Vertex", \tryMakeVertex],
     ["Response", "Vertex", \vertexResponseHandler],
