@@ -22,7 +22,7 @@ Routine({
 
 Vertex(\server1).kill(\test1, \test2, \test3);
 Vertex(\server1).host.postln;
-Vertex(\server1).boot.class;
+Vertex(\server1).class;
 
 Mesh.thisHost.sendMsg(("/" ++ name ++ "/Boot/Server"), \bootServer)
 
