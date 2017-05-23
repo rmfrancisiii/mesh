@@ -1,16 +1,6 @@
 VertexAbstract {
   var <>name, <>mesh, <>isProxy;
 
-  *makeGenericClassInterface {
-    //each VertexType class interface 
-    var interfaces = Array.with(
-    ["Request", "Vertex", \tryMakeVertex],
-    ["Response", "Vertex", \vertexResponseHandler],
-    ["Request", "Proxy", \tryMakeProxy],
-    ["Response", "Proxy", \proxyResponseHandler]
-    ).do({|args|  VertexTypeClassInterface.new(this, *args)});
-  }
-
   *requestor { |vertexName, vertexType, vertexHost, meshName...args|
     var path = this.makeClassOSCdefPath("Request", "Vertex");
     var msg = VertexMessage.newRequest(path, vertexName, vertexType, vertexHost, meshName, \new, args);

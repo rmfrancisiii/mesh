@@ -1,6 +1,16 @@
 VertexTypeClassInterface {
   var <>vertexType, <>transaction, <>object, <>method, <>oscDefName, <>oscDefpath;
 
+  *makeGenericClassInterfaces {|vertexType|
+    //each VertexType class interface
+    var interfaces = Array.with(
+    ["Request", "Vertex", \tryMakeVertex],
+    ["Response", "Vertex", \vertexResponseHandler],
+    ["Request", "Proxy", \tryMakeProxy],
+    ["Response", "Proxy", \proxyResponseHandler]
+    ).do({|args|  this.new(vertexType, *args)});
+  }
+
   *new { |vertexType, transaction, object, method|
     var oscDefName = (vertexType.asSymbol ++ transaction ++ object).asSymbol;
     var oscDefPath = "/" ++ vertexType.name ++ "/" ++ transaction ++ "/" ++ object;
