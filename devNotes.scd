@@ -1,8 +1,15 @@
-Vertex.test;
+// TODO: go over the addressing and osc messaging components
+// particularly calling methods on remote objects.
 
-Vertex(\server1).boot(\test1, \test2, \test3);
+
+Vertex.test;
+Vertex(\pattern1, \pattern);
 Mesh.at(\mesh1).vertexes.postln;
 
+Vertex(\server1).boot(\test1, \test2, \test3);
+
+
+Vertex.vertexTypeDict.postln;
 
 (
 SynthDef("grain", {
@@ -18,6 +25,15 @@ Routine({
     })
 }).play;
 )
+
+
+(
+p = Pbind(
+    \midinote, Pseq([60, 72, 71, 67, 69, 71, 72, 60, 69, 67], 1),
+    \dur, Pseq([2, 2, 1, 0.5, 0.5, 1, 1, 2, 2, 3], 1)
+).play;
+)
+
 
 
 Vertex(\server1).kill(\test1, \test2, \test3);

@@ -5,15 +5,14 @@ Vertex {
 		vertexTypeDict = VertexTypeDict.new;
 	}
 
-	*new {| vertexName, vertexType, vertexHost, meshName ...passArgs|
+	*new {| vertexName, vertexTypeName, vertexHostName, meshName ...passArgs|
 		var mesh = this.getMesh(meshName); // add TRY
 		var vertex = this.getVertex(vertexName, mesh);
-		vertexHost = mesh[vertexHost];
-		vertexType = vertexTypeDict[vertexType];
+		var vertexHost = mesh[vertexHostName];
+		var vertexType = vertexTypeDict[vertexTypeName];
 
 		if (vertex == List.new)
-			{	vertexType.requestor( vertexName, vertexType.name, vertexHost, mesh.name, *passArgs)
-			}
+			{	vertexType.requestor( vertexName, vertexType.name, vertexHost, mesh.name, *passArgs )};
 
 		^ vertex
 	}
@@ -26,7 +25,7 @@ Vertex {
 
 	*currentMesh {
 		if (Mesh.hasCurrent)
-				{^ Mesh.current};
+				{	^ Mesh.current};
 		"nil Mesh".error; ^ Error;
 	}
 

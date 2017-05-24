@@ -20,8 +20,11 @@ TestVertex : UnitTest {
 			{"Resetting broadcast address. local loopback testing only!".warn;
 				Mesh.broadcastAddr = MeshHostAddr("127.0.0.1", 57120 + (0..7))};
 		this.makeVertex(\server1, \server, hostName);
-		2.yield;
+		1.yield;
 		this.vertexExists(mesh, \server1);
+		1.yield;
+		Vertex(\server1).boot(\test1, \test2, \test3);
+
 		}).play
 	}
 

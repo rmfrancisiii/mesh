@@ -1,8 +1,9 @@
 VertexMessage {
   var <>path, <>name, <>type, <>vertexHost, <>requestingHost, <>mesh, <>methodName, <>args;
 
-  *newRequest {|path, name, type, host, mesh, methodName, args|
-    ^ super.newCopyArgs(path, name, type, host, Mesh.thisHost, Mesh(mesh), methodName, args)
+  *newRequest {|name, type, host, mesh, args|
+    var path = "/" ++ type ++ "/Request/Vertex";
+    ^ super.newCopyArgs(path, name, type, host, Mesh.thisHost, Mesh(mesh), \new, args)
   }
 
   *decode {|host, msg|

@@ -1,10 +1,8 @@
 VertexAbstract {
   var <>name, <>mesh, <>isProxy;
 
-  *requestor { |vertexName, vertexType, vertexHost, meshName...args|
-    var path = this.makeClassOSCdefPath("Request", "Vertex");
-    var msg = VertexMessage.newRequest(path, vertexName, vertexType, vertexHost, meshName, \new, args);
-    msg.sendRequest;
+  *requestor { |...args|
+    VertexMessage.newRequest(*args).sendRequest;
   }
 
   *tryMakeVertex { |msg|
