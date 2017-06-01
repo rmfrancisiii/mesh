@@ -1,8 +1,28 @@
 // TODO: go over the addressing and osc messaging components
 // particularly calling methods on remote objects.
 
+Mesh(\mesh1).push;
+
+
+Mesh.broadcastAddr = MeshHostAddr("127.0.0.1", 57120 + (0..7))
+
+Vertex(\server1, \server);
+
+Vertex(\server1).postln;
+Mesh(\mesh1).vertexes.at(\server1).postln;
+
 
 Vertex.test;
+Vertex(\server1).boot;
+
+VertexServer.methods.do({|args| args.name.postln});
+Vertex(\server1).class.methods.do({|args| args.name.postln});
+Vertex(\server1).methods.do({|args| args.name.postln});
+
+OSCdef.all.keys.postln;
+OSCdef.all
+Mesh.all.postln;
+
 Vertex(\pattern1, \pattern);
 Mesh.at(\mesh1).vertexes.postln;
 

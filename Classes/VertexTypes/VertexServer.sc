@@ -19,6 +19,7 @@ VertexServer : VertexAbstract {
     ["kill", "server", \killHandler],
     ).do({|args|
 			VertexTypeInstanceInterface.new(this, *args)});
+			"instance interface initialized".postln;
 	}
 
 	initProxy {|msg|

@@ -2,7 +2,7 @@ VertexAbstract {
   var <>name, <>mesh, <>isProxy;
 
   *requestor { |...args|
-    VertexMessage.newRequest(*args).sendRequest;
+    VertexTypeClassMessage.newRequest(*args).sendRequest;
   }
 
   *tryMakeVertex { |msg|

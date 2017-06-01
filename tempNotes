@@ -1,0 +1,22 @@
+
+VertexPatternRequestProxy,
+VertexPatternResponseVertex,
+VertexPatternResponseProxy,
+VertexPatternRequestVertex
+
+TestVertex
+   TestMesh.makeMesh
+      Mesh.new
+   Mesh.push
+   .vertexInitialized
+    OSCdefs:
+      VertexServerResponseVertex,
+      VertexServerResponseProxy,
+      VertexServerRequestVertex,
+      VertexServerRequestProxy,
+
+   .setLocalBroadcastAddr
+   .makeVertex(\server1, \server, hostName)
+      Vertex.new(name, type, hostName)
+        VertexAbstract.requestor(vertexName, vertexType.name, vertexHost, mesh.name, *passArgs)
+        dsxx.newRequest (...args)

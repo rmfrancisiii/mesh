@@ -16,7 +16,7 @@ VertexTypeClassInterface {
     var oscDefPath = "/" ++ vertexType.name ++ "/" ++ transaction ++ "/" ++ object;
 
     OSCdef(oscDefName, {|msg, time, host, recvPort|
-       msg = VertexMessage.decode(host, msg);
+       msg = VertexTypeClassMessage.decode(host, msg);
        vertexType.tryPerform(method, msg);
     }, oscDefPath)
   }
@@ -33,14 +33,23 @@ VertexTypeInstanceInterface {
 
     OSCdef(name, {
       |msg, time, host, recvPort|
-      msg = VertexMessage.decode(host, msg);
+      "oscdef!!".postln;
+      msg = VertexTypeInstanceMessage.decode(host, msg);
       vertex.tryPerform(method, host, msg.args);
     }, path);
+
+    methodName.postln;
 
     vertex.addUniqueMethod(methodName,
       {|...args|
         var vertexHost = vertex.getVertexHost;
-        var msg = VertexMessage.newRequest(path, name, vertex.class.asSymbol, vertexHost, vertex.mesh.name, methodName);
+        // PROBLEM HERE!
+        var msg = VertexTypeInstanceMessage.newRequest(path, name, vertex.class.asSymbol, vertexHost, vertex.mesh.name, methodName);
+        "BOOT".postln;
+        vertexHost.postln;
+        vertex.mesh.name.postln;
+        msg.postln;
+        args.postln;
         msg.args_(args);
         msg.sendRequest;
       })

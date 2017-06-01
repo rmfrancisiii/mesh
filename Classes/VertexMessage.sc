@@ -1,4 +1,4 @@
-VertexMessage {
+VertexTypeClassMessage {
   var <>path, <>name, <>type, <>vertexHost, <>requestingHost, <>mesh, <>methodName, <>args;
 
   *newRequest {|name, type, host, mesh, args|
@@ -59,4 +59,9 @@ VertexMessage {
   printOn { |stream| stream << this.class.name << "(" << this.asArray << ")" }
 
 
+}
+
+
+VertexTypeInstanceMessage {
+  var <>path, <>name, <>type, <>vertexHost, <>requestingHost, <>mesh, <>methodName, <>args;
 }

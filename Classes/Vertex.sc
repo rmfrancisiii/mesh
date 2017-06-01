@@ -8,13 +8,19 @@ Vertex {
 	*new {| vertexName, vertexTypeName, vertexHostName, meshName ...passArgs|
 		var mesh = this.getMesh(meshName); // add TRY
 		var vertex = this.getVertex(vertexName, mesh);
-		var vertexHost = mesh[vertexHostName];
+		var vertexHost = this.getHost(vertexHostName, mesh);
 		var vertexType = vertexTypeDict[vertexTypeName];
 
 		if (vertex == List.new)
 			{	vertexType.requestor( vertexName, vertexType.name, vertexHost, mesh.name, *passArgs )};
 
 		^ vertex
+	}
+
+	*getHost{|vertexHostName, mesh|
+		if (vertexHostName.isNil)
+				{	^ Mesh.thisHost};
+		^ mesh[vertexHostName];
 	}
 
 	*getMesh{|meshName|
