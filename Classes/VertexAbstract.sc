@@ -18,7 +18,8 @@ VertexAbstract {
   *makeVertex{ |msg|
     var vertex = super.new.initVertex(msg);
     var name = msg.name;
-    var vertexes = msg.mesh.vertexes;
+    var mesh = msg.mesh;
+    var vertexes = mesh.vertexes;
     //Error("This is a basic error.").throw;
     vertexes.put(name, vertex);
     this.sendConfirmation(msg);

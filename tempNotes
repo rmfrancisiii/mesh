@@ -20,3 +20,16 @@ TestVertex
       Vertex.new(name, type, hostName)
         VertexAbstract.requestor(vertexName, vertexType.name, vertexHost, mesh.name, *passArgs)
         dsxx.newRequest (...args)
+
+
+
+
+Vertex.new (args)
+  VertexType.sendVertexRequest (args)
+    msg = VertexTypeClassMessage.newRequest(args)
+    msg.sendRequest
+
+    +oscdef+
+      msg.decode
+
+    VertexType.tryMakeVertex  
