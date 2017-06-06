@@ -5,14 +5,16 @@ Vertex {
 		vertexTypeDict = VertexTypeDict.new;
 	}
 
-	*new {| vertexName, vertexTypeName, vertexHostName, meshName ...passArgs|
-		var mesh = this.getMesh(meshName); // add TRY
-		var vertex = this.getVertex(vertexName, mesh);
-		var vertexHost = this.getHost(vertexHostName, mesh);
-		var vertexType = vertexTypeDict[vertexTypeName];
+	*new {| vertexName, vertexTypeName, vertexHostName, meshName|
+
+		var mesh = this.getMesh(mesh); // add TRY
+		var vertex = this.getVertex(vertex, mesh);
 
 		if (vertex == List.new)
-			{	vertexType.requestor( vertexName, vertexType.name, vertexHost, mesh.name, *passArgs )};
+			{	var vertexHost = this.getHost(vertexHostName, mesh);
+				var vertexType = vertexTypeDict[vertexTypeName];
+				vertexType.newVertexRequest( vertexName, vertexTypeName, vertexHostName, meshName);
+			};
 
 		^ vertex
 	}

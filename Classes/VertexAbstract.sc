@@ -1,7 +1,7 @@
 VertexAbstract {
   var <>name, <>mesh, <>isProxy;
 
-  *requestor { |...args|
+  *newVertexRequest { |...args|
     VertexTypeClassMessage.newRequest(*args).sendRequest;
   }
 

@@ -2,8 +2,8 @@ VertexTypeClassMessage {
   var <>path, <>name, <>type, <>vertexHost, <>requestingHost, <>mesh, <>methodName, <>args;
 
   *newRequest {|name, type, host, mesh, args|
-    var path = "/" ++ type ++ "/Request/Vertex";
-    ^ super.newCopyArgs(path, name, type, host, Mesh.thisHost, Mesh(mesh), \new, args)
+    var path = "/Vertex" ++ type ++ "/interface";
+    ^ super.newCopyArgs(path, name, type, Mesh(mesh)[host], Mesh.thisHost, Mesh(mesh), \new, args)
   }
 
   *decode {|host, msg|
@@ -11,57 +11,25 @@ VertexTypeClassMessage {
   }
 
   sendRequest {
-    var request = this.asVertexRequest;
-    vertexHost.sendMsg(*request)
+    var request = this.asOSCMsg;
+    MeshDebugMon(request);
+    // FIX NAME OF VertexType
+    vertexHost.sendMsg(*request);
   }
 
-  sendError { |responsePath, error|
-    var response = this.asErrorResponse(responsePath, error);
-    requestingHost.sendMsg(*response);
-  }
-
-  sendConfirmation { |responsePath|
-    var response = this.asConfirmation(responsePath);
-    requestingHost.sendMsg(*response);
-  }
-
-  sendProxyRequest {|requestPath|
-    var request = this.asProxyRequest(requestPath);
-    var broadcastAddr = Mesh.broadcastAddr;
-    broadcastAddr.sendMsg(*request)
-  }
-
-  sendProxyConfirmation { |responsePath|
-    var response = this.asConfirmation(responsePath);
-    vertexHost.sendMsg(*response);
-  }
-
-  asVertexRequest {
+  asOSCMsg {
     ^ Array.with(path, name, type, vertexHost.name, requestingHost.name,  mesh.name, methodName, *args)
   }
 
-  asErrorResponse{|responsePath, error|
-    ^ Array.with(responsePath, name, type, vertexHost.name, requestingHost.name, mesh.name, \error, error)
+  printOn {|stream|
+    path.postln;
+    name.postln;
+    type.postln;
+    vertexHost.name.postln;
+    requestingHost.name.postln;
+    mesh.name.postln;
+    methodName.postln;
+    (args).postln;
   }
 
-  asConfirmation{|responsePath|
-    ^ Array.with(responsePath, name, type, vertexHost.name, requestingHost.name,  mesh.name, \confirmed)
-  }
-
-  asProxyRequest{|responsePath|
-    ^ Array.with(responsePath, name, type, vertexHost.name, requestingHost.name,  mesh.name, *args)
-  }
-
-  asArray {
-    ^ Array.with(path, name, type, vertexHost, requestingHost, mesh, *args)
-  }
-
-  printOn { |stream| stream << this.class.name << "(" << this.asArray << ")" }
-
-
-}
-
-
-VertexTypeInstanceMessage {
-  var <>path, <>name, <>type, <>vertexHost, <>requestingHost, <>mesh, <>methodName, <>args;
 }

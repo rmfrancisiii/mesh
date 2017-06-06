@@ -18,11 +18,9 @@
 
 
 Mesh(\mesh1).push;
-
-
 Mesh.broadcastAddr = MeshHostAddr("127.0.0.1", 57120 + (0..7))
-
-Vertex(\server1, \server);
+Mesh.current.hosts.beacon.start;
+Vertex(\server1, \server, \rose, \mesh1);
 
 Vertex(\server1).postln;
 Mesh(\mesh1).vertexes.at(\server1).postln;

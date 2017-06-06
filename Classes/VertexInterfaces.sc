@@ -1,57 +1,30 @@
 VertexTypeClassInterface {
-  var <>vertexType, <>transaction, <>object, <>method, <>oscDefName, <>oscDefpath;
 
-  *makeGenericClassInterfaces {|vertexType|
-    //each VertexType class interface
-    var interfaces = Array.with(
-    ["Request", "Vertex", \tryMakeVertex],
-    ["Response", "Vertex", \vertexResponseHandler],
-    ["Request", "Proxy", \tryMakeProxy],
-    ["Response", "Proxy", \proxyResponseHandler]
-    ).do({|args|  this.new(vertexType, *args)});
-  }
+    *makeGenericClassInterfaces { |vertexType|
+      // this is called on compilation by each Vertex Type Class:
+      //    Mesh.initClass ->
+      //      Vertex.initVertexTypes ->
+      //        VertexTypeDict.new ->
+      //          VertexTypeDict.initTypeOSCdefs ->
+      //            VertexType.makeClassInterface(thisVertexType)
+      //
+      //  it provides each VertexType with a Local and OSC interface for:
+      //    creating new vertexes
+      //    confirmation/error messages
+      //    potentially for global messages to
+      //    every vertex of a Vertex Type
+      //
+      // responds to /VertexType/interface
+      //
+      // Message contains:
+      // <>path, <>name, <>type, <>vertexHost, <>requestingHost, <>mesh, <>methodName, <>args
 
-  *new { |vertexType, transaction, object, method|
-    var oscDefName = (vertexType.asSymbol ++ transaction ++ object).asSymbol;
-    var oscDefPath = "/" ++ vertexType.name ++ "/" ++ transaction ++ "/" ++ object;
+      var oscDefName = (vertexType.asSymbol ++ "Interface").asSymbol;
+      var oscDefPath = "/" ++ vertexType.asSymbol ++ "/interface" ;
 
-    OSCdef(oscDefName, {|msg, time, host, recvPort|
-       msg = VertexTypeClassMessage.decode(host, msg);
-       vertexType.tryPerform(method, msg);
-    }, oscDefPath)
-  }
-}
-
-VertexTypeInstanceInterface {
-
-  var <>vertex, <>transaction, <>object, <>method, <>name, <>path;
-
-  *new { |vertex, transaction, object, method|
-    var name = (vertex.name ++ transaction ++ object).asSymbol;
-    var path = "/" ++ vertex.name ++ "/" ++ transaction ++ "/" ++ object;
-    var methodName = transaction.asSymbol;
-
-    OSCdef(name, {
-      |msg, time, host, recvPort|
-      "oscdef!!".postln;
-      msg = VertexTypeInstanceMessage.decode(host, msg);
-      vertex.tryPerform(method, host, msg.args);
-    }, path);
-
-    methodName.postln;
-
-    vertex.addUniqueMethod(methodName,
-      {|...args|
-        var vertexHost = vertex.getVertexHost;
-        // PROBLEM HERE!
-        var msg = VertexTypeInstanceMessage.newRequest(path, name, vertex.class.asSymbol, vertexHost, vertex.mesh.name, methodName);
-        "BOOT".postln;
-        vertexHost.postln;
-        vertex.mesh.name.postln;
-        msg.postln;
-        args.postln;
-        msg.args_(args);
-        msg.sendRequest;
-      })
-  }
+      OSCdef(oscDefName, {|msg, time, host, recvPort|
+         msg = VertexTypeClassMessage.decode(host, msg);
+         vertexType.tryPerform((msg.method++"Handler").asSymbol, msg);
+      }, oscDefPath)
+    }
 }
