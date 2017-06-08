@@ -2,8 +2,15 @@ VertexTypeClassMessage {
   var <>path, <>name, <>type, <>vertexHost, <>requestingHost, <>mesh, <>methodName, <>args;
 
   *newRequest {|name, type, host, mesh, args|
-    var path = "/Vertex" ++ type ++ "/interface";
-    ^ super.newCopyArgs(path, name, type, Mesh(mesh)[host], Mesh.thisHost, Mesh(mesh), \new, args)
+    var upCaseType = this.upcaseFirst(type);
+    var path = "/Vertex" ++ upCaseType ++ "/interface";
+    ^ super.newCopyArgs(path, name, type, Mesh(mesh)[host], Mesh.thisHost, Mesh(mesh), \newVertexRequest, args)
+  }
+
+  *upcaseFirst{|string|
+    string = string.asString;
+    string[0] = string.first.toUpper;
+    ^string
   }
 
   *decode {|host, msg|
@@ -12,9 +19,19 @@ VertexTypeClassMessage {
 
   sendRequest {
     var request = this.asOSCMsg;
-    MeshDebugMon(request);
-    // FIX NAME OF VertexType
     vertexHost.sendMsg(*request);
+  }
+
+  sendError {|errorString|
+    methodName = \error;
+    args = [errorString];
+    requestingHost.sendMsg(this.asOSCMsg);
+  }
+
+  sendConfirmation {
+    methodName = \confirmation;
+    args = [\CONFIRMED];
+    requestingHost.sendMsg(this.asOSCMsg);
   }
 
   asOSCMsg {

@@ -5,7 +5,7 @@ Vertex {
 		vertexTypeDict = VertexTypeDict.new;
 	}
 
-	*new {| vertexName, vertexTypeName, vertexHostName, meshName|
+	*new {| vertexName, vertexTypeName, vertexHostName, meshName...args|
 
 		var mesh = this.getMesh(mesh); // add TRY
 		var vertex = this.getVertex(vertex, mesh);
@@ -13,7 +13,7 @@ Vertex {
 		if (vertex == List.new)
 			{	var vertexHost = this.getHost(vertexHostName, mesh);
 				var vertexType = vertexTypeDict[vertexTypeName];
-				vertexType.newVertexRequest( vertexName, vertexTypeName, vertexHostName, meshName);
+				vertexType.newVertexRequest( vertexName, vertexTypeName, vertexHostName, meshName, args);
 			};
 
 		^ vertex

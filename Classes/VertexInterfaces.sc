@@ -24,7 +24,7 @@ VertexTypeClassInterface {
 
       OSCdef(oscDefName, {|msg, time, host, recvPort|
          msg = VertexTypeClassMessage.decode(host, msg);
-         vertexType.tryPerform((msg.method++"Handler").asSymbol, msg);
+         vertexType.tryPerform((msg.methodName++"Handler").asSymbol, msg);
       }, oscDefPath)
     }
 }

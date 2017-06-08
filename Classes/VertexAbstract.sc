@@ -5,14 +5,23 @@ VertexAbstract {
     VertexTypeClassMessage.newRequest(*args).sendRequest;
   }
 
-  *tryMakeVertex { |msg|
+  *newVertexRequestHandler { |msg|
     if (this.vertexExists(msg))
-       { this.sendError(msg, Error("VertexName already in use."))}
+       { this.sendError(msg, Error("VertexName already in use."))
+       }
 
        { "received vertex request".postln;
          try { this.makeVertex(msg) }
              { |error| this.sendError(msg, error)};
        };
+  }
+
+  *errorHandler {|msg|
+    msg.postln;
+  }
+
+  *confirmationHandler {|msg|
+    msg.postln;
   }
 
   *makeVertex{ |msg|
@@ -67,13 +76,12 @@ VertexAbstract {
 
   *sendError { |msg, error|
     var errorString = error.errorString;
-    var path = this.makeClassOSCdefPath("Response", "Vertex");
-    msg.sendError(path, errorString)
+    msg.sendError(errorString)
   }
 
   *sendConfirmation{ |msg|
-    var path = this.makeClassOSCdefPath("Response", "Vertex");
-    msg.sendConfirmation(path);
+
+    msg.sendConfirmation;
   }
 
   *sendProxyRequest{ |msg|
