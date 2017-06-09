@@ -25,19 +25,8 @@ VertexTypeClassMessage {
     vertexHost.sendMsg(*request);
   }
 
-  sendError {|errorString|
+  sendResponse {
     MeshDebugMon(thisFunctionDef);
-    methodName = \error;
-    args = [errorString];
-    requestingHost.sendMsg(*this.asOSCMsg);
-  }
-
-  sendConfirmation {
-    methodName = \confirmation;
-    args = [\CONFIRMED];
-    MeshDebugMon(thisFunctionDef, this);
-    (requestingHost.sendMsg(*this.asOSCMsg)).postcs;
-
     requestingHost.sendMsg(*this.asOSCMsg);
   }
 

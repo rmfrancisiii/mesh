@@ -26,9 +26,7 @@ VertexTypeClassInterface {
         var method;
          msg = VertexTypeClassMessage.decode(host, msg);
          method = (msg.methodName++"Handler").asSymbol;
-         MeshDebugMon("OSCdef", vertexType, method);
          vertexType.tryPerform(method, msg);
-
       }, oscDefPath)
     }
 }

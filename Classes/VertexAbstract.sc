@@ -18,14 +18,31 @@ VertexAbstract {
        };
   }
 
+  *sendError { |msg, error|
+    var errorString = error.errorString;
+    msg.methodName = \error;
+    msg.args = [errorString];
+    MeshDebugMon(thisFunctionDef, error);
+    msg.sendResponse;
+  }
+
   *errorHandler {|msg|
     MeshDebugMon(thisFunctionDef);
+    msg.args.postln
+  }
+
+  *sendConfirmation{ |msg|
+    msg.methodName = \confirmation;
+    msg.args = [\CONFIRMED];
+    MeshDebugMon(thisFunctionDef);
+    msg.sendResponse;
   }
 
   *confirmationHandler {|msg|
-    "HELLLLLOOOOOO".postln;
     MeshDebugMon(thisFunctionDef);
+    msg.args.postln; 
   }
+
 
   *makeVertex{ |msg|
     var vertex = super.new.initVertex(msg);
@@ -82,17 +99,7 @@ VertexAbstract {
 
   }
 
-  *sendError { |msg, error|
-    var errorString = error.errorString;
-    MeshDebugMon(thisFunctionDef, error);
 
-    msg.sendError(errorString)
-  }
-
-  *sendConfirmation{ |msg|
-    MeshDebugMon(thisFunctionDef);
-    msg.sendConfirmation;
-  }
 
   *sendProxyRequest{ |msg|
     MeshDebugMon(thisFunctionDef);
