@@ -6,7 +6,7 @@ VertexServer : VertexAbstract {
 	}
 
 	initVertex{|msg|
-		MeshDebugMon(thisFunctionDef, msg);
+		MeshDebugMon(thisFunctionDef);
 		this.setInstanceVars(msg);
 		isProxy = false;
 		server = Server.local;
@@ -15,7 +15,7 @@ VertexServer : VertexAbstract {
 	}
 
 	makeInstanceInterfaces{
-		MeshDebugMon(thisFunctionDef, this);
+		MeshDebugMon(thisFunctionDef);
 
 		/*var interfaces = Array.with(
     ["boot", "server", \bootHandler],

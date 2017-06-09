@@ -4,7 +4,7 @@ VertexTypeClassMessage {
   *newRequest {|name, type, host, mesh, args|
     var upCaseType = this.upcaseFirst(type);
     var path = "/Vertex" ++ upCaseType ++ "/interface";
-    MeshDebugMon(thisFunctionDef, this);
+    MeshDebugMon(thisFunctionDef);
     ^ super.newCopyArgs(path, name, type, Mesh(mesh)[host], Mesh.thisHost, Mesh(mesh), \newVertexRequest, args)
   }
 
@@ -15,26 +15,30 @@ VertexTypeClassMessage {
   }
 
   *decode {|host, msg|
+    MeshDebugMon(thisFunctionDef);
     ^  super.newCopyArgs(msg[0], msg[1], msg[2], Mesh(msg[5])[msg[3]], Mesh(msg[5])[msg[4]], Mesh(msg[5]), msg[6], msg[7..])
   }
 
   sendRequest {
     var request = this.asOSCMsg;
+    MeshDebugMon(thisFunctionDef);
     vertexHost.sendMsg(*request);
   }
 
   sendError {|errorString|
+    MeshDebugMon(thisFunctionDef);
     methodName = \error;
     args = [errorString];
-    requestingHost.sendMsg(this.asOSCMsg);
+    requestingHost.sendMsg(*this.asOSCMsg);
   }
 
   sendConfirmation {
     methodName = \confirmation;
     args = [\CONFIRMED];
     MeshDebugMon(thisFunctionDef, this);
+    (requestingHost.sendMsg(*this.asOSCMsg)).postcs;
 
-    requestingHost.sendMsg(this.asOSCMsg);
+    requestingHost.sendMsg(*this.asOSCMsg);
   }
 
   asOSCMsg {
@@ -44,15 +48,6 @@ VertexTypeClassMessage {
   printOn {|stream|
     [path, name, type, vertexHost.name, requestingHost.name,
      mesh.name, methodName, args].postln;
-
-    /*path.postln;
-    name.postln;
-    type.postln;
-    vertexHost.name.postln;
-    requestingHost.name.postln;
-    mesh.name.postln;
-    methodName.postln;
-    (args).postln;*/
   }
 
 }

@@ -4,7 +4,7 @@ MeshDebugMon {
 
 		if (debug){
 			args.do({|item| item.postln });
-			"\n".postln;
+			//"\n".postln;
 		}
 	}
 

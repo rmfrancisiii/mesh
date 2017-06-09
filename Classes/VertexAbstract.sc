@@ -2,28 +2,29 @@ VertexAbstract {
   var <>name, <>mesh, <>isProxy;
 
   *newVertexRequest { |...args|
+    MeshDebugMon(thisFunctionDef);
     VertexTypeClassMessage.newRequest(*args).sendRequest;
   }
 
   *newVertexRequestHandler { |msg|
-    MeshDebugMon(thisFunctionDef, msg);
+    MeshDebugMon(thisFunctionDef);
 
     if (this.vertexExists(msg))
        { this.sendError(msg, Error("VertexName already in use."))
        }
 
-       { "received vertex request".postln;
-         try { this.makeVertex(msg) }
+       { try { this.makeVertex(msg) }
              { |error| this.sendError(msg, error)};
        };
   }
 
   *errorHandler {|msg|
-    MeshDebugMon(thisFunctionDef, msg);
+    MeshDebugMon(thisFunctionDef);
   }
 
   *confirmationHandler {|msg|
-    MeshDebugMon(thisFunctionDef, msg);
+    "HELLLLLOOOOOO".postln;
+    MeshDebugMon(thisFunctionDef);
   }
 
   *makeVertex{ |msg|
@@ -31,7 +32,7 @@ VertexAbstract {
     var name = msg.name;
     var mesh = msg.mesh;
     var vertexes = mesh.vertexes;
-    MeshDebugMon(thisFunctionDef, msg);
+    MeshDebugMon(thisFunctionDef);
     //Error("This is a basic error.").throw;
     vertexes.put(name, vertex);
     this.sendConfirmation(msg);
@@ -46,9 +47,13 @@ VertexAbstract {
         { response == \confirmed } {
           (msg.name ++ " Vertex Confirmed!").postln };
     result.value;
+    MeshDebugMon(thisFunctionDef);
+
 	}
 
   *tryMakeProxy{ |msg|
+    MeshDebugMon(thisFunctionDef);
+
    if (this.vertexExists(msg))
        { this.sendError(msg, Error("VertexName already in use."))}
 
@@ -85,19 +90,19 @@ VertexAbstract {
   }
 
   *sendConfirmation{ |msg|
-    MeshDebugMon(thisFunctionDef, msg);
+    MeshDebugMon(thisFunctionDef);
     msg.sendConfirmation;
   }
 
   *sendProxyRequest{ |msg|
-    MeshDebugMon(thisFunctionDef, msg);
+    MeshDebugMon(thisFunctionDef);
       /*var path = this.makeClassOSCdefPath("Request", "Proxy");
       msg.sendProxyRequest(path);*/
   }
 
   *sendProxyConfirmation{ |msg|
       var path = this.makeClassOSCdefPath("Response", "Proxy");
-      MeshDebugMon(thisFunctionDef, msg);
+      MeshDebugMon(thisFunctionDef);
       msg.sendProxyResponse(path);
   }
 

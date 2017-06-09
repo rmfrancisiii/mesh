@@ -23,8 +23,12 @@ VertexTypeClassInterface {
       var oscDefPath = "/" ++ vertexType.asSymbol ++ "/interface" ;
 
       OSCdef(oscDefName, {|msg, time, host, recvPort|
+        var method;
          msg = VertexTypeClassMessage.decode(host, msg);
-         vertexType.tryPerform((msg.methodName++"Handler").asSymbol, msg);
+         method = (msg.methodName++"Handler").asSymbol;
+         MeshDebugMon("OSCdef", vertexType, method);
+         vertexType.tryPerform(method, msg);
+
       }, oscDefPath)
     }
 }
