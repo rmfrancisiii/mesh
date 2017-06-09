@@ -4,6 +4,7 @@ VertexTypeClassMessage {
   *newRequest {|name, type, host, mesh, args|
     var upCaseType = this.upcaseFirst(type);
     var path = "/Vertex" ++ upCaseType ++ "/interface";
+    MeshDebugMon(thisFunctionDef, this);
     ^ super.newCopyArgs(path, name, type, Mesh(mesh)[host], Mesh.thisHost, Mesh(mesh), \newVertexRequest, args)
   }
 
@@ -31,6 +32,8 @@ VertexTypeClassMessage {
   sendConfirmation {
     methodName = \confirmation;
     args = [\CONFIRMED];
+    MeshDebugMon(thisFunctionDef, this);
+
     requestingHost.sendMsg(this.asOSCMsg);
   }
 
@@ -39,14 +42,17 @@ VertexTypeClassMessage {
   }
 
   printOn {|stream|
-    path.postln;
+    [path, name, type, vertexHost.name, requestingHost.name,
+     mesh.name, methodName, args].postln;
+
+    /*path.postln;
     name.postln;
     type.postln;
     vertexHost.name.postln;
     requestingHost.name.postln;
     mesh.name.postln;
     methodName.postln;
-    (args).postln;
+    (args).postln;*/
   }
 
 }

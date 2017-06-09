@@ -6,6 +6,8 @@ VertexAbstract {
   }
 
   *newVertexRequestHandler { |msg|
+    MeshDebugMon(thisFunctionDef, msg);
+
     if (this.vertexExists(msg))
        { this.sendError(msg, Error("VertexName already in use."))
        }
@@ -17,11 +19,11 @@ VertexAbstract {
   }
 
   *errorHandler {|msg|
-    msg.postln;
+    MeshDebugMon(thisFunctionDef, msg);
   }
 
   *confirmationHandler {|msg|
-    msg.postln;
+    MeshDebugMon(thisFunctionDef, msg);
   }
 
   *makeVertex{ |msg|
@@ -29,6 +31,7 @@ VertexAbstract {
     var name = msg.name;
     var mesh = msg.mesh;
     var vertexes = mesh.vertexes;
+    MeshDebugMon(thisFunctionDef, msg);
     //Error("This is a basic error.").throw;
     vertexes.put(name, vertex);
     this.sendConfirmation(msg);
@@ -76,21 +79,25 @@ VertexAbstract {
 
   *sendError { |msg, error|
     var errorString = error.errorString;
+    MeshDebugMon(thisFunctionDef, error);
+
     msg.sendError(errorString)
   }
 
   *sendConfirmation{ |msg|
-
+    MeshDebugMon(thisFunctionDef, msg);
     msg.sendConfirmation;
   }
 
   *sendProxyRequest{ |msg|
-      var path = this.makeClassOSCdefPath("Request", "Proxy");
-      msg.sendProxyRequest(path);
+    MeshDebugMon(thisFunctionDef, msg);
+      /*var path = this.makeClassOSCdefPath("Request", "Proxy");
+      msg.sendProxyRequest(path);*/
   }
 
   *sendProxyConfirmation{ |msg|
       var path = this.makeClassOSCdefPath("Response", "Proxy");
+      MeshDebugMon(thisFunctionDef, msg);
       msg.sendProxyResponse(path);
   }
 
