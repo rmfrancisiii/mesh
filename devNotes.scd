@@ -1,14 +1,6 @@
 // TODO: go over the addressing and osc messaging components
 // particularly calling methods on remote objects.
 
-// TODO: Combine into One OSC Def per VertexType to handle
-//       Request
-//       Confirm
-//       proxy Request
-//       error
-//    eg.
-//       Vertex.method -> msg.encode -> msg.send -> OSCDef
-//       OSCDef -> msg.decode -> VertexType.oscMsgHandler -> method
 
 // TODO: Combine into One OSC Def per Vertex Instance to handle
 //       Method calls

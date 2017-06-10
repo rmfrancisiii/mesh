@@ -72,7 +72,6 @@ VertexAbstract {
     this.sendProxyConfirmation(msg);
   }
 
-
   *sendProxyConfirmation{ |msg|
     MeshDebugMon(thisFunctionDef);
     msg.methodName = \proxyConfirmation;
@@ -81,10 +80,21 @@ VertexAbstract {
 
   *proxyConfirmationHandler { |msg|
       MeshDebugMon(thisFunctionDef);
+      "proxy response received".postln;
+
+      // from vertexResponseHandler
+
+      //should track that all mesh hosts confirm proxy request
+      // and resend if necessary?
+
   }
 
   *vertexExists { |msg|
     ^ (msg.mesh).includesVertex(msg.name)
   }
 
+
+  initProxy {
+   this.subclassResponsibility(thisMethod);
+  }
 }
