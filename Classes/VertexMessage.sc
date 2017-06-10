@@ -30,13 +30,21 @@ VertexTypeClassMessage {
     requestingHost.sendMsg(*this.asOSCMsg);
   }
 
+  sendProxyRequest {
+    MeshDebugMon(thisFunctionDef);
+    Mesh.broadcastAddr.postln;
+    Mesh.broadcastAddr.sendMsg(*this.asOSCMsg);
+
+  }
+
   asOSCMsg {
     ^ Array.with(path, name, type, vertexHost.name, requestingHost.name,  mesh.name, methodName, *args)
   }
 
   printOn {|stream|
-    [path, name, type, vertexHost.name, requestingHost.name,
-     mesh.name, methodName, args].postln;
+    //this.class.instVarNames.do({|i,j| instVarAt(j).postln});
+    [path, name, type, vertexHost, requestingHost,
+     mesh, methodName, args].postln;
   }
 
 }

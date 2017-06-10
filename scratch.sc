@@ -1,4 +1,30 @@
-/*  var <>vertexType, <>transaction, <>object, <>method, <>oscDefName, <>oscDefpath;
+/*
+
+Meta_Vertex:getMesh
+Meta_Vertex:currentMesh
+Meta_Vertex:getVertex
+Meta_Vertex:new
+Meta_Vertex:getHost
+Meta_VertexAbstract:newVertexRequest
+Meta_VertexTypeClassMessage:newRequest
+VertexTypeClassMessage:sendRequest
+-> New Vertex Request sent
+Meta_VertexTypeClassMessage:decode
+Meta_VertexAbstract:newVertexRequestHandler
+VertexServer:initVertex
+VertexServer:makeInstanceInterfaces
+Meta_VertexAbstract:makeVertex
+Meta_VertexAbstract:sendConfirmation
+VertexTypeClassMessage:sendResponse
+Meta_VertexAbstract:sendProxyRequest
+Meta_VertexTypeClassMessage:decode
+Meta_VertexAbstract:confirmationHandler
+[ CONFIRMED ]
+
+
+
+
+  var <>vertexType, <>transaction, <>object, <>method, <>oscDefName, <>oscDefpath;
 
 
     //each VertexType class interface
@@ -90,13 +116,74 @@ VertexTypeInstanceInterface {
     ^ Array.with(path, name, type, vertexHost, requestingHost, mesh, *args)
   }
 
-  printOn { |stream| stream << this.class.name << "(" << this.asArray << ")" }
+
 
 
 }
 
 
-VertexTypeInstanceMessage {
-  var <>path, <>name, <>type, <>vertexHost, <>requestingHost, <>mesh, <>methodName, <>args;
+
+
+*vertexResponseHandler { |msg|
+  var response = msg.args[0];
+  var result = case
+      { response == \error }   {
+        (msg.name ++ " Vertex Error:  " ++ msg.args[1]).postln }
+      { response == \confirmed } {
+        (msg.name ++ " Vertex Confirmed!").postln };
+  result.value;
+  MeshDebugMon(thisFunctionDef, msg);
+
+}
+
+*tryMakeProxy{ |msg|
+  MeshDebugMon(thisFunctionDef);
+
+ if (this.vertexExists(msg))
+     { this.sendError(msg, Error("VertexName already in use."))}
+
+     { "received proxy request".postln;
+       try { this.makeProxy(msg) }
+           { |error| this.sendError(msg, error)};
+     };
+}
+
+*makeProxy{ |msg|
+  var proxy = super.new.initProxy(msg);
+  var vertexes = msg.mesh.vertexes;
+  //Error("This is a basic error.").throw;
+  vertexes.put(name, proxy);
+  this.sendProxyConfirmation(msg);
+}
+
+*proxyResponseHandler { |msg|
+
+  "proxy response received".postln;
+
+  // from vertexResponseHandler
+
+  //should track that all mesh hosts confirm proxy request
+  and resend if necessary?
+
+}
+
+
+
+*sendProxyRequest{ |msg|
+  MeshDebugMon(thisFunctionDef);
+    // var path = this.makeClassOSCdefPath("Request", "Proxy");
+    // msg.sendProxyRequest(path);
+}
+
+*sendProxyConfirmation{ |msg|
+    var path = this.makeClassOSCdefPath("Response", "Proxy");
+    MeshDebugMon(thisFunctionDef);
+    msg.sendProxyResponse(path);
+}
+
+
+
+*makeClassOSCdefPath {|transaction, object|
+  ^ "/" ++ this.name ++ "/" ++ transaction ++ "/" ++ object
 }
 */
