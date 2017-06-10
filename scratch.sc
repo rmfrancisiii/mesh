@@ -1,4 +1,18 @@
 /*
+
+Vertex.boot {
+  msg.methodName=\boot
+  msg.oscSendMethod} ->
+
+OSCdef: /vertexName/method
+  Vertex(vertexName).tryPerform(msg.method, msg.args)
+
+
+
+
+
+
+
 Host rose joined the mesh
 New Mesh Created: mesh1
 WARNING: No current mesh

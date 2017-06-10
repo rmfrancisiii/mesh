@@ -1,4 +1,4 @@
-VertexTypeClassMessage {
+VertexMessage {
   var <>path, <>name, <>type, <>vertexHost, <>requestingHost, <>mesh, <>methodName, <>args;
 
   *newRequest {|name, type, host, mesh, args|

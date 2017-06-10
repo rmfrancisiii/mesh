@@ -6,6 +6,7 @@ VertexServer : VertexAbstract {
 	}
 
 	initVertex{|msg|
+		MeshDebugMon(thisFunctionDef);
 		// called by VertexAbstract.makeVertex
 		this.setInstanceVars(msg);
 		isProxy = false;
@@ -16,10 +17,12 @@ VertexServer : VertexAbstract {
 
 	makeInstanceInterfaces{
 		MeshDebugMon(thisFunctionDef);
+		VertexTypeInstanceInterface.makeInstanceInterfaces(this);
 
 	}
 
 	initProxy {|msg|
+		// called by VertexAbstract.makeProx
 		this.setInstanceVars(msg);
 		isProxy = true;
 		server = Server.remote(name, host);
@@ -36,6 +39,9 @@ VertexServer : VertexAbstract {
 	}
 
 	setServerOptions{ |args|
+		// NOTE: these are hard coded!
+		// TODO: logic HERE
+
 		server.options.protocol_(\tcp);
 		server.options.maxLogins_(8);
 	}

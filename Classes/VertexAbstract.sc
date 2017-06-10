@@ -2,10 +2,12 @@ VertexAbstract {
   var <>name, <>mesh, <>isProxy;
 
   *sendNewVertex { |...args|
-    VertexTypeClassMessage.newRequest(*args).sendRequest;
+    VertexMessage.newRequest(*args).sendRequest;
   }
 
   *newVertexHandler { |msg|
+    MeshDebugMon(thisFunctionDef);
+
     if (this.vertexExists(msg))
        { this.sendError(msg, Error("VertexName already in use."))}
 
@@ -17,6 +19,8 @@ VertexAbstract {
   *makeVertex{ |msg|
     var vertex = super.new.initVertex(msg);
     //Error("This is a basic error.").throw;
+    MeshDebugMon(thisFunctionDef);
+
     msg.mesh.vertexes.put(msg.name, vertex);
     this.sendConfirmation(msg);
     this.sendProxyRequest(msg);
@@ -93,6 +97,10 @@ VertexAbstract {
     ^ (msg.mesh).includesVertex(msg.name)
   }
 
+
+  initVertex {
+   this.subclassResponsibility(thisMethod);
+  }
 
   initProxy {
    this.subclassResponsibility(thisMethod);
