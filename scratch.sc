@@ -1,5 +1,11 @@
 /*
-
+Host rose joined the mesh
+New Mesh Created: mesh1
+WARNING: No current mesh
+Entering Mesh: mesh1
+-> [ Mesh(mesh1) ]
+-> Mesh
+-> a Beacon
 Meta_Vertex:getMesh
 Meta_Vertex:currentMesh
 Meta_Vertex:getVertex
@@ -17,25 +23,14 @@ Meta_VertexAbstract:makeVertex
 Meta_VertexAbstract:sendConfirmation
 VertexTypeClassMessage:sendResponse
 Meta_VertexAbstract:sendProxyRequest
+VertexTypeClassMessage:sendProxyRequest
+a MeshHostAddr(127.0.0.1, 57127)
 Meta_VertexTypeClassMessage:decode
 Meta_VertexAbstract:confirmationHandler
-[ CONFIRMED ]
+Meta_VertexTypeClassMessage:decode
+Meta_VertexAbstract:proxyRequestHandler
 
 
-
-
-  var <>vertexType, <>transaction, <>object, <>method, <>oscDefName, <>oscDefpath;
-
-
-    //each VertexType class interface
-.do({|args|  this.new(vertexType, *args)});
-  }
-
-  *new { |vertexType, transaction, object, method|
-
-
-
-  }
 
 VertexTypeInstanceInterface {
 
@@ -77,53 +72,6 @@ VertexTypeInstanceInterface {
 
 
 
-  sendError { |responsePath, error|
-    var response = this.asErrorResponse(responsePath, error);
-    requestingHost.sendMsg(*response);
-  }
-
-  sendConfirmation { |responsePath|
-    var response = this.asConfirmation(responsePath);
-    requestingHost.sendMsg(*response);
-  }
-
-  sendProxyRequest {|requestPath|
-    var request = this.asProxyRequest(requestPath);
-    var broadcastAddr = Mesh.broadcastAddr;
-    broadcastAddr.sendMsg(*request)
-  }
-
-  sendProxyConfirmation { |responsePath|
-    var response = this.asConfirmation(responsePath);
-    vertexHost.sendMsg(*response);
-  }
-
-
-
-  asErrorResponse{|responsePath, error|
-    ^ Array.with(responsePath, name, type, vertexHost.name, requestingHost.name, mesh.name, \error, error)
-  }
-
-  asConfirmation{|responsePath|
-    ^ Array.with(responsePath, name, type, vertexHost.name, requestingHost.name,  mesh.name, \confirmed)
-  }
-
-  asProxyRequest{|responsePath|
-    ^ Array.with(responsePath, name, type, vertexHost.name, requestingHost.name,  mesh.name, *args)
-  }
-
-  asArray {
-    ^ Array.with(path, name, type, vertexHost, requestingHost, mesh, *args)
-  }
-
-
-
-
-}
-
-
-
-
 *vertexResponseHandler { |msg|
   var response = msg.args[0];
   var result = case
@@ -136,25 +84,6 @@ VertexTypeInstanceInterface {
 
 }
 
-*tryMakeProxy{ |msg|
-  MeshDebugMon(thisFunctionDef);
-
- if (this.vertexExists(msg))
-     { this.sendError(msg, Error("VertexName already in use."))}
-
-     { "received proxy request".postln;
-       try { this.makeProxy(msg) }
-           { |error| this.sendError(msg, error)};
-     };
-}
-
-*makeProxy{ |msg|
-  var proxy = super.new.initProxy(msg);
-  var vertexes = msg.mesh.vertexes;
-  //Error("This is a basic error.").throw;
-  vertexes.put(name, proxy);
-  this.sendProxyConfirmation(msg);
-}
 
 *proxyResponseHandler { |msg|
 
@@ -187,3 +116,25 @@ VertexTypeInstanceInterface {
   ^ "/" ++ this.name ++ "/" ++ transaction ++ "/" ++ object
 }
 */
+
+
+
+		/*var interfaces = Array.with(
+    ["boot", "server", \bootHandler],
+    ["kill", "server", \killHandler],
+    ).do({|args|
+			VertexTypeInstanceInterface.new(this, *args)});
+			"instance interface initialized".postln;
+
+
+
+
+      */
+
+/*
+      c = Condition(false); fork { 0.5.wait; "started ...".postln; c.wait;  "... and finished.".postln };
+c.instVarDict.postln;
+
+
+c.test = true;
+c.signal;*/

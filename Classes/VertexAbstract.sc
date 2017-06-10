@@ -1,87 +1,90 @@
 VertexAbstract {
   var <>name, <>mesh, <>isProxy;
 
-  *newVertexRequest { |...args|
-    MeshDebugMon(thisFunctionDef);
+  *sendNewVertex { |...args|
     VertexTypeClassMessage.newRequest(*args).sendRequest;
   }
 
-  *newVertexRequestHandler { |msg|
-    MeshDebugMon(thisFunctionDef);
-
+  *newVertexHandler { |msg|
     if (this.vertexExists(msg))
-       { this.sendError(msg, Error("VertexName already in use."))
-       }
+       { this.sendError(msg, Error("VertexName already in use."))}
 
        { try { this.makeVertex(msg) }
              { |error| this.sendError(msg, error)};
        };
   }
 
+  *makeVertex{ |msg|
+    var vertex = super.new.initVertex(msg);
+    //Error("This is a basic error.").throw;
+    msg.mesh.vertexes.put(msg.name, vertex);
+    this.sendConfirmation(msg);
+    this.sendProxyRequest(msg);
+  }
+
+
   *sendError { |msg, error|
     var errorString = error.errorString;
     msg.methodName = \error;
     msg.args = [errorString];
-    MeshDebugMon(thisFunctionDef, error);
     msg.sendResponse;
   }
 
-  *errorHandler {|msg|
-    MeshDebugMon(thisFunctionDef);
-    msg.args.postln
+  *errorHandler { |msg|
+    ("Error: " ++ msg.args).postln
   }
 
   *sendConfirmation{ |msg|
     msg.methodName = \confirmation;
-    msg.args = [\CONFIRMED];
-    MeshDebugMon(thisFunctionDef);
     msg.sendResponse;
   }
 
   *confirmationHandler {|msg|
-    MeshDebugMon(thisFunctionDef, msg);
-    msg.args.postln;
+    ("Successfully Created " ++ msg.name).postln;
   }
 
   *sendProxyRequest{ |msg|
     msg.methodName = \proxyRequest;
+    msg.args = [\proxyVertex];
     MeshDebugMon(thisFunctionDef);
     msg.sendProxyRequest;
   }
 
-  *proxyRequestHandler { |msg|
-    MeshDebugMon(thisFunctionDef, msg);
-    msg.args.postln;
+  *proxyRequestHandler{ |msg|
+    // REMOVE!!! ONLY FOR TESTING ON ONE MACHINE!!!
+    msg.name = (msg.name ++ "Proxy").asSymbol;
+    //
+
+   if (this.vertexExists(msg))
+       { this.sendError(msg, Error("VertexName already in use."))}
+
+       { "received proxy request".postln;
+         try { this.makeProxy(msg) }
+             { |error| this.sendError(msg, error)};
+       };
   }
 
+  *makeProxy{ |msg|
+    var proxy = super.new.initProxy(msg);
+    var vertexes = msg.mesh.vertexes;
+    //Error("This is a basic error.").throw;
+    vertexes.put(msg.name, proxy);
+    this.sendProxyConfirmation(msg);
+  }
+
+
   *sendProxyConfirmation{ |msg|
-    msg.methodName = \proxyConfirmation;
     MeshDebugMon(thisFunctionDef);
+    msg.methodName = \proxyConfirmation;
+    msg.sendResponse;
   }
 
   *proxyConfirmationHandler { |msg|
       MeshDebugMon(thisFunctionDef);
   }
 
-
-  *makeVertex{ |msg|
-    var vertex = super.new.initVertex(msg);
-    var name = msg.name;
-    var mesh = msg.mesh;
-    var vertexes = mesh.vertexes;
-    MeshDebugMon(thisFunctionDef);
-    //Error("This is a basic error.").throw;
-    vertexes.put(name, vertex);
-    this.sendConfirmation(msg);
-    this.sendProxyRequest(msg);
-  }
-
-
-
-  *vertexExists {|msg|
+  *vertexExists { |msg|
     ^ (msg.mesh).includesVertex(msg.name)
   }
-
-
 
 }

@@ -2,13 +2,11 @@ VertexTypeDict : IdentityDictionary {
 
   *new{
     var allTypes = VertexAbstract.subclasses;
-    var dict = allTypes.collectAs(
-        { |vertexType|
+    var dict = allTypes.collectAs({ |vertexType|
           var key = this.trimClassName(vertexType.name);
-          key -> vertexType },
-        IdentityDictionary);
+          key -> vertexType }, IdentityDictionary);
 
-        this.initTypeOSCdefs(dict);
+    this.initTypeOSCdefs(dict);
     ^ dict;
   }
 
@@ -19,8 +17,9 @@ VertexTypeDict : IdentityDictionary {
 	}
 
 	*initTypeOSCdefs{ | dict |
-		dict.keysValuesDo({|key, value| value.tryPerform(\makeClassInterface)
-		})
+		dict.keysValuesDo({ |key, value| 
+      value.tryPerform(\makeClassInterface)
+    })
 	}
 }
 
