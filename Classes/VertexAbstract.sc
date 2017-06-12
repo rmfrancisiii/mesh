@@ -97,6 +97,14 @@ VertexAbstract {
     ^ (msg.mesh).includesVertex(msg.name)
   }
 
+  doesNotUnderstand {|selector ... args|
+    this.methodname = selector;
+    this.args = args;
+    MeshDebugMon(this);
+//    (result = addr.tryPerform(selector, *args));
+  }
+
+
 
   initVertex {
    this.subclassResponsibility(thisMethod);

@@ -90,4 +90,34 @@ c.instVarDict.postln;
 c.test = true;
 c.signal;
 
+
+
+VertexTypeInstanceInterface {
+  // creating OSC defs for instances of Vertexes and Proxies
+  // accessed by vertexName, operates method on remote server
+
+    *makeInstanceInterfaces { |inst|
+      var oscDefName = (inst.name ++ "Interface").asSymbol;
+      var oscDefPath = "/" ++ inst.name ++ "/interface";
+      MeshDebugMon(thisFunctionDef);
+
+      oscDefName.postln;
+      oscDefPath.postln;
+
+
+      OSCdef(oscDefName, { |msg, time, host, recvPort|
+        var instance;
+        var method;
+        var args;
+        MeshDebugMon(thisFunctionDef);
+
+          msg = VertexMessage.decode(host, msg) ;
+          instance = Vertex(msg.name) ;
+          method = (msg.methodName++"Handler").asSymbol ;
+          args = msg.args;
+          instance.tryPerform(method, *args) ;
+      }, oscDefPath)
+
+    }
+
 */

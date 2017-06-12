@@ -3,6 +3,7 @@ MeshDebugMon {
 	*new {|...args|
 
 		if (debug){
+			"DEBUG:".warn;
 			args.do({|item| item.postln });
 			//"\n".postln;
 		}
