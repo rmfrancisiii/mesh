@@ -9,10 +9,15 @@ VertexMessage {
 
   *newMethodRequest {|vertex, vertexHost, selector, args|
     var path = "/" ++ vertex.name ++ "/interface";
+    var mesh = Mesh(vertex.mesh);
+    var type = vertex.class;
+    var requestingHost = Mesh.thisHost;
+    var vertexName = vertex.name;
+    vertexHost = mesh[vertexHost];
 
-    MeshDebugMon(thisFunctionDef, vertexHost, path, vertex, selector, args);
+    MeshDebugMon(thisFunctionDef, path, vertexName, type, vertexHost, requestingHost, mesh, selector, args).postln;
 
-    /*^ super.newCopyArgs(path, name, type, Mesh(mesh)[host], Mesh.thisHost, Mesh(mesh), \newVertex, args)*/
+    // ^ super.newCopyArgs
   }
 
   *upcaseFirst{|string|
