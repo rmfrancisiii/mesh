@@ -1,10 +1,18 @@
 VertexMessage {
   var <>path, <>name, <>type, <>vertexHost, <>requestingHost, <>mesh, <>methodName, <>args;
 
-  *newRequest {|name, type, host, mesh, args|
+  *newVertexRequest {|name, type, host, mesh, args|
     var upCaseType = this.upcaseFirst(type);
     var path = "/Vertex" ++ upCaseType ++ "/interface";
     ^ super.newCopyArgs(path, name, type, Mesh(mesh)[host], Mesh.thisHost, Mesh(mesh), \newVertex, args)
+  }
+
+  *newMethodRequest {|vertex, vertexHost, selector, args|
+    var path = "/" ++ vertex.name ++ "/interface";
+
+    MeshDebugMon(thisFunctionDef, vertexHost, path, vertex, selector, args);
+
+    /*^ super.newCopyArgs(path, name, type, Mesh(mesh)[host], Mesh.thisHost, Mesh(mesh), \newVertex, args)*/
   }
 
   *upcaseFirst{|string|

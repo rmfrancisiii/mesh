@@ -17,6 +17,7 @@ VertexServer : VertexAbstract {
 
 	makeInstanceInterfaces{
 		MeshDebugMon(thisFunctionDef);
+		VertexTypeInstanceInterface.makeInstanceInterface(this);
 	}
 
 	initProxy {|msg|

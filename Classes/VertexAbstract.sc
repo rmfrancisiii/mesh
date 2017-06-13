@@ -2,7 +2,7 @@ VertexAbstract {
   var <>name, <>mesh, <>isProxy;
 
   *sendNewVertex { |...args|
-    VertexMessage.newRequest(*args).sendRequest;
+    VertexMessage.newVertexRequest(*args).sendRequest;
   }
 
   *newVertexHandler { |msg|
@@ -55,9 +55,9 @@ VertexAbstract {
   }
 
   *proxyRequestHandler{ |msg|
-    // REMOVE!!! ONLY FOR TESTING ON ONE MACHINE!!!
+    /* REMOVE!!! ONLY FOR TESTING ON ONE MACHINE!!!
     msg.name = (msg.name ++ "Proxy").asSymbol;
-    //
+    */
 
    if (this.vertexExists(msg))
        { this.sendError(msg, Error("VertexName already in use."))}
@@ -93,18 +93,20 @@ VertexAbstract {
 
   }
 
+  sendMethodRequest { |selector, args|
+    var vertexHost = this.getVertexHost;
+    MeshDebugMon(thisFunctionDef);
+    VertexMessage.newMethodRequest(this, vertexHost, selector, args,); //.sendRequest;
+  }
+
   *vertexExists { |msg|
     ^ (msg.mesh).includesVertex(msg.name)
   }
 
-  doesNotUnderstand {|selector ... args|
-    this.methodname = selector;
-    this.args = args;
-    MeshDebugMon(this);
-//    (result = addr.tryPerform(selector, *args));
+  doesNotUnderstand {|selector ...args|
+    MeshDebugMon(thisFunctionDef,this);
+    this.sendMethodRequest(selector, args)
   }
-
-
 
   initVertex {
    this.subclassResponsibility(thisMethod);
@@ -112,5 +114,9 @@ VertexAbstract {
 
   initProxy {
    this.subclassResponsibility(thisMethod);
+  }
+
+  printOn {|stream|
+    this.instVarDict.values.postln;
   }
 }
