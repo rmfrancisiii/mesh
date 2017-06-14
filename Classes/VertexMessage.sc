@@ -15,9 +15,7 @@ VertexMessage {
     var vertexName = vertex.name;
     vertexHost = mesh[vertexHost];
 
-    MeshDebugMon(thisFunctionDef, path, vertexName, type, vertexHost, requestingHost, mesh, selector, args).postln;
-
-    // ^ super.newCopyArgs
+    ^ super.newCopyArgs(path, vertexName, type, vertexHost, requestingHost, mesh, selector, args);
   }
 
   *upcaseFirst{|string|
@@ -48,7 +46,11 @@ VertexMessage {
   }
 
   printOn {|stream|
-    this.instVarDict.values.postln;
+    this.instVarDict.postln;
+  }
+
+  bootHandler {
+    MeshDebugMon(thisFunctionDef);
   }
 
 }

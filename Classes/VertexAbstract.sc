@@ -95,8 +95,10 @@ VertexAbstract {
 
   sendMethodRequest { |selector, args|
     var vertexHost = this.getVertexHost;
-    MeshDebugMon(thisFunctionDef);
-    VertexMessage.newMethodRequest(this, vertexHost, selector, args,); //.sendRequest;
+    var msg = VertexMessage.newMethodRequest(this, vertexHost, selector, args);
+    MeshDebugMon(thisFunctionDef, msg);
+
+     //.sendRequest;
   }
 
   *vertexExists { |msg|
