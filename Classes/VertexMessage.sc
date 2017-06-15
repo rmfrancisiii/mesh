@@ -9,11 +9,10 @@ VertexMessage {
 
   *newMethodRequest {|vertex, vertexHost, selector, args|
     var path = "/" ++ vertex.name ++ "/interface";
-    var mesh = Mesh(vertex.mesh);
-    var type = vertex.class;
+    var mesh = vertex.mesh;
+    var type = vertex.class.name.asSymbol;
     var requestingHost = Mesh.thisHost;
     var vertexName = vertex.name;
-    vertexHost = mesh[vertexHost];
 
     ^ super.newCopyArgs(path, vertexName, type, vertexHost, requestingHost, mesh, selector, args);
   }
@@ -30,6 +29,7 @@ VertexMessage {
 
   sendRequest {
     vertexHost.sendMsg(*this.asOSCMsg);
+    //MeshDebugMon(thisFunctionDef, path, name, type, vertexHost, requestingHost, mesh, methodName, args);
   }
 
   sendResponse {
@@ -46,7 +46,7 @@ VertexMessage {
   }
 
   printOn {|stream|
-    this.instVarDict.postln;
+    this.asOSCMsg.postln; //instVarDict.postln;
   }
 
   bootHandler {
