@@ -24,11 +24,10 @@ VertexTypeInstanceInterface {
     OSCdef(oscDefName, { |msg, time, host, recvPort|
       var method ;
       var vertex ;
-      MeshDebugMon(thisFunctionDef, msg)
-//      msg = VertexMessage.decode(host, msg) ;
-//      method = (msg.methodName++"Handler").asSymbol ;
-//      vertex = Vertex(vertex.name);
-//      vertex.tryPerform(method, *msg.args) ;
+      msg = VertexMessage.decode(host, msg);
+      method = (msg.methodName++"Handler").asSymbol;
+      vertex = Vertex(msg.name);
+      vertex.tryPerform(method, *msg.args);
     }, oscDefPath)
   }
 
