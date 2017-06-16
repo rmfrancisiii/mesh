@@ -61,6 +61,15 @@ VertexServer : VertexAbstract {
 		// send proxy update request (isRunning = false)
 	}
 
+	freeHandler{ |requestingHost, msg|
+		"freeing".postln;
+	}
+
+	free {
+    MeshDebugMon(thisFunctionDef,this);
+    this.sendMethodRequest(\free)
+  }
+
 
 
 }

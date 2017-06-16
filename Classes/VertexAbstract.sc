@@ -115,6 +115,10 @@ VertexAbstract {
    this.subclassResponsibility(thisMethod);
   }
 
+  free {
+    this.subclassResponsibility(thisMethod);
+  }
+
   printOn {|stream|
     this.instVarDict.values.postln;
   }

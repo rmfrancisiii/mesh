@@ -13,11 +13,10 @@
 Mesh(\mesh1).push;
 Mesh.broadcastAddr = MeshHostAddr("127.0.0.1", 57120 + (0..7))
 Mesh.current.hosts.beacon.start;
-
 Vertex(\server1, \server, \rose, \mesh1);
-Vertex(\server1).postln;
 Vertex(\server1).boot;
-
+Vertex(\server1).kill;
+Vertex(\server1).free;
 
 Vertex(\pattern1, \pattern, \rose, \mesh1);
 
