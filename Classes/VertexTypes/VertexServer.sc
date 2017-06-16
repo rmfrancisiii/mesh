@@ -44,22 +44,34 @@ VertexServer : VertexAbstract {
 		"Booting".postln;
 		this.setServerOptions;
 		server.boot;
+
+		// WORKING HERE; /////////
+
+		// ADD MESSAGING FOR PROXY UPDATE
+		// this.sendProxyUpdate (ARGS)
 		// set isRunning to true
 		// send proxy update request (isRunning = true)
+
+		////////////////////////////
 	}
 
 	killHandler{ |requestingHost, msg|
 		"Killing".postln;
 		server.quit;
+		// ADD MESSAGING FOR PROXY UPDATE
 		// set isRunning to false
 		// send proxy update request (isRunning = false)
 	}
+
+
+	// example to Overload inherited method from Object
+	free {
+    this.sendMethodRequest(\free)
+  }
 
 	freeHandler{ |requestingHost, msg|
 		"freeing".postln;
 	}
 
-	free {
-    this.sendMethodRequest(\free)
-  }
+
 }

@@ -19,11 +19,12 @@ VertexTypeInstanceInterface {
   *makeInstanceInterface { |vertex|
     var oscDefName = (vertex.name.asSymbol ++ "Interface").asSymbol ;
     var oscDefPath = "/" ++ vertex.name.asSymbol ++ "/interface" ;
+
     OSCdef(oscDefName, { |argMsg, time, host, recvPort|
       var msg = VertexMessage.decode(host, argMsg);
       var method = (msg.methodName++"Handler").asSymbol;
       var vertex = Vertex(msg.name);
-      vertex.tryPerform(method, *msg.args);
+      vertex.tryPerform(method, msg.args);
     }, oscDefPath)
   }
 

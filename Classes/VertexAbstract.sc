@@ -84,6 +84,34 @@ VertexAbstract {
     var msg = VertexMessage.newMethodRequest(this, vertexHost, selector, args).sendRequest;
   }
 
+////////////////////////////
+// WORKING HERE: /////////
+
+  sendProxyUpdate { |args|
+    var vertexHost = Mesh.broadcastAddr;
+    var msg = VertexMessage.newMethodRequest(this, vertexHost, \proxyUpdate, args).sendRequest;
+  }
+
+
+proxyUpdateHandler {|args|
+
+  MeshDebugMon(thisFunctionDef);
+
+
+  // vertexName, address,
+  //   method: (\proxyUpdate),
+  //   args: [
+  //     varNameA: newValue1,
+  //     varNameB: newValue2,
+  //     varNameC: newValue3
+  //   ]
+
+  // Calls Vertex.proxyUpdateHandler(args);
+
+  ////////////////////////////
+
+}
+
   *vertexExists { |msg|
     ^ (msg.mesh).includesVertex(msg.name)
   }
