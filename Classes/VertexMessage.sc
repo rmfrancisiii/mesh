@@ -13,7 +13,6 @@ VertexMessage {
     var type = vertex.class.name.asSymbol;
     var requestingHost = Mesh.thisHost;
     var vertexName = vertex.name;
-
     ^ super.newCopyArgs(path, vertexName, type, vertexHost, requestingHost, mesh, selector, args);
   }
 
@@ -29,7 +28,6 @@ VertexMessage {
 
   sendRequest {
     vertexHost.sendMsg(*this.asOSCMsg);
-    //MeshDebugMon(thisFunctionDef, path, name, type, vertexHost, requestingHost, mesh, methodName, args);
   }
 
   sendResponse {
@@ -37,7 +35,6 @@ VertexMessage {
   }
 
   sendProxyRequest {
-    MeshDebugMon(thisFunctionDef);
     Mesh.broadcastAddr.sendMsg(*this.asOSCMsg);
   }
 
@@ -49,8 +46,5 @@ VertexMessage {
     this.asOSCMsg.postln; //instVarDict.postln;
   }
 
-  bootHandler {
-    MeshDebugMon(thisFunctionDef);
-  }
 
 }

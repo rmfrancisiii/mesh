@@ -6,8 +6,6 @@ VertexServer : VertexAbstract {
 	}
 
 	initVertex{|msg|
-		MeshDebugMon(thisFunctionDef);
-		// called by VertexAbstract.makeVertex
 		this.setInstanceVars(msg);
 		isProxy = false;
 		server = Server.local;
@@ -16,12 +14,10 @@ VertexServer : VertexAbstract {
 	}
 
 	makeInstanceInterfaces{
-		MeshDebugMon(thisFunctionDef);
 		VertexTypeInstanceInterface.makeInstanceInterface(this);
 	}
 
 	initProxy {|msg|
-		// called by VertexAbstract.makeProx
 		this.setInstanceVars(msg);
 		isProxy = true;
 		server = Server.remote(name, host);
@@ -40,15 +36,14 @@ VertexServer : VertexAbstract {
 	setServerOptions{ |args|
 		// NOTE: these are hard coded!
 		// TODO: logic HERE
-
 		server.options.protocol_(\tcp);
 		server.options.maxLogins_(8);
 	}
 
 	bootHandler{ |requestingHost, msg|
 		"Booting".postln;
+		this.setServerOptions;
 		server.boot;
-		//when booted:
 		// set isRunning to true
 		// send proxy update request (isRunning = true)
 	}
@@ -56,7 +51,6 @@ VertexServer : VertexAbstract {
 	killHandler{ |requestingHost, msg|
 		"Killing".postln;
 		server.quit;
-		//when killed:
 		// set isRunning to false
 		// send proxy update request (isRunning = false)
 	}
@@ -66,10 +60,6 @@ VertexServer : VertexAbstract {
 	}
 
 	free {
-    MeshDebugMon(thisFunctionDef,this);
     this.sendMethodRequest(\free)
   }
-
-
-
 }

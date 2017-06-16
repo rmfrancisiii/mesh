@@ -6,8 +6,6 @@ VertexAbstract {
   }
 
   *newVertexHandler { |msg|
-    MeshDebugMon(thisFunctionDef);
-
     if (this.vertexExists(msg))
        { this.sendError(msg, Error("VertexName already in use."))}
 
@@ -19,8 +17,6 @@ VertexAbstract {
   *makeVertex{ |msg|
     var vertex = super.new.initVertex(msg);
     //Error("This is a basic error.").throw;
-    MeshDebugMon(thisFunctionDef);
-
     msg.mesh.vertexes.put(msg.name, vertex);
     this.sendConfirmation(msg);
     this.sendProxyRequest(msg);
@@ -50,15 +46,10 @@ VertexAbstract {
   *sendProxyRequest{ |msg|
     msg.methodName = \proxyRequest;
     msg.args = [\proxyVertex];
-    MeshDebugMon(thisFunctionDef);
     msg.sendProxyRequest;
   }
 
   *proxyRequestHandler{ |msg|
-    /* REMOVE!!! ONLY FOR TESTING ON ONE MACHINE!!!
-    msg.name = (msg.name ++ "Proxy").asSymbol;
-    */
-
    if (this.vertexExists(msg))
        { this.sendError(msg, Error("VertexName already in use."))}
 
@@ -77,20 +68,15 @@ VertexAbstract {
   }
 
   *sendProxyConfirmation{ |msg|
-    MeshDebugMon(thisFunctionDef);
     msg.methodName = \proxyConfirmation;
     msg.sendResponse;
   }
 
   *proxyConfirmationHandler { |msg|
-      MeshDebugMon(thisFunctionDef);
       "proxy response received".postln;
-
       // from vertexResponseHandler
-
-      //should track that all mesh hosts confirm proxy request
+      // should track that all mesh hosts confirm proxy request
       // and resend if necessary?
-
   }
 
   sendMethodRequest { |selector, args|
@@ -103,7 +89,6 @@ VertexAbstract {
   }
 
   doesNotUnderstand {|selector ...args|
-    MeshDebugMon(thisFunctionDef,this);
     this.sendMethodRequest(selector, args)
   }
 

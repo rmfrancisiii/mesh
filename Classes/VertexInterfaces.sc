@@ -19,14 +19,10 @@ VertexTypeInstanceInterface {
   *makeInstanceInterface { |vertex|
     var oscDefName = (vertex.name.asSymbol ++ "Interface").asSymbol ;
     var oscDefPath = "/" ++ vertex.name.asSymbol ++ "/interface" ;
-    MeshDebugMon(thisFunctionDef, oscDefName, oscDefPath);
-
-    OSCdef(oscDefName, { |msg, time, host, recvPort|
-      var method ;
-      var vertex ;
-      msg = VertexMessage.decode(host, msg);
-      method = (msg.methodName++"Handler").asSymbol;
-      vertex = Vertex(msg.name);
+    OSCdef(oscDefName, { |argMsg, time, host, recvPort|
+      var msg = VertexMessage.decode(host, argMsg);
+      var method = (msg.methodName++"Handler").asSymbol;
+      var vertex = Vertex(msg.name);
       vertex.tryPerform(method, *msg.args);
     }, oscDefPath)
   }
