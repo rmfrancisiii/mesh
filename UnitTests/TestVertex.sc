@@ -29,7 +29,7 @@ TestVertex : UnitTest {
 
 	setLocalBroadcastAddr {
 		"Resetting broadcast address. local loopback testing only!".warn;
-			Mesh.broadcastAddr = MeshHostAddr("127.0.0.1", 57120 + (0..7))
+			Mesh.broadcastAddr.addr = MeshHostAddr("127.0.0.1", 57120 + (0..7))
 	}
 
 	vertexInitialized {

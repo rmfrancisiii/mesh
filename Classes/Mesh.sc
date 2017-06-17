@@ -9,11 +9,14 @@ Mesh {
 		thisHost = thisHost.as(MeshHost);
 		Vertex.initVertexTypes;
 
-	broadcastAddr = MeshHostAddr("255.255.255.255", 57120 + (0..7));
+// 	broadcastAddr = MeshHostAddr("255.255.255.255", 57120 + (0..7));
+
+	broadcastAddr = BroadcastHost.new(\broadcast, MeshHostAddr("255.255.255.255", 57120 + (0..7)));
 
 	}
 
-	*at {|key| ^ all.at(key) }
+	*at {|key|
+		^ all.at(key) }
 
 	*new {|key|
 		^ all.at(key) ?? { ^ super.new.init(key).addMesh };

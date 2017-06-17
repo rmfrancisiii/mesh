@@ -88,7 +88,7 @@ VertexAbstract {
 // WORKING HERE: /////////
 
   sendProxyUpdate { |args|
-    var msg = VertexMessage.newMethodRequest(this, Mesh.thisHost, \proxyUpdate, args).sendRequest;
+    var msg = VertexMessage.newMethodRequest(this, Mesh.broadcastAddr, \proxyUpdate, args).sendRequest;
 
     MeshDebugMon(thisFunctionDef, msg);
 

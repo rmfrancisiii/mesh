@@ -19,7 +19,9 @@ MeshHostsManager {
 
 	now { ^ Main.elapsedTime }
 
-	at {|key| ^ all.at(key) }
+	at {|key|
+		if (key == \broadcast) {^ Mesh.broadcastAddr};
+		^ all.at(key) }
 
 	names { ^ all.keys.asArray }
 

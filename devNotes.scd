@@ -9,7 +9,7 @@
 //       OSCDef -> msg.decode -> VertexType.oscMsgHandler -> Vertex.methodHandler
 
 Mesh(\mesh1).push;
-Mesh.broadcastAddr = MeshHostAddr("127.0.0.1", 57120 + (0..7))
+Mesh.broadcastAddr.addr = MeshHostAddr("127.0.0.1", 57120 + (0..7))
 Mesh.current.hosts.beacon.start;
 Vertex(\server1, \server, \rose, \mesh1);
 Vertex(\server1).boot;

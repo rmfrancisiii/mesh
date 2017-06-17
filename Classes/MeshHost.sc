@@ -34,3 +34,15 @@ MeshHost {
 
 }
 
+BroadcastHost {
+	var <name, <>addr, <>online;
+
+	*new {|name, addr, online = true|
+		^super.newCopyArgs(name.asSymbol, addr, online);
+	}
+
+	sendMsg {|...args|
+		addr.sendMsg(*args);
+	}
+
+}
