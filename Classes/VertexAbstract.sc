@@ -88,14 +88,16 @@ VertexAbstract {
 // WORKING HERE: /////////
 
   sendProxyUpdate { |args|
-    var vertexHost = Mesh.broadcastAddr;
-    var msg = VertexMessage.newMethodRequest(this, vertexHost, \proxyUpdate, args).sendRequest;
+    var msg = VertexMessage.newMethodRequest(this, Mesh.thisHost, \proxyUpdate, args).sendRequest;
+
+    MeshDebugMon(thisFunctionDef, msg);
+
   }
 
 
 proxyUpdateHandler {|args|
 
-  MeshDebugMon(thisFunctionDef);
+  MeshDebugMon(thisFunctionDef, args);
 
 
   // vertexName, address,

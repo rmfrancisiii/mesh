@@ -45,6 +45,8 @@ VertexServer : VertexAbstract {
 		this.setServerOptions;
 		server.boot;
 
+		this.sendProxyUpdate([\isRunning, true]);
+
 		// WORKING HERE; /////////
 
 		// ADD MESSAGING FOR PROXY UPDATE
