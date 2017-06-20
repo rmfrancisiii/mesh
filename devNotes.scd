@@ -12,12 +12,27 @@ Mesh(\mesh1).push;
 Mesh.broadcastAddr.addr = MeshHostAddr("127.0.0.1", 57120 + (0..7))
 Mesh.current.hosts.beacon.start;
 Vertex(\server1, \server, \rose, \mesh1);
+Vertex(\server1).isRunning.postln;
+Vertex(\server1).isProxy.postln;
 Vertex(\server1).boot;
+
+
+Vertex(\server1).isRunning.postln;
+Vertex(\server1).postln;
+
+Vertex(\server1).server.serverRunning.postln;
+Vertex(\server1).isRunning = false;
+
+Vertex(\server1).postln;
 Vertex(\server1).kill;
 Vertex(\server1).free;
 
 Vertex(\pattern1, \pattern, \rose, \mesh1);
 
+
+Mesh(\mesh1)[\broadcast].addr.postln;
+
+Mesh.broadcastAddr.name.postln;
 
 Mesh(\mesh1).vertexes.postln;
 

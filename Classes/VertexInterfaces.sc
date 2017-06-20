@@ -24,8 +24,6 @@ VertexTypeInstanceInterface {
       var msg = VertexMessage.decode(host, argMsg);
       var method = (msg.methodName++"Handler").asSymbol;
       var vertex = Vertex(msg.name);
-
-      MeshDebugMon(thisFunctionDef, msg);
       vertex.tryPerform(method, msg.args);
     }, oscDefPath)
   }

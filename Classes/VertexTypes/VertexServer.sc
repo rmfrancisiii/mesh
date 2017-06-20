@@ -8,6 +8,7 @@ VertexServer : VertexAbstract {
 	initVertex{|msg|
 		this.setInstanceVars(msg);
 		isProxy = false;
+		isRunning = false;
 		server = Server.local;
 		this.setServerOptions(msg.args);
 		this.makeInstanceInterfaces;
@@ -31,6 +32,7 @@ VertexServer : VertexAbstract {
 		name = msg.name;
 		host = msg.vertexHost;
 		mesh = msg.mesh;
+		isRunning = false;
 	}
 
 	setServerOptions{ |args|
@@ -44,25 +46,16 @@ VertexServer : VertexAbstract {
 		"Booting".postln;
 		this.setServerOptions;
 		server.boot;
+		isRunning = true;
+		this.sendProxyUpdate([\isRunning, \true]);
 
-		this.sendProxyUpdate([\isRunning, true]);
-
-		// WORKING HERE; /////////
-
-		// ADD MESSAGING FOR PROXY UPDATE
-		// this.sendProxyUpdate (ARGS)
-		// set isRunning to true
-		// send proxy update request (isRunning = true)
-
-		////////////////////////////
 	}
 
 	killHandler{ |requestingHost, msg|
 		"Killing".postln;
 		server.quit;
-		// ADD MESSAGING FOR PROXY UPDATE
-		// set isRunning to false
-		// send proxy update request (isRunning = false)
+		isRunning = false;
+		this.sendProxyUpdate([\isRunning, false]);
 	}
 
 

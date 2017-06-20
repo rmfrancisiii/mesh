@@ -27,8 +27,6 @@ VertexMessage {
   }
 
   sendRequest {
-    //PROBLEM WITH *this.asOSCMsg WHEN USING BROADCAST ADDR
-
     vertexHost.sendMsg(*this.asOSCMsg);
   }
 
@@ -41,8 +39,6 @@ VertexMessage {
   }
 
   asOSCMsg {
-    //PROBLEM WITH vertexHost.name WHEN USING BROADCAST ADDR
-
     ^ Array.with(path, name, type, vertexHost.name, requestingHost.name,  mesh.name, methodName, *args)
   }
 
