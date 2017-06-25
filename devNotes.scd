@@ -1,30 +1,21 @@
-// TODO: go over the addressing and osc messaging components
-// particularly calling methods on remote objects.
-
-
-// TODO: Combine into One OSC Def per Vertex Instance to handle
-//       Method calls
-//
-//       Vertex.method -> msg.encode -> msg.send -> OSCDef
-//       OSCDef -> msg.decode -> VertexType.oscMsgHandler -> Vertex.methodHandler
-
+// for on the bus
 Mesh(\mesh1).push;
 Mesh.broadcastAddr.addr = MeshHostAddr("127.0.0.1", 57120 + (0..7))
 Mesh.current.hosts.beacon.start;
 Vertex(\server1, \server, \rose, \mesh1);
-Vertex(\server1).isRunning.postln;
-Vertex(\server1).isProxy.postln;
 Vertex(\server1).boot;
-
-
 Vertex(\server1).isRunning.postln;
-Vertex(\server1).postln;
+Vertex(\server1).name.postln;
+Vertex(\server1).mesh.postln;
+Vertex(\server1).isProxy.postln;
+Vertex(\server1).server.postln;
+Vertex(\server1).host.postln;
+Vertex(\server1).isRunning.postln;
+Vertex(\server1).status.postln;
 
-Vertex(\server1).server.serverRunning.postln;
-Vertex(\server1).isRunning = false;
-
-Vertex(\server1).postln;
 Vertex(\server1).kill;
+
+
 Vertex(\server1).free;
 
 Vertex(\pattern1, \pattern, \rose, \mesh1);
@@ -115,14 +106,6 @@ Mesh(\mesh1).vertexes.postln;
 Vertex(\server1).server.options.maxLogins.postln;
 
 
-Vertex(\server1).name.postln;
-Vertex(\server1).mesh.postln;
-Vertex(\server1).isProxy.postln;
-Vertex(\server1).server.postln;
-Vertex(\server1).host.postln;
-Vertex(\server1).isRunning.postln;
-
-Vertex(\server1).server.status.postln;
 Vertex(\server2).server.status.postln;
 Vertex(\server3).server.status.postln;
 

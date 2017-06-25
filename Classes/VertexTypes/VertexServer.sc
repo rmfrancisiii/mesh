@@ -58,14 +58,16 @@ VertexServer : VertexAbstract {
 		this.sendProxyUpdate([\isRunning, false]);
 	}
 
-
 	// example to Overload inherited method from Object
 	free {
     this.sendMethodRequest(\free)
   }
 
+	//and then handle it
 	freeHandler{ |requestingHost, msg|
 		"freeing".postln;
+		// send proxyFree
+		// remove the vertex from the vertexDict
 	}
 
 
