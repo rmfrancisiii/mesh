@@ -8,6 +8,12 @@ Mesh.broadcastAddr.addr = MeshHostAddr("127.0.0.1", 57120 + (0..7))
 Mesh.current.hosts.beacon.start;
 Vertex(\server1, \server, \rose, \mesh1);
 Vertex(\server1).boot;
+
+
+
+
+
+
 Vertex(\server1).isRunning.postln;
 Vertex(\server1).name.postln;
 Vertex(\server1).mesh.postln;
@@ -16,7 +22,6 @@ Vertex(\server1).server.postln;
 Vertex(\server1).host.postln;
 Vertex(\server1).inExistence(\arg1, \arg2);
 Vertex(\server1).kill;
-
 
 o = Server.local.options;
 o.numOutputBusChannels.postln;

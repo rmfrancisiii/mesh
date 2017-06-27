@@ -86,12 +86,6 @@ VertexAbstract {
     var msg = VertexMessage.newMethodRequest(this, Mesh.broadcastAddr, \proxyUpdate, args).sendRequest;
   }
 
-  proxyUpdateHandler {|args|
-    if (isProxy)
-      { args.asAssociations.do({ |item|
-        this.tryPerform(item.key.asSetter, item.value)})
-    };
-  }
 
   *vertexExists { |msg|
     ^ (msg.mesh).includesVertex(msg.name)
@@ -103,6 +97,10 @@ VertexAbstract {
   }
 
   initVertex {
+   this.subclassResponsibility(thisMethod);
+  }
+
+  proxyUpdateHandler {
    this.subclassResponsibility(thisMethod);
   }
 

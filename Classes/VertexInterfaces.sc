@@ -1,6 +1,6 @@
 VertexTypeClassInterface {
 // this enables calling Class methods on a remote machine
-// needs error handling
+// needs more error handling
   *makeGenericClassInterfaces { |vertexType|
     var oscDefName = (vertexType.asSymbol ++ "Interface").asSymbol ;
     var oscDefPath = "/" ++ vertexType.asSymbol ++ "/interface" ;

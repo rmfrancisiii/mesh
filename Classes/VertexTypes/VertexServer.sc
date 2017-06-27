@@ -72,6 +72,13 @@ VertexServer : VertexAbstract {
 		// send proxyFree
 		// remove the vertex from the vertexDict
 	}
+	
+	proxyUpdateHandler {|args|
+    if (isProxy)
+      { args.asAssociations.do({ |item|
+        this.tryPerform(item.key.asSetter, item.value)})
+    };
+  }
 
 
 }
