@@ -25,19 +25,12 @@ VertexTypeInstanceInterface {
       var method = (msg.methodName++"Handler").asSymbol;
       var vertex = Vertex.at(msg.name);
 
-      "Received MESSAGE:".post;
-      msg.postln;
-
       if (vertex.class.findMethod(method).isNil)
-      {
-      msg.methodName = \error;
-      msg.args = [(method ++ " Method does not exist")];
-      msg.sendResponse;
-      }
+      { msg.methodName = \error;
+        msg.args = [(method ++ " Method does not exist")];
+        msg.sendResponse }
 
-      { "TRYING METHOD:  ".post;
-        method.postln;
-        try {vertex.perform(method, msg.args)}{|error| "error".postln }};
+      { try {vertex.perform(method, msg.args)}{|error| "error".postln }};
     }, oscDefPath)
   }
 

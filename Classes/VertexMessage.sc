@@ -28,13 +28,10 @@ VertexMessage {
 
   sendRequest {
     vertexHost.sendMsg(*this.asOSCMsg);
-
   }
 
   sendResponse {
     requestingHost.sendMsg(*this.asOSCMsg);
-    "Sending: ".post;
-    this.postln;
   }
 
   sendProxyRequest {

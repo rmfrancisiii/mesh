@@ -15,19 +15,19 @@ Vertex(\server1).isProxy.postln;
 Vertex(\server1).server.postln;
 Vertex(\server1).host.postln;
 Vertex(\server1).inExistence(\arg1, \arg2);
+Vertex(\server1).kill;
 
 
 o = Server.local.options;
 o.numOutputBusChannels.postln;
 o.maxLogins.postln;
 o.protocol.postln;
-Vertex(\server1).kill;
 
 
 Vertex(\server1).free;
 
 Vertex(\pattern1, \pattern, \rose, \mesh1);
-
+Mesh(\mesh1).vertexes.postln;
 
 Mesh(\mesh1)[\broadcast].addr.postln;
 

@@ -80,7 +80,6 @@ VertexAbstract {
   sendMethodRequest { |selector, args|
     var vertexHost = this.getVertexHost;
     var msg = VertexMessage.newMethodRequest(this, vertexHost, selector, args).sendRequest;
-        MeshDebugMon(thisFunctionDef);
   }
 
   sendProxyUpdate { |args|
@@ -119,7 +118,7 @@ VertexAbstract {
     this.subclassResponsibility(thisMethod);
   }
 
-  printOn {|stream|
-    this.instVarDict.values.postln;
-  }
+  /*printOn {|stream|
+    stream << this.instVarDict.values.postln;
+  }*/
 }
