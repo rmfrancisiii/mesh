@@ -1,4 +1,8 @@
+
+
 // for on the bus
+
+
 Mesh(\mesh1).push;
 Mesh.broadcastAddr.addr = MeshHostAddr("127.0.0.1", 57120 + (0..7))
 Mesh.current.hosts.beacon.start;
@@ -10,9 +14,13 @@ Vertex(\server1).mesh.postln;
 Vertex(\server1).isProxy.postln;
 Vertex(\server1).server.postln;
 Vertex(\server1).host.postln;
-Vertex(\server1).isRunning.postln;
-Vertex(\server1).status.postln;
+Vertex(\server1).inExistence(\arg1, \arg2);
 
+
+o = Server.local.options;
+o.numOutputBusChannels.postln;
+o.maxLogins.postln;
+o.protocol.postln;
 Vertex(\server1).kill;
 
 
@@ -812,7 +820,7 @@ TODO: Check to be sure the following are for a local server.
   setServerOptions{ |args|
 		"Setting server Options".postln;
 		// use args for optional ServerOptions
-		server.options.protocol_(\tcp);
+		server.options.protocol(\tcp);
 		server.options.maxLogins_(8);
 		server.options.protocol_(\tcp);
 		//server.addr.connect;

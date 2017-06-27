@@ -12,7 +12,6 @@ VertexTypeClassInterface {
       vertexType.tryPerform(method, msg) ;
     }, oscDefPath)
   }
-
 }
 
 VertexTypeInstanceInterface {
@@ -24,13 +23,21 @@ VertexTypeInstanceInterface {
     OSCdef(oscDefName, { |argMsg, time, host, recvPort|
       var msg = VertexMessage.decode(host, argMsg);
       var method = (msg.methodName++"Handler").asSymbol;
-      // needs to handle error if vertex does not exist (not try to create)
       var vertex = Vertex.at(msg.name);
-      Vertex.at(msg.name).postln;
-      // this only prints error on host machine.
-      // needs: try, on failure, return Error
-      if (vertex.class.findMethod(method).isNil){"ERROR".postln};
-      vertex.tryPerform(method, msg.args);
+
+      "Received MESSAGE:".post;
+      msg.postln;
+
+      if (vertex.class.findMethod(method).isNil)
+      {
+      msg.methodName = \error;
+      msg.args = [(method ++ " Method does not exist")];
+      msg.sendResponse;
+      }
+
+      { "TRYING METHOD:  ".post;
+        method.postln;
+        try {vertex.perform(method, msg.args)}{|error| "error".postln }};
     }, oscDefPath)
   }
 

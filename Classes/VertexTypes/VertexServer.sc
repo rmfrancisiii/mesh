@@ -48,8 +48,11 @@ VertexServer : VertexAbstract {
 		server.boot;
 		isRunning = true;
 		this.sendProxyUpdate([\isRunning, \true]);
-
 	}
+
+	errorHandler { |msg|
+    ("Error: " ++ msg).postln
+  }
 
 	killHandler{ |requestingHost, msg|
 		"Killing".postln;

@@ -31,7 +31,7 @@ VertexAbstract {
   }
 
   *errorHandler { |msg|
-    ("Error: " ++ msg.args).postln
+    (msg.args[0]).postln
   }
 
   *sendConfirmation{ |msg|
@@ -50,9 +50,7 @@ VertexAbstract {
   }
 
   *proxyRequestHandler{ |msg|
-   if (this.vertexExists(msg))
-       { this.sendError(msg, Error("VertexName already in use."))}
-
+   if (this.vertexExists(msg).not)
        { "received proxy request".postln;
          try { this.makeProxy(msg) }
              { |error| this.sendError(msg, error)};
@@ -82,6 +80,7 @@ VertexAbstract {
   sendMethodRequest { |selector, args|
     var vertexHost = this.getVertexHost;
     var msg = VertexMessage.newMethodRequest(this, vertexHost, selector, args).sendRequest;
+        MeshDebugMon(thisFunctionDef);
   }
 
   sendProxyUpdate { |args|
@@ -100,7 +99,8 @@ VertexAbstract {
   }
 
   doesNotUnderstand {|selector ...args|
-    this.sendMethodRequest(selector, args)
+    this.sendMethodRequest(selector, args);
+    ^ "sent method request";
   }
 
   initVertex {
