@@ -86,7 +86,6 @@ VertexAbstract {
     var msg = VertexMessage.newMethodRequest(this, Mesh.broadcastAddr, \proxyUpdate, args).sendRequest;
   }
 
-
   *vertexExists { |msg|
     ^ (msg.mesh).includesVertex(msg.name)
   }
@@ -96,11 +95,21 @@ VertexAbstract {
     ^ "sent method request";
   }
 
-  initVertex {
-   this.subclassResponsibility(thisMethod);
+  // OVERLOADED:
+  free {
+    this.sendMethodRequest(\free)
   }
 
-  proxyUpdateHandler {
+  // REQUIRED SUBCLASS RESPONSIBILITIES
+  *makeClassInterface {
+    this.subclassResponsibility(thisMethod);
+	}
+
+  *makeInstanceInterface {
+    this.subclassResponsibility(thisMethod);
+  }
+
+  initVertex {
    this.subclassResponsibility(thisMethod);
   }
 
@@ -112,8 +121,24 @@ VertexAbstract {
    this.subclassResponsibility(thisMethod);
   }
 
-  free {
+  proxyUpdateHandler {
+   this.subclassResponsibility(thisMethod);
+  }
+
+	errorHandler {
+    this.subclassResponsibility(thisMethod);
+  }
+
+  freeHandler {
     this.subclassResponsibility(thisMethod);
+  }
+
+  patchIn {
+    this.subclassResponsibility(thisMethod);
+  }
+
+  patchOut {
+    this.subclassResponsibility(thisMethod);
   }
 
   /*printOn {|stream|

@@ -1,188 +1,40 @@
+UnitTest.gui;
+Vertex.test;
+MeshHostsManager.test;
+Mesh.test;
 
 
 // for on the bus
-
-
 Mesh(\mesh1).push;
 Mesh.broadcastAddr.addr = MeshHostAddr("127.0.0.1", 57120 + (0..7))
 Mesh.current.hosts.beacon.start;
 Vertex(\server1, \server, \rose, \mesh1);
+Vertex(\server1).setOptions(\maxLogins, 12);
 Vertex(\server1).boot;
+Vertex(\server1).ping;
 
+Vertex(\synth1, \synth, \mesh1,
+	{ | out, freq = 440, amp = 0.1, nharms = 10, pan = 0, gate = 1 |
+    var audio = Blip.ar(freq, nharms, amp);
+    var env = Linen.kr(gate, doneAction: 2);
+		OffsetOut.ar(out, Pan2.ar(audio, pan, env) )});
 
+Vertex(\pattern1, \pattern, \mesh1,
+	    \instrument, \test,
+	[ \server, Server.default,
+      \nharms, Pseq([4, 10, 40], inf),
+      \dur, Pseq([1, 1, 2, 1]/10, inf),
+      #[freq, sustain], Ptuple([
+		 // assignment to multiple keys
+         Pseq( (1..16) * 50, 4),
+			Pseq([1/10, 0.5, 1, 2], inf)])]);
 
+Patch(\synth1, \server1);
+Patch(\pattern1, \synth1);
 
 
 
-Vertex(\server1).isRunning.postln;
-Vertex(\server1).name.postln;
-Vertex(\server1).mesh.postln;
-Vertex(\server1).isProxy.postln;
-Vertex(\server1).server.postln;
-Vertex(\server1).host.postln;
-Vertex(\server1).inExistence(\arg1, \arg2);
-Vertex(\server1).kill;
 
-o = Server.local.options;
-o.numOutputBusChannels.postln;
-o.maxLogins.postln;
-o.protocol.postln;
-
-
-Vertex(\server1).free;
-
-Vertex(\pattern1, \pattern, \rose, \mesh1);
-Mesh(\mesh1).vertexes.postln;
-
-Mesh(\mesh1)[\broadcast].addr.postln;
-
-Mesh.broadcastAddr.name.postln;
-
-Mesh(\mesh1).vertexes.postln;
-
-Vertex(\server1).postln;
-Mesh(\mesh1).vertexes.at(\server1).isProxy.postln;
-Mesh(\mesh1).vertexes.at(\server1Proxy).isProxy.postln;
-
-
-Vertex.test;
-Vertex(\server1).boot;
-
-VertexServer.methods.do({|args| args.name.postln});
-Vertex(\server1).class.methods.do({|args| args.name.postln});
-Vertex(\server1).methods.do({|args| args.name.postln});
-
-OSCdef.all.keys.postln;
-OSCdef.all
-Mesh.all.postln;
-
-Vertex(\pattern1, \pattern);
-Mesh.at(\mesh1).vertexes.postln;
-
-Vertex(\server1).boot(\test1, \test2, \test3);
-
-
-Vertex.vertexTypeDict.postln;
-
-(
-SynthDef("grain", {
-	    Out.ar(0, Line.kr(0.1, 0, 0.01, doneAction:2) * FSinOsc.ar([400,1000]))
-}).send(Vertex(\server1).server);
-)
-
-(
-Routine({
-    20.do({
-		        (Vertex(\server1).server).sendMsg("/s_new", "grain", -1);
-        0.01.wait;
-    })
-}).play;
-)
-
-
-(
-p = Pbind(
-    \midinote, Pseq([60, 72, 71, 67, 69, 71, 72, 60, 69, 67], 1),
-    \dur, Pseq([2, 2, 1, 0.5, 0.5, 1, 1, 2, 2, 3], 1)
-).play;
-)
-
-
-
-Vertex(\server1).kill(\test1, \test2, \test3);
-Vertex(\server1).host.postln;
-Vertex(\server1).class;
-
-Mesh.thisHost.sendMsg(("/" ++ name ++ "/Boot/Server"), \bootServer)
-
-OSCdef.all;
-VertexServer.methods.do({|args| args.name.postln});
-
-
-UnitTest.gui;
-
-Pbind(\freq, Prand([300, 500, 231.2, 399.2], inf), \dur, 0.1).play;
-Pbind(\freq, Prand([300, 500, 231.2, 399.2], inf), \dur, Prand([0.1, 0.3], inf)).play;
-
-
-n = Synth(\default, [\freq, 850]);
-n.set(\freq, 500)
-n.free;
-
-Vertex(\server1).boot(\test1, \test2, \test3);
-
-
-
-
-
-Mesh(\mesh1).vertexes.postln;
-Vertex(\server1).server.options.maxLogins.postln;
-
-
-Vertex(\server2).server.status.postln;
-Vertex(\server3).server.status.postln;
-
-
-
-
-Vertex(\server1p).name.postln;
-Vertex(\server1p).mesh.postln;
-Vertex(\server1p).isProxy.postln;
-Vertex(\server1p).server.postln;
-Vertex(\server1p).host.postln;
-Vertex(\server1p).isRunning.postln;
-
-OSCdef.all
-
-Server.all.postln;
-
-Mesh(\mesh1).push;
-
-Vertex(\server2, \server, \rose, \mesh1, \arg1, \arg2, \arg3);
-Vertex(\server3, \server, \river, \mesh1, \arg1, \arg2, \arg3);
-
-Vertex(\server2).host.postln;
-Vertex(\server3).host.postln;
-
-
-
-Mesh.at(\mesh1).vertexes.at(\vertex1).postln;
-Vertex(\vertex1).setOptions(maxLogins: 12);
-Vertex(\vertex1).boot;
-Vertex(\vertex1).postln;
-
-
-
-MeshHostsManager.test;
-Mesh.test;
-
-Mesh.at(\mesh1)[\rose].postln;
-
-
-Vertex(\server1).setOptions(maxLogins: 12);
-Vertex(\server1).boot;
-
-Vertex.vertexTypeDict.postln;
-UnitTest.gui;
-
-Mesh.current.postln;
-Mesh.current.hosts;
-Mesh.stack.postln;
-Mesh.all.postln;
-Mesh.thisHost.name.postln;
-Vertex.vertexTypeDict.postln;
-Mesh.all.postln;
-Mesh.current.hosts;
-Mesh.all.removeAt(\mesh1);
-NetAddr.localAddr.postln;
-NetAddr.localAddr.sendMsg("/x");
-r = OSCFunc({ "message arrived".postln }, '/x');
-n = NetAddr("127.0.0.1", 57120);
-n.sendMsg("/x")
-
-("hostname".unixCmdGetStdOut.split($.)[0]).stripWhiteSpace.asSymbol
-
-OSCdef.all;
 
 
 
@@ -628,229 +480,3 @@ eg Digital Music Orchestra
 ? Patches could hold a transformation function (scaling/mapping) of some sort
 
 
-
-Code scratchpad (ignore):
-/////////////////////////
-
-TODO: Check to be sure the following are for a local server.
-
-
-		if (myHost == Mesh.me)
-
-		{
-		// if its being added to THIS machine:
-		// If Local:
-		// set Host = Mesh.me
-		// set Params = *[options]
-		// set Server = Server.local(\Local, Mesh.me);
-		// send SPAWN_SIGNAL
-		// Reboot Server;
-		// Wait for boot;
-		// send SPAWN_REPLY;
-		// server.connect;
-
-			"Local Server".postln;
-			host = myHost;
-			server = myServer;
-			this.setParams;
-			this.boot;
-			this.notifyMesh;
-
-		}
-
-		{ // What if it's on a remote server?
-
-		// If Remote:
-		// set Host = Mesh(\mesh1)[\river]
-		// set Params = *[options]
-		// set Server = Server.remote(\river, NetAddr(Mesh(\mesh1)[\river].addr.ip, 57110))
-		// send SPAWN_SIGNAL
-		// wait for SPAWN_REPLY;
-		// server.connect
-
-			"Creating A Remote Server!!!".postln;
-			host = myHost;
-			server = myServer;
-			this.setParams;
-			// this.reboot;
-		}
-
-
-	spawn {|msg, time, addr, recvPort|
-		"Create a Server from this message".postln;
-
-	}
-
-	spawnReply {|msg, time, addr, recvPort|
-		"server is created and booted".postln;
-
-	}
-
-
-
-
-
-	doesNotUnderstand {|selector ... args|
-		// TODO: need to check order?
-		var result = nil;
-		(result = server.tryPerform(selector, *args)) !? { ^ result };
-		(result = server.options.tryPerform(selector, *args)) !? { ^ result };
-		(result = server.addr.tryPerform(selector, *args)) !? { ^ result };
-	}
-
-	setParams {
-		server.options.protocol_(\tcp);
-		server.options.maxLogins_(8);
-	}
-
-	notifyMesh {
-		"Spread the word!!".postln;
-	}
-  // all additional instance/interface methods
-  // are calls to the proxy, and can direct requests to the server
-
-  /*doesNotUnderstand {|selector ... args|
-    // TODO: need to check order?
-    var result = nil;
-    (result = server.tryPerform(selector, *args)) !? { ^ result };
-    (result = server.options.tryPerform(selector, *args)) !? { ^ result };
-    (result = server.addr.tryPerform(selector, *args)) !? { ^ result };
-  }*/
-
-  /**vertexRequestHandler {|msg|
-    if (super.new.init(*msg)) {
-      ^ "Broadcast Vertex Proxy Request message now!".postln
-      // TODO: This!!!
-      // this.vertexProxyRequestor(arguments)
-
-    }
-    {^ "Not added, Failed, return error to requesting host!".postln
-      // TODO: This!!!
-    };
-  }*/
-
-
-
-
-/*
-
-*sendVertexConfirmation { |msg|
-  var path = (this.makeOSCdefPath("Confirm", "Vertex"));
-  this.relayMsg(path, msg);
-}
-
-*sendProxyRequest{ |msg|
-  var path = (this.makeOSCdefPath("Request", "Proxy"));
-  this.relayMsg(path, msg);
-}
-
-*relayMsg {|path, msg, error|
-  msg.requestingHost.sendMsg(path, msg, error);
-}
-
-*tryMakeProxy { |msg|
-  /*var proxyHost = Mesh.thisHost;
-  var oscAddr = msg[0];
-  var vertexName = msg[1];
-  var mesh = Mesh(msg[2]);
-  var args = msg[3..];
-
-  if (vertexHost.ip != Mesh.thisHost.ip){
-
-    "received proxy request".postln;
-
-    if (mesh.includesVertex(vertexName).not)
-      {
-        if (this.makeProxy(vertexName, mesh, vertexHost, args))
-          { "Proxy added, sending Proxy Confirmation".postln;
-            this.sendProxyConfirmation(vertexName, mesh.name, proxyHost, vertexHost);
-          }{ var error;
-            // TODO:  construct Proxy Creation Failed Error Message
-            this.sendProxyError(vertexName, mesh.name, vertexHost, error);
-            // add caught error?
-          }
-      }
-
-      {var error;
-        // TODO:  construct Proxy Creation Error Message
-        this.sendProxyError(vertexName, mesh.name, vertexHost, error);
-        // add caught error?
-      }
-  }*/
-}
-
-/**makeProxy{ |msg|
-  /*var proxy = super.new.initProxy(vertexName, mesh, vertexHost, args);
-  mesh.vertexes.put(vertexName, proxy);
-  ^ true
-}
-
-*sendProxyConfirmation { |msg|
-  var path = (this.makeOSCdefPath("Confirm", "Proxy"));
-  this.relayMsg(path, msg);
-  }
-
-*sendProxyError { |msg, error|
-  var path = (this.makeOSCdefPath("Error", "Proxy"));
-  this.relayMsg(path, msg, error);
-  }
-
-  *proxyResponse {|msg|
-  	"Proxy Error".postln;
-    /*var vertexName = msg[1];
-    var meshName = msg[2];
-    var errorString = msg[3];
-		("Vertex " ++ msg.vertexName ++ "reports error in " ++ msg.mesh.name).postln; errorString.postln;
-	}
-
-
-  boot {
-    var path = (this.class.makeOSCdefPath("Request", "Boot"));
-    host.sendMsg(path);
-	}
-
-	bootHandler{
-		"booting server".postln;
-		server.boot;
-		this.bootNotify;
-	}
-
-	bootNotify {
-		this.notifyIsRunning;
-	}
-
-	notifyIsRunning{
-		isRunning = true;
-	}
-  setServerOptions{ |args|
-		"Setting server Options".postln;
-		// use args for optional ServerOptions
-		server.options.protocol(\tcp);
-		server.options.maxLogins_(8);
-		server.options.protocol_(\tcp);
-		//server.addr.connect;
-		//server.startAliveThread( 0 );
-		/*server.doWhenBooted({
-			"remote tcp server started".postln;
-			server.notify;
-			server.initTree });
-	}
-
-
-  *makeTypeMethodOSCDefs{
-    // for each method has two helper methods:
-    // OSC Invoker (interface) creates and sends OSC message to vertexHost.
-    // OSCdef responder on vertexHost unpacks message and calls method, then broadcasts a proxyUpdate message.
-
-
-
-    //this.makeOSCInvoker("Boot", "Vertex", \invokeBootServer);
-    this.makeOSCdef("Boot", "Vertex", \tryBootServer);
-
-    /*OSCdef(\bootServerResponder, {|msg, time, addr, recvPort|
-      this.bootHandler;
-    }, this.makeOSCdefPath("Request", "Boot"));
-
-
-  }
-  */

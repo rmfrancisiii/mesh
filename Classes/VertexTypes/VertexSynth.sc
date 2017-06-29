@@ -1,5 +1,5 @@
-VertexPattern : VertexAbstract {
-  var <>pattern;
+VertexSynth : VertexAbstract {
+  var <>synthDef;
 
   *makeClassInterface {
     VertexTypeClassInterface.makeGenericClassInterfaces(this)
