@@ -9,9 +9,17 @@ Mesh(\mesh1).push;
 Mesh.broadcastAddr.addr = MeshHostAddr("127.0.0.1", 57120 + (0..7))
 Mesh.current.hosts.beacon.start;
 Vertex(\server1, \server, \rose, \mesh1);
-Vertex(\server1).setOptions(\maxLogins, 12);
+//Vertex(\server1).setOptions(\maxLogins, 12);
 Vertex(\server1).boot;
 Vertex(\server1).ping;
+Vertex(\server1).kill;
+
+Vertex(\server1).free;
+Mesh(\mesh1).vertexes.postln;
+
+OSCdef(\server1Interface).func.postln;
+OSCdef.all.postln;
+
 
 Vertex(\synth1, \synth, \mesh1,
 	{ | out, freq = 440, amp = 0.1, nharms = 10, pan = 0, gate = 1 |

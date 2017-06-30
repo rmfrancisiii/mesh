@@ -41,19 +41,17 @@ VertexServer : VertexAbstract {
   }
 
 	freeHandler{ |msg|
-		//this.sendProxyRequest(\proxyFree);
-		/*MeshDebugMon(thisFunctionDef. msg);
 		"freeing".postln;
-		msg.postln;*/
-//		msg.methodName = \proxyFree;
-//		msg.sendProxyRequest;
+		this.server.freeAll;
+		this.killHandler;
+		VertexMessage.newMethodRequest(this, host, \serverFree).sendProxyRequest;
+
 	}
 
-	proxyFreeHandler{
-		MeshDebugMon(thisFunctionDef);
+	serverFreeHandler{
+		var defName = (name++"Interface").asSymbol;
 		mesh.vertexes.removeAt(name);
-		// send proxyFree
-		// remove the vertex from the vertexDict
+		OSCdef(defName).free;
 
 	}
 
@@ -79,7 +77,6 @@ VertexServer : VertexAbstract {
 		// TODO: logic HERE
 		server.options.protocol_(\tcp);
 		server.options.maxLogins_(8);
-		args.postln;
 	}
 
 	pingHandler{
