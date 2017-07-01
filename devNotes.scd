@@ -1,5 +1,7 @@
 UnitTest.gui;
+
 Vertex.test;
+VertexPatchBay.test;
 MeshHostsManager.test;
 Mesh.test;
 
@@ -13,12 +15,8 @@ Vertex(\server1, \server, \rose, \mesh1);
 Vertex(\server1).boot;
 Vertex(\server1).ping;
 Vertex(\server1).kill;
-
 Vertex(\server1).free;
 Mesh(\mesh1).vertexes.postln;
-
-OSCdef(\server1Interface).func.postln;
-OSCdef.all.postln;
 
 
 Vertex(\synth1, \synth, \mesh1,
