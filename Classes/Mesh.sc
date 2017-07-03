@@ -1,6 +1,6 @@
 Mesh {
 	classvar <>all, <>stack, <thisHost, <>broadcastAddr;
-	var <>name, <>environment, <>hosts, <>vertexes, <>proxies, <>window;
+	var <>name, <>environment, <>hosts, <>vertexes, <>proxies, <>window, <>patchbay;
 
 	// test
 	*initClass {
@@ -110,6 +110,7 @@ Mesh {
 		vertexes = VertexDict.new;
 		proxies = VertexDict.new;
 		window = MeshView(this);
+		patchbay = VertexPatchbay.new
 	}
 
 	initializeInstanceEnvironment {

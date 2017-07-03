@@ -18,6 +18,7 @@ VertexAbstract {
     var vertex = super.new.initVertex(msg);
     //Error("This is a basic error.").throw;
     msg.mesh.vertexes.put(msg.name, vertex);
+    msg.mesh.patchbay.addVertex(msg.name);
     this.sendConfirmation(msg);
     this.sendProxyRequest(msg);
   }

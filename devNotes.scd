@@ -11,6 +11,26 @@ Mesh(\mesh1).push;
 Mesh.broadcastAddr.addr = MeshHostAddr("127.0.0.1", 57120 + (0..7))
 Mesh.current.hosts.beacon.start;
 Vertex(\server1, \server, \rose, \mesh1);
+Vertex(\server2, \server, \rose, \mesh1);
+Mesh(\mesh1).patchbay.addPatch(\vertex1, \vertex2);
+Mesh(\mesh1).patchbay.addPatch(\server1, \server2);
+
+Mesh(\mesh1).patchbay.vertexList.postln;
+
+Mesh(\mesh1).patchbay.vertexList.postln;
+Mesh(\mesh1).patchbay.vertexList.at(\server1).postln;
+Mesh(\mesh1).patchbay.vertexList.at(\server1).at(\server2).postln;
+Mesh(\mesh1).patchbay.vertexList.at(\server2).postln;
+
+Mesh(\mesh1).patchbay.getPatch(\server1, \server2).class.postln;
+Mesh(\mesh1).patchbay.getPatch(\server1, \server2).rand.postln;
+
+
+
+
+Mesh(\mesh1).patchbay.vertexList.postln;
+Mesh(\mesh1).patchbay.vertexList.keys.postln;
+
 //Vertex(\server1).setOptions(\maxLogins, 12);
 Vertex(\server1).boot;
 Vertex(\server1).ping;

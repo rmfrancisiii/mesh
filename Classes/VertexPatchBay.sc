@@ -1,20 +1,24 @@
-VertexPatchBay {
+VertexPatchbay {
   var <>vertexList;
 
   *new  {
-    ^super.new.init;
+    ^super.new().init;
     }
 
   init {
-    vertexList = NamedList.new;
+    vertexList = NamedList.new();
   }
 
   addVertex {|vertexName|
-    vertexList.addLast(vertexName, NamedList.new);
+    vertexList.addLast(vertexName, NamedList.new());
   }
 
-  addPatch {|firstVertexName, secondVertexName|
-    vertexList.at(firstVertexName).addLast(secondVertexName, VertexPatch.new);
+  addPatch {|vertexAOut, vertexBIn|
+    if (this.hasVertex(vertexAOut)){
+      if (this.hasVertex(vertexBIn)){
+        (vertexList.at(vertexAOut)).addLast(vertexBIn, VertexPatch.new())
+      }{("No such vertex:" ++ vertexBIn).postln};
+    }{("No such vertex:" ++ vertexAOut).postln};
   }
 
   getPatch {|firstVertexName, secondVertexName|
@@ -22,7 +26,7 @@ VertexPatchBay {
   }
 
   hasVertex {|vertexName|
-    ^ vertexList.includes(vertexName);
+    ^ vertexList.includesKey(vertexName);
   }
 
 }

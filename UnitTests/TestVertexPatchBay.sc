@@ -3,7 +3,7 @@ TestVertexPatchBay : UnitTest {
 
 	setUp {
 			"Testing Patch Bay".postln;
-			patchBay = VertexPatchBay.new;
+			patchBay = VertexPatchbay.new;
 	}
 
 	tearDown {
@@ -26,8 +26,8 @@ TestVertexPatchBay : UnitTest {
 	}
 
 	isPatchBay {
-		this.assert( patchBay.isKindOf(VertexPatchBay),
-		"patchBay is PatchBay".postln);
+		this.assert( patchBay.isKindOf(VertexPatchbay),
+		"patchBay is Patchbay".postln);
 	}
 
 
