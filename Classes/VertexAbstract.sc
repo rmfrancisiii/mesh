@@ -2,7 +2,7 @@ VertexAbstract {
   var <>name, <>mesh, <>isProxy;
 
   *sendNewVertex { |...args|
-    VertexMessage.newVertexRequest(*args).sendRequest;
+    MeshMessage.newVertexRequest(*args).sendRequest;
   }
 
   *newVertexHandler { |msg|
@@ -80,11 +80,11 @@ VertexAbstract {
 
   sendMethodRequest { |selector, args|
     var vertexHost = this.getVertexHost;
-    var msg = VertexMessage.newMethodRequest(this, vertexHost, selector, args).sendRequest;
+    var msg = MeshMessage.newMethodRequest(this, vertexHost, selector, args).sendRequest;
   }
 
   sendProxyUpdate { |args|
-    var msg = VertexMessage.newMethodRequest(this, Mesh.broadcastAddr, \proxyUpdate, args).sendRequest;
+    var msg = MeshMessage.newMethodRequest(this, Mesh.broadcastAddr, \proxyUpdate, args).sendRequest;
   }
 
   *vertexExists { |msg|

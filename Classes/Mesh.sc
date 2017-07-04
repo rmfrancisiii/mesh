@@ -110,7 +110,7 @@ Mesh {
 		vertexes = VertexDict.new;
 		proxies = VertexDict.new;
 		window = MeshView(this);
-		patchbay = VertexPatchbay.new
+		patchbay = MeshPatchbay.new
 	}
 
 	initializeInstanceEnvironment {

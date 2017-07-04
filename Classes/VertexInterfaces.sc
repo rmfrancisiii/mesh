@@ -7,7 +7,7 @@ VertexTypeClassInterface {
 
     OSCdef(oscDefName, { |msg, time, host, recvPort|
       var method ;
-      msg = VertexMessage.decode(host, msg) ;
+      msg = MeshMessage.decode(host, msg) ;
       method = (msg.methodName++"Handler").asSymbol ;
       vertexType.tryPerform(method, msg) ;
     }, oscDefPath)
@@ -21,7 +21,7 @@ VertexTypeInstanceInterface {
     var oscDefPath = "/" ++ vertex.name.asSymbol ++ "/interface" ;
 
     OSCdef(oscDefName, { |argMsg, time, host, recvPort|
-      var msg = VertexMessage.decode(host, argMsg);
+      var msg = MeshMessage.decode(host, argMsg);
       var method = (msg.methodName++"Handler").asSymbol;
       var vertex = Vertex.at(msg.name);
 

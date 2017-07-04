@@ -1,4 +1,4 @@
-VertexPatchbay {
+MeshPatchbay {
   var <>vertexList;
 
   *new  {
@@ -6,17 +6,17 @@ VertexPatchbay {
     }
 
   init {
-    vertexList = NamedList.new();
+    vertexList = MeshNamedList.new();
   }
 
   addVertex {|vertexName|
-    vertexList.addLast(vertexName, NamedList.new());
+    vertexList.addLast(vertexName, MeshNamedList.new());
   }
 
   addPatch {|vertexAOut, vertexBIn|
     if (this.hasVertex(vertexAOut)){
       if (this.hasVertex(vertexBIn)){
-        (vertexList.at(vertexAOut)).addLast(vertexBIn, VertexPatch.new())
+        (vertexList.at(vertexAOut)).addLast(vertexBIn, MeshPatch.new())
       }{("No such vertex:" ++ vertexBIn).postln};
     }{("No such vertex:" ++ vertexAOut).postln};
   }

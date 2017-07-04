@@ -1,4 +1,4 @@
-VertexMessage {
+MeshMessage {
   var <>path, <>name, <>type, <>vertexHost, <>requestingHost, <>mesh, <>methodName, <>args;
 
   *newVertexRequest {|name, type, host, mesh, args|

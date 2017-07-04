@@ -44,7 +44,7 @@ VertexServer : VertexAbstract {
 		"freeing".postln;
 		this.server.freeAll;
 		this.killHandler;
-		VertexMessage.newMethodRequest(this, host, \serverFree).sendProxyRequest;
+		MeshMessage.newMethodRequest(this, host, \serverFree).sendProxyRequest;
 
 	}
 
