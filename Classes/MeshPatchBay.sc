@@ -14,6 +14,7 @@ MeshPatchbay {
   }
 
   addPatch {|vertexAOut, vertexBIn|
+    // TODO: add error catching and validation, eg. not VertexA == VertexB, etc.
     if (this.hasVertex(vertexAOut)){
       if (this.hasVertex(vertexBIn)){
         (vertexList.at(vertexAOut)).addLast(vertexBIn, MeshPatch.new())

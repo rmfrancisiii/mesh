@@ -128,7 +128,7 @@ Mesh {
 		});
 	}
 
-	includesVertex {|key| ^ this.vertexes.includesKey(key)}
+	hasVertex {|key| ^ this.vertexes.includesKey(key)}
 
 	hideCurrentWindow { Mesh.current.window.deactivate }
 

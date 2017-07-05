@@ -1,5 +1,5 @@
 MeshNamedList : NamedList {
-  // depends upon Modality Quark
+  // depends upon Modality-Toolkit Quark
 
 storeOn { |stream|
 		stream << this.class.name << "("
@@ -7,14 +7,6 @@ storeOn { |stream|
 	}
 
 storeArgs { ^[names, array].flop }
-
-pretty {
-  names.do({|item, i|
-    item.postln;
-    array[i].keysDo({|key| ("  " ++ key ).postln });
-    "".postln;
-    });
-}
 
 printOn {|stream|
   stream << "Patches: \n";

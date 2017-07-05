@@ -1,59 +1,23 @@
 UnitTest.gui;
 
-Vertex.test;
-VertexPatchBay.test;
-MeshHostsManager.test;
 Mesh.test;
 
-// for on the bus
-Mesh.broadcastAddr.addr = MeshHostAddr("127.0.0.1", 57120 + (0..7))
-Mesh.current.hosts.beacon.start;
+Vertex.test;
 
+MeshPatchbay.test;
+MeshHostsManager.test;
 
 
 Mesh(\mesh1).push;
-(
-Vertex(\server1, \server, \rose, \mesh1);
-Vertex(\server2, \server, \rose, \mesh1);
-Vertex(\server3, \server, \rose, \mesh1);
-Vertex(\server4, \server, \rose, \mesh1);
-)
-(
-Mesh(\mesh1).patchbay.addPatch(\server1, \server2);
-Mesh(\mesh1).patchbay.addPatch(\server1, \server3);
-Mesh(\mesh1).patchbay.addPatch(\server1, \server4);
-Mesh(\mesh1).patchbay.addPatch(\server2, \server3);
-Mesh(\mesh1).patchbay.addPatch(\server2, \server4);
-Mesh(\mesh1).patchbay.addPatch(\server3, \server4);
-)
-
 Mesh(\mesh1).patchbay.vertexList.postln;
-
-
-Mesh(\mesh1).patchbay.vertexList.postln;
-
-Mesh(\mesh1).patchbay.vertexList.array.postln;
-
-(
-Mesh(\mesh1).patchbay.vertexList.dict.keysValuesDo({
-	|key, value|
-	key.postln;
-});
-)
-
-(
-Mesh(\mesh1).patchbay.vertexList.dict.keysValuesDo({
-	|key, value|
-	key.postln;
-});
-)
+Mesh(\mesh1).patchbay.getPatch(\server1, \server2).rand.postln;
+Mesh(\mesh1).patchbay.getPatch(\server3, \server4).rand.postln;
 
 
 Mesh(\mesh1).patchbay.vertexList.at(\server1).at(\server2).rand.postln;
 Mesh(\mesh1).patchbay.vertexList.at(\server2).postln;
 
 Mesh(\mesh1).patchbay.getPatch(\server1, \server2).class.postln;
-Mesh(\mesh1).patchbay.getPatch(\server1, \server2).rand.postln;
 
 
 
@@ -173,7 +137,7 @@ Mesh(\mesh2).push;
 Vertex(\serverTwo).test;
 
 
-Mesh(\mesh1).vertexList;
+Mesh(\mesh1).vertexes;
 Mesh(\mesh2).vertexList;
 
 Mesh.peek;

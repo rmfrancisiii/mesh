@@ -3,7 +3,6 @@ TestVertex : UnitTest {
 
 	setUp {
 			"Testing Vertexes".postln;
-			//this.makeOSCdefs;
 			mesh = TestMesh.new.makeMesh;
 			mesh.push;
 			thisHost = Mesh.thisHost;
@@ -14,17 +13,16 @@ TestVertex : UnitTest {
 	}
 
 	test_vertex {|local = true|
-		Routine.new({
 		this.vertexInitialized;
 		if (local == true)
 			{this.setLocalBroadcastAddr};
-		this.makeVertex(\server1, \server, hostName);
-		1.yield;
-		this.vertexExists(mesh, \server1);
-		1.yield;
-		Vertex(\server1).boot(\test1, \test2, \test3);
 
-		}).play
+			Vertex(\server1, \server, \rose, \mesh1);
+//		this.makeVertex(\server1, \server, hostName, mesh);
+		2.0.wait;
+		this.vertexExists(mesh, \server1);
+		2.0.wait;
+		Vertex(\server1).boot;
 	}
 
 	setLocalBroadcastAddr {
@@ -37,8 +35,8 @@ TestVertex : UnitTest {
 			"Vertex Type Dictionary created");
 	}
 
-	makeVertex { |name, type, hostName|
-		Vertex.new(name, type, hostName);
+	makeVertex { |name, type, hostName, mesh|
+		Vertex.new(name, type, hostName, mesh);
 	}
 
 	vertexExists{ |mesh, key|

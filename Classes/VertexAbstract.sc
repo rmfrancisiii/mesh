@@ -88,7 +88,7 @@ VertexAbstract {
   }
 
   *vertexExists { |msg|
-    ^ (msg.mesh).includesVertex(msg.name)
+    ^ (msg.mesh).hasVertex(msg.name)
   }
 
   doesNotUnderstand {|selector ...args|
