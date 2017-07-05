@@ -17,7 +17,7 @@ TestMeshHostsManager : UnitTest {
   	this.addManyFakeHosts(count: 5, delay: 3);
 		//theres a timing bug in the test here, and its slow in execution. //this.setAllFakeHostOffline(2);
 		hosts.beacon.stop;
-		
+
 	}
 
 	hostsManagerInitialization {
