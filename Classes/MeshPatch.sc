@@ -1,12 +1,14 @@
 MeshPatch {
   var <>rand;
 
-  *new  {
-    ^super.new.init;
+  *new  { |vertexOut, vertexIn|
+    ^super.new(vertexOut, vertexIn).init;
     }
 
-  init {
+  init {|vertexOut, vertexIn|
     rand = 5000.rand;
+    //Vertex(vertexOut).patchOut;
+    //Vertex(vertexIn).patchIn;    
     ("Mesh Patch created: " ++ rand).postln;
   }
 

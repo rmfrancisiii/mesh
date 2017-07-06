@@ -8,15 +8,22 @@ Mesh {
 		all = IdentityDictionary.new;
 		thisHost = thisHost.as(MeshHost);
 		Vertex.initVertexTypes;
-		broadcastAddr = BroadcastHost.new(\broadcast, MeshHostAddr("255.255.255.255", 57120 + (0..7)));
+		this.setBroadcastAddr;
+	}
 
+	*setBroadcastAddr{
+				broadcastAddr = BroadcastHost.new(\broadcast, MeshHostAddr("255.255.255.255", 57120 + (0..7)));
+	}
+
+	*setLocalBroadcastAddr{
+				broadcastAddr = BroadcastHost.new(\broadcast, MeshHostAddr("127.0.0.1", 57120 + (0..7)));
 	}
 
 	*at {|key|
 		^ all.at(key) }
 
-	*new {|key|
-		^ all.at(key) ?? { ^ super.new.init(key).addMesh };
+	*new {|key, local = false|
+		^ all.at(key) ?? { ^ super.new.init(key, local).addMesh };
 	}
 
 	*newFrom {|mesh|
@@ -60,6 +67,11 @@ Mesh {
 		^ all.includesKey(key)
 	}
 
+	*list {
+		^ all.keys
+	}
+
+
 	*onStack { |key|
 		Mesh.stack.do({|mesh|
 			if (mesh.name == key) {^true};
@@ -98,10 +110,14 @@ Mesh {
 		});
 	}
 
-	init {|key|
+	init {|key, local|
 		name = key.asSymbol;
 		this.initializeInstanceVariables(name);
 		this.initializeInstanceEnvironment;
+		if (local == true) {
+			"Local Testing Only, Resetting Broadcast to LoopBack address. Try: \n  Mesh.setBroadcastAddr; to reset, and \n Mesh.current.hosts.beacon.start to restart.".postln;
+			Mesh.setLocalBroadcastAddr;
+		};
 		postf("New Mesh Created: % \n", (name));
 	}
 

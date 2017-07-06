@@ -1,24 +1,11 @@
 Development notes
 
 Next:
-	add multiple in/out port possibility to patchbay process (will need to add vertex type class descriptor field/s to hold information)
-	Final cleanup of messaging and interfaces to simplify.
-	refactor tests for timing and networking
-	add tests for Messaging, Interfaces, Patchbay
-
-7/5/17: (amongst many changes since last update)
-	* Made significant changes to the method passing for vertex instances and classes, in VertexInterfaces.
-
-	* Added messaging components (still need a good refactoring for cleaner code, better consistency)
-
-	* Added basic patch bay and patch objects to keep adjacency lists for vertexes. these might be better kept in Mesh.vertexes somehow, because there's duplication, but fine for now.
-
-	* Using NamedList from the Modality-Toolkit Quark, in the patchbay, with a couple of things overloaded (basically just for sensible output of a nested NamedList).
-
-	* Reworked the unit tests slightly but havent been using them as much. need to fix them and start using them consistently again. Need to write tests for Interface and Messaging components
-
-5/6/17: created skeleton for messages for VertexAbstract
-
+	* set up improved ~meshLocalTesting flag for the bus, etc.
+	* add multiple in/out port possibility to patchbay process (will need to add vertex type class descriptor field/s to hold information)
+	* final cleanup of messaging and interfaces to simplify.
+	* refactor tests for timing and networking
+	* add tests for Messaging, Interfaces, Patchbay
 
 General practices for Vertexes:
 
@@ -45,23 +32,6 @@ On Vertex Host
 7. Proxy Request Handler adds proxy to Mesh.Vertexes
 - done -
 
-
-
-all activity @Vertex is -> proxy.
-
-
-TODO:
-
-new:
-Vertex(\name, \type, \host, \mesh)
-
-method/modify:
-Vertex(\name).method(parameters)
-
-
-
-
-Make Offline option for new Mesh?
 
 
 Ideas:
@@ -145,54 +115,53 @@ Generic Object creation pseudocode:
 
 9. vertexProxyRequestor
 
-////////////
- Completed: 
-///////////
+Completed:
 
-4/9/17:
-  Set up initial requestor, OSCdef, requestHandler
+	7/5/17: (amongst many changes since last update)
+		* made significant changes to the method passing for vertex instances and classes, in VertexInterfaces.
 
-4/2/17:
-  Merged Vertex branch back into master,
-  started VertexServer Branch
+		* added messaging components (still need a good refactoring for cleaner code, better consistency)
 
-4/1/17:
-  fixed dynamic Vertex Type List to include all subclasses of VertexAbstract, and to initialize OSCdefs if possible
-  added doesNotUnderstand to MeshHost to pass method requests to the MeshHostAddr
+		* added basic patch bay and patch objects to keep adjacency lists for vertexes. these might be better kept in Mesh.vertexes somehow, because there's duplication, but fine for now.
 
-3/31/17:
-  Trying to use doesNotUnderstand to pass unknown method calls
-  up the chain of command, not by Object Inheritance,
-  but by the definitions of our own occult system. e.g.
+		* using NamedList from the Modality-Toolkit Quark, in the patchbay, with a couple of things overloaded (basically just for sensible output of a nested NamedList).
 
-     Vertex(\serverOne).protocol;
+		* reworked the unit tests slightly but havent been using them as much. need to fix them and start using them consistently again. Need to write tests for Interface and Messaging components
 
-  should pass through to
+	5/6/17:
+		* created skeleton for messages for VertexAbstract
 
-     VertexServer.server.protocol;
+	4/9/17:
+  	* Set up initial requestor, OSCdef, requestHandler
 
-  NOT AbstractServer.proocol. I think IdentityDictionary does something similar but my
-  Aramaic is rusty. maybe:
+	4/2/17:
+  	* Merged Vertex branch back into master,
+  	* started VertexServer Branch
 
-    tryPerform... YES!!!!
+	4/1/17:
+  	* fixed dynamic Vertex Type List to include all subclasses of VertexAbstract, and to initialize OSCdefs if possible
+  	* added doesNotUnderstand to MeshHost to pass method requests to the MeshHostAddr
 
-3/30/17:
-  added MeshDebugMon
-    allows adding Debug(something) calls anywhere in the code and
-    when MeshDebugMon.on it outputs something to the post window
-    these should be removed from performance code where latency might matter
+	3/31/17:
+  	* Trying to use doesNotUnderstand to pass unknown method calls up the chain of command, not by Object Inheritance, but by the definitions of our own occult system. e.g.
 
-    needs:
+     	Vertex(\serverOne).protocol should pass through to VertexServer.server.protocol;
+
+  		NOT AbstractServer.proocol. I think IdentityDictionary does something similar but my Aramaic is rusty. maybe: tryPerform... YES!!!!
+
+	3/30/17:
+		* added MeshDebugMon. allows adding Debug(something) calls anywhere in the code and when MeshDebugMon.on it outputs something to the post window.  These should be removed from performance code where latency might matter
+
+			needs:
        * Documentation
        * Help File
        * Unit Test
 
-  added MeshCommandParser
-    when MeshCommandParser.on, this runs in the interpreter
-    and preprocesses executed code, checking for a matching expression
-    this will allow shortcuts to pretty much anything, of the type:
-      //** -> Mesh.peek.ping
-    this could add a little latency (one extra conditional per shortcut checked)
+  	* added MeshCommandParser. when MeshCommandParser.on, this runs in the interpreter and preprocesses executed code, checking for a matching expression this will allow shortcuts to pretty much anything, of the type:
+
+      			** -> Mesh.peek.ping
+
+    		this could add a little latency (one extra conditional per shortcut checked)
 
     needs:
        * maybe a better/more legible init class,
@@ -299,8 +268,6 @@ Outgoing UDP Ports of transmitters will just dynamically set to match the incomi
 
 Should share their Port information, eg.
 Namespace :: Type :: Units :: Min :: Max
-
-
 
 Mapping functionality
 eg Digital Music Orchestra
