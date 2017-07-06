@@ -13,13 +13,13 @@ MeshPatchbay {
     vertexList.addLast(vertexName, MeshNamedList.new());
   }
 
-  addPatch {|vertexAOut, vertexBIn|
+  addPatch {|vertexOut, vertexIn|
     // TODO: add error catching and validation, eg. not VertexA == VertexB, etc.
-    if (this.hasVertex(vertexAOut)){
-      if (this.hasVertex(vertexBIn)){
-        (vertexList.at(vertexAOut)).addLast(vertexBIn, MeshPatch.new())
-      }{("No such vertex:" ++ vertexBIn).postln};
-    }{("No such vertex:" ++ vertexAOut).postln};
+    if (this.hasVertex(vertexOut)){
+      if (this.hasVertex(vertexIn)){
+        (vertexList.at(vertexOut)).addLast(vertexIn, MeshPatch.new(vertexOut, vertexIn))
+      }{("No such vertex:" ++ vertexIn).postln};
+    }{("No such vertex:" ++ vertexOut).postln};
   }
 
   getPatch {|firstVertexName, secondVertexName|

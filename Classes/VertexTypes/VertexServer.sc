@@ -56,10 +56,11 @@ VertexServer : VertexAbstract {
 	}
 
 	patchIn {
-
+		"PATCHING...".postln;
 	}
 
 	patchOut {
+		"PATCHING...".postln;
 
 	}
 
