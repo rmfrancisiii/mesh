@@ -28,10 +28,12 @@ VertexSynth : VertexAbstract {
   freeHandler{
   }
 
-  patchIn {
+  patchOut {|vertexIn|
+    "PATCHING TO %. \n".postf(vertexIn);
   }
 
-  patchOut {
+  patchIn {|vertexOut|
+    "PATCHING FROM %. \n".postf(vertexOut);
   }
 
 }

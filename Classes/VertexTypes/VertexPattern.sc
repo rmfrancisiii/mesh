@@ -1,5 +1,5 @@
 VertexPattern : VertexAbstract {
-  var <>pattern;
+  var <>patternDict;
 
   *makeClassInterface {
     VertexTypeClassInterface.makeGenericClassInterfaces(this)
@@ -14,6 +14,7 @@ VertexPattern : VertexAbstract {
   }
 
   initVertex{|msg|
+      patternDict = IdentityDictionary.with(*[\name -> msg.name]);
   }
 
   initProxy {|msg|
@@ -28,10 +29,14 @@ VertexPattern : VertexAbstract {
   freeHandler{
   }
 
-  patchIn {
-  }
+  patchOut {|vertexIn|
+		"PATCHING TO %. \n".postf(vertexIn);
+	}
 
-  patchOut {
-  }
+	patchIn {|vertexOut|
+    "NO".postln;
+
+		"PATCHING FROM %. \n".postf(vertexOut);
+	}
 
 }

@@ -55,16 +55,15 @@ VertexServer : VertexAbstract {
 
 	}
 
-	patchIn {
-		"PATCHING...".postln;
+	patchOut {|vertexIn|
+		"NO".postln;
+		"PATCHING TO %. \n".postf(vertexIn);
 	}
 
-	patchOut {
-		"PATCHING...".postln;
+	patchIn {|vertexOut|
 
+		"PATCHING FROM %. \n".postf(vertexOut);
 	}
-
-
 // UNIQUE METHODS
 	setInstanceVars {|msg|
 		name = msg.name;

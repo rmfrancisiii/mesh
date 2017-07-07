@@ -30,17 +30,18 @@ TestMeshPatchbay : UnitTest {
 	addVertexes{
 		Vertex(\server1, \server, \rose, \mesh1);
 		Vertex(\server2, \server, \rose, \mesh1);
-		Vertex(\server3, \server, \rose, \mesh1);
-		Vertex(\server4, \server, \rose, \mesh1);
+		Vertex(\synth1, \synth, \rose, \mesh1);
+		Vertex(\synth2, \synth, \rose, \mesh1);
+		Vertex(\pattern1, \pattern, \rose, \mesh1);
+		Vertex(\pattern2, \pattern, \rose, \mesh1);
 	}
 
 	addPatches {
-		Mesh(\mesh1).patchbay.addPatch(\server1, \server2);
-		Mesh(\mesh1).patchbay.addPatch(\server1, \server3);
-		Mesh(\mesh1).patchbay.addPatch(\server1, \server4);
-		Mesh(\mesh1).patchbay.addPatch(\server2, \server3);
-		Mesh(\mesh1).patchbay.addPatch(\server2, \server4);
-		Mesh(\mesh1).patchbay.addPatch(\server3, \server4);
+		Mesh(\mesh1).patchbay.addPatch(\pattern1, \synth1);
+		Mesh(\mesh1).patchbay.addPatch(\synth1, \server1);
+		Mesh(\mesh1).patchbay.addPatch(\pattern2, \synth2);
+		Mesh(\mesh1).patchbay.addPatch(\synth2, \server2);
+
 	}
 
 	isPatch {|patch|
@@ -54,8 +55,8 @@ TestMeshPatchbay : UnitTest {
 	}
 
 	testPatches{
-		this.assert( Mesh(\mesh1).patchbay.getPatch(\server1, \server2).isKindOf(MeshPatch),
-		"patchbay is Patchbay".postln);
+		this.assert( Mesh(\mesh1).patchbay.getPatch(\pattern1, \synth1).isKindOf(MeshPatch),
+		"patch is Patch".postln);
 
 	}
 

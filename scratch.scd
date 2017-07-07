@@ -18,6 +18,11 @@ Mesh(\mesh1, true).push;
 Mesh.current.hosts.beacon.start;
 // add a server to the mesh
 Vertex(\server1, \server, \rose, \mesh1);
+Vertex(\pattern1, \pattern, \rose, \mesh1);
+Vertex(\pattern1).patternDict.postln;
+
+Mesh(\mesh1).patchbay.addPatch(\pattern1, \server1);
+
 
 //boot the server
 Vertex(\server1).boot;

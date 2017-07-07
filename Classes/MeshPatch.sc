@@ -7,10 +7,8 @@ MeshPatch {
 
   init {|vertexOut, vertexIn|
     rand = 5000.rand;
-    vertexOut.postln;
-    vertexIn.postln;
-    Vertex(vertexOut).patchOut;
-    Vertex(vertexIn).patchIn;
+    Vertex(vertexOut).patchOut(vertexIn);
+    Vertex(vertexIn).patchIn(vertexOut);
     ("Mesh Patch created: " ++ rand).postln;
   }
 
