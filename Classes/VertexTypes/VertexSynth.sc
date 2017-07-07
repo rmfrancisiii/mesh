@@ -14,9 +14,14 @@ VertexSynth : VertexAbstract {
   }
 
   initVertex{|msg|
+    this.setInstanceVars(msg);
+    isProxy = false;
+    this.makeInstanceInterfaces;
   }
 
   initProxy {|msg|
+    this.setInstanceVars(msg);
+		isProxy = true;
   }
 
   proxyUpdateHandler {|args|
@@ -28,12 +33,17 @@ VertexSynth : VertexAbstract {
   freeHandler{
   }
 
-  patchOut {|vertexIn|
-    "PATCHING TO %. \n".postf(vertexIn);
+  patchOutput {|vertexIn|
+    "PATCHING % TO %. \n".postf(this.name, vertexIn);
   }
 
-  patchIn {|vertexOut|
-    "PATCHING FROM %. \n".postf(vertexOut);
+  patchInput {|vertexOut|
+		"PATCHING % FROM %. \n".postf(this.name, vertexOut);
+	}
+
+  setInstanceVars {|msg|
+    name = msg.name;
+    mesh = msg.mesh;
   }
 
 }

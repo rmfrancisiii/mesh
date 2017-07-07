@@ -134,11 +134,11 @@ VertexAbstract {
     this.subclassResponsibility(thisMethod);
   }
 
-  patchIn {
+  patchInput {
     this.subclassResponsibility(thisMethod);
   }
 
-  patchOut {
+  patchOutput {
     this.subclassResponsibility(thisMethod);
   }
 

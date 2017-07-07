@@ -1,5 +1,5 @@
 VertexServer : VertexAbstract {
-	var <>server, <>host, <>isRunning;
+	var <>server, <>host, <>isRunning, <>synthList;
 
 // RESPONSIBILITIES
 	*makeClassInterface {
@@ -55,21 +55,23 @@ VertexServer : VertexAbstract {
 
 	}
 
-	patchOut {|vertexIn|
-		"NO".postln;
-		"PATCHING TO %. \n".postf(vertexIn);
+	patchOutput {|vertexIn|
+		"No output port from Server".postln;
+		// TODO: Return Error
 	}
 
-	patchIn {|vertexOut|
+	patchInput {|vertexOut|
 
-		"PATCHING FROM %. \n".postf(vertexOut);
+		"PATCHING % FROM %. \n".postf(this.name, vertexOut);
 	}
+
 // UNIQUE METHODS
 	setInstanceVars {|msg|
 		name = msg.name;
 		host = msg.vertexHost;
 		mesh = msg.mesh;
 		isRunning = false;
+		synthList = List();
 	}
 
 	setOptionsHandler{ |args|

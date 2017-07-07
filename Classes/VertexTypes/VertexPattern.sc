@@ -14,10 +14,17 @@ VertexPattern : VertexAbstract {
   }
 
   initVertex{|msg|
+    this.setInstanceVars(msg);
+    isProxy = false;
+
       patternDict = IdentityDictionary.with(*[\name -> msg.name]);
   }
 
   initProxy {|msg|
+    this.setInstanceVars(msg);
+		isProxy = true;
+    this.makeInstanceInterfaces;
+
   }
 
   proxyUpdateHandler {|args|
@@ -29,12 +36,17 @@ VertexPattern : VertexAbstract {
   freeHandler{
   }
 
-  patchOut {|vertexIn|
-		"PATCHING TO %. \n".postf(vertexIn);
+  patchOutput {|vertexIn|
+    "PATCHING % TO %. \n".postf(this.name, vertexIn);
+  }
+
+  patchInput {|vertexOut|
+		"PATCHING % FROM %. \n".postf(this.name, vertexOut);
 	}
 
-	patchIn {|vertexOut|
-		"PATCHING FROM %. \n".postf(vertexOut);
-	}
+  setInstanceVars {|msg|
+    name = msg.name;
+    mesh = msg.mesh;
+  }
 
 }

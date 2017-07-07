@@ -8,7 +8,7 @@ Next:
 
 7/6/17:
 * added -Local flag to mesh creation, Mesh(\mesh1, true).push; will create a mesh, but switch the broadcast address to localhost. just makes it easier to do testing on the bus, etc.
-* added message forwarding for VertexType.patchIn and .patchOut, so that creating a patch will update the vertex if necessary
+* added message forwarding for VertexType.patchInput and .patchOutput, so that creating a patch will update the vertex if necessary
 
 General practices for Vertexes:
 
