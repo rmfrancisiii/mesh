@@ -34,8 +34,6 @@ VertexPattern : VertexAbstract {
 	}
 
 	patchIn {|vertexOut|
-    "NO".postln;
-
 		"PATCHING FROM %. \n".postf(vertexOut);
 	}
 
