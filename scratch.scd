@@ -9,11 +9,17 @@ Vertex.test;
 MeshPatchbay.test;
 MeshHostsManager.test;
 
+
+Mesh(\mesh1, local:true).push;
+Vertex(\server1, \server, \rose, \mesh1);
 Vertex(\server1).boot;
+Vertex(\sinSynth, \synth, \rose, \mesh1, \sin);
+Vertex(\sinSynth).synthDef.play;
+Vertex(\fmSynth1, \synth, \rose, \mesh1, \fm);
+Vertex(\fmSynth1).synthDef.play;
 
-VertexSynth.synthList[1].load;
-VertexSynth.synthList[1].play;
-
+VertexSynth.synthList[\sin].play;
+VertexSynth.synthList[\sin].play;
 
 VertexSynth.synthList.postln;
 VertexSynth.synthList.do({|path| path.fullPath.load})
@@ -50,7 +56,6 @@ Vertex(\pattern1, \pattern, \rose, \mesh1);
 
 Vertex(\pattern1).patternDict.postln;
 
-Vertex(\sinSynth, \instrument, \sin);
 
 Mesh(\mesh1).patchbay.addPatch(\pattern1, \server1);
 Mesh(\mesh1).patchbay.patchList;

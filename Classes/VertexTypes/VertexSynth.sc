@@ -32,6 +32,8 @@ VertexSynth : VertexAbstract {
     ^ Mesh.thisHost;
   }
 
+
+
   initVertex{|msg|
     this.setInstanceVars(msg);
     isProxy = false;
@@ -63,6 +65,7 @@ VertexSynth : VertexAbstract {
   setInstanceVars {|msg|
     name = msg.name;
     mesh = msg.mesh;
+    synthDef = synthList[msg.args[0]];
   }
 
 }
