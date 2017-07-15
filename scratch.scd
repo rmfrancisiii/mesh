@@ -14,15 +14,16 @@ Mesh(\mesh1, local:true).push;
 Vertex(\server1, \server, \rose, \mesh1);
 Vertex(\server1).boot;
 Vertex(\sinSynth, \synth, \rose, \mesh1, \sin);
+Mesh(\mesh1).patchbay.addPatch(\sinSynth, \server1);
 Vertex(\sinSynth).synthDef.play;
+
+
+
 Vertex(\fmSynth1, \synth, \rose, \mesh1, \fm);
+Mesh(\mesh1).patchbay.addPatch(\fmSynth, \server1);
 Vertex(\fmSynth1).synthDef.play;
 
-VertexSynth.synthList[\sin].play;
-VertexSynth.synthList[\sin].play;
 
-VertexSynth.synthList.postln;
-VertexSynth.synthList.do({|path| path.fullPath.load})
 
 SynthDescLib.global.browse; //synthDescs.postln
 

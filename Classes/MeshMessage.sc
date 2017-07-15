@@ -18,7 +18,7 @@ MeshMessage {
 
   *upcaseFirst{|string|
     string = string.asString;
-    string[0] = string.first.toUpper;
+    string[0] = string[0].toUpper;
     ^string
   }
 

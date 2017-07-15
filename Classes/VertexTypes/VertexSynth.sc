@@ -1,20 +1,18 @@
 VertexSynth : VertexAbstract {
-  classvar <>synthList;
-  var <>synthDef;
+  classvar <>synthDict;
+  var <>synthDef, <>pdefnList;
 
   *initClass{
-    synthList = this.loadSynthList;
+    synthDict = this.loadSynthDict;
   }
 
-  *loadSynthList{
+  *loadSynthDict{
     var path = PathName("".resolveRelative).parentLevelPath(2);
     var folder = path +/+ PathName("SynthDefs/*");
     var files = folder.pathMatch;
-    var synths = files.collectAs({|file|
-
+    var synthDict = files.collectAs({|file|
         this.extractSynth(file).name -> this.extractSynth(file) }, IdentityDictionary);
-
-    ^ synths;
+    ^ synthDict;
   }
   *extractSynth{|file|
     ^ Object.readArchive(file);
@@ -31,8 +29,6 @@ VertexSynth : VertexAbstract {
   *getVertexHost {
     ^ Mesh.thisHost;
   }
-
-
 
   initVertex{|msg|
     this.setInstanceVars(msg);
@@ -65,7 +61,13 @@ VertexSynth : VertexAbstract {
   setInstanceVars {|msg|
     name = msg.name;
     mesh = msg.mesh;
-    synthDef = synthList[msg.args[0]];
+    synthDef = synthDict[msg.args[0]];
+    pdefnList = synthDef.metadata.keysValuesDo({ |parameter, pattern|
+      parameter = parameter.asString;
+      parameter[0] = parameter.first.toUpper;
+      parameter = (name ++ parameter).asSymbol;
+      Pdefn(parameter, pattern)
+      })
   }
 
 }
