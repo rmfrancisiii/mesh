@@ -1,126 +1,64 @@
 Development notes
+=======================
 
-Next:
-* add multiple in/out port possibility to patchbay process (will need to add vertex type class descriptor field/s to hold information)
-* final cleanup of messaging and interfaces to simplify.
-* refactor tests for timing and networking
-* add tests for Messaging, Interfaces, Patchbay
+Working On:
+------------------
+VertexSynth
+  .pdefnList
+  .synthDef
 
-7/6/17:
-* added -Local flag to mesh creation, Mesh(\mesh1, true).push; will create a mesh, but switch the broadcast address to localhost. just makes it easier to do testing on the bus, etc.
-* added message forwarding for VertexType.patchInput and .patchOutput, so that creating a patch will update the vertex if necessary
+  Initialization:
+    * Mesh loads list of synths from folder
 
-General practices for Vertexes:
+  Instantiation:
+    * creates vertex
+    * sets .synthDef
+    * creates pdefns in VertexSynth.pdefnList (on vertex and proxies) named as
+        (pdefn \vertexNameParameter)
 
-- invocation process:
+  Patching out:
+    * loads synthdef to server (if necessary)
+    * moves vertex object to patched server, sets others to proxy
+    * loads pdefnList on that server
 
-On Requesting Host;
- 1. Vertex.new(\name, \type, \args)
- 2. VertexType.requestor, inherits from VertexAbstract
- 3. sends OSC msg to Vertex Host
+  Other:
+    manually create pdefn?
 
----
-On Vertex Host
- 4. OSCdef VertexTypeRequestVertex
- 5. VertexType.tryMakeVertex
- 6. checks Mesh for vertex,
-    7. makes proxy and initializes it.
-    8. puts name -> this vertex into Mesh(\thisMesh).vertexes
-    9. sendVertexConfirmation back to Requesting Host
-    10. sendProxyRequest to Broadcast address (all hosts)
+VertexPattern
+  .pbind
+  .pdefnDict
 
-   b. makes new server, stores reference somewhere?
-   c. returns notification or exceptions
-6. Broadcast proxy requestor with reference to 5.b.
-7. Proxy Request Handler adds proxy to Mesh.Vertexes
-- done -
+  Initialization:
 
+  Instantiation:
 
+  Patching Out:
+    * sets the VertexPattern.pdefnDict from the VertexSynth.pdefnList, (and default values fromt the synth file if possible?)
+    * sets the target server and instrument for pattern from vertexSynth
+    * constructs a pbind from the pdefnDict
 
-Ideas:
+  Other
+    * updating the pdefnDict updates the named pdefn on the remote server
 
-Use Preprocessor for command confirmation request?
-Create a 'Confirm' class. pass a fn into it, and only execute it
-if/when //**confirm or similar is executed.
-
-Use ServerTree to set up ordered groups for VertexTypes
-
-CmdPeriod to remove host from mesh?
-
-add confirmation to cmd period? "you have N vertexes hosted on your
-machine. are you sure you want to kill the server?"
+OTHER:
+  * add multiple in/out port possibility to patchbay process (will need to add vertex type class descriptor field/s to hold information) this is only necessary for effects...
+  * final refactor/cleanup of messaging and interfaces.
+  * create tests for Messaging, Interfaces, Patchbay, refactor all tests for better timing and network control
+  * use Preprocessor for command confirmation request? e.g. Create a 'Confirm' class. pass a fn into it, and only execute it if/when ' //**confirm or similar is executed.
+  * use ServerTree to set up ordered groups for VertexTypes
+  * should CmdPeriod remove host from mesh? could we add confirmation to cmd period? "you have N vertexes hosted on your machine. are you REALLY sure you want to kill the server?"
 
 
 
-///////////
-Currently:
-///////////
 
-VertexServer: A Vertex that represents a Supercollider server node.
-  at least for version 0.0, the Server will be at the end of a signal path,
-  so essentially it determines the location of running synth nodes.
-  when any other node is created, in order for it to be played,
-  a server node with an audio out device should be connected
-
-	Instance Variables:
-		Host : A MeshHostAddr
-		Server: a Server (may be local OR remote)
-
-+++++++++++
-
-Generic Object creation pseudocode:
-
-1. Artist issues Vertex(\vertexName, \vertexType, \hostName, \name);
-
-2. Vertex checks to be sure the mesh exists, then checks \name.vertexList
-   2a. if it exists (currently returns the Vertex)
-       Might want to extend functionality for updating in this syntax.
-
-   2b. if it does NOT exist, checks for vertexType in vertexTypeList.
-
-3. Messages vertexType.vertexRequestor, and passes:
-    a. ref to Mesh object,
-    b. ref to Host object from all,
-    c. any other Args as an array.
-
-4. VertexRequestor class method generates an OSC message and sends it to the named Host.
-
-       To:   Host Address
-       Path: /VertexType/request/new
-       Msg:  (vertexName, mesh.name, ...arguments);
-
-   A generic vertexRequestor method is inherited from VertexAbstract,
-   but could be overloaded by VertexType depending on specific needs.
-
-----------------------------
-- Machine/Process Boundary -
-----------------------------
-
-5a. OSCdef receives request and marshalls its arguments
-5b. Handles any preprocessing, eg. supplying default arguments,
-5c. Passes request off to VertexType.vertexRequestHandler
-
-6. vertexRequestHandler class method calls super.new.init and passes an unpacked array of arguments.
-   This step is necessary because the instance isn't created yet.
-
-   A generic vertexRequestHandler class method is inherited from VertexAbstract,
-   but could be overloaded by VertexType depending on specific needs.
-
-7. The VertexType.init method:
-   7a. sets the initial state of the VertexType object.
-   7b. adds the Vertex to the Mesh.vertexList
- ----- stopped here -----
-   7c. tests the Success of adding the object,
-   7d. returns success status to vertexRequestHandler
-
-8a. If Creation succeeded, vertexRequestHandler calls VertexType.vertexProxyRequestor
-8b. If Creation failed, vertexRequestHandler returns an OSC Remoting Error Message to the invoking client
-
-9. vertexProxyRequestor
-
+=======================
 Completed:
+=======================
+  7/6/17:
+    * added -Local flag to mesh creation, Mesh(\mesh1, true).push; will create a mesh, but switch the broadcast address to localhost. just makes it easier to do testing on the bus, etc.
+    * added message forwarding for VertexType.patchInput and .patchOutput, so that creating a patch will update the vertex if necessary
 
-	7/5/17: (amongst many changes since last update)
+	7/5/17: (amongst many changes since last update to this file)
 		* made significant changes to the method passing for vertex instances and classes, in VertexInterfaces.
 
 		* added messaging components (still need a good refactoring for cleaner code, better consistency)
@@ -176,36 +114,32 @@ Completed:
   Created initial VertexServer vertex type
     intended to provide access to SC Servers on local and remote machines on the mesh
 
+  3/29/17:
+    Basic Vertex functionality,
+    Class Vertex serves as a factory and a registry
+    VertexAbstract is abstract superclass for the classes located in Classes/VertexTypes
 
-3/29/17:
-  Basic Vertex functionality,
-  Class Vertex serves as a factory and a registry
-  VertexAbstract is abstract superclass for the classes located in Classes/VertexTypes
+  3/28/17:
+    Fixed gui bug (look at defer)
+    Better ping for Jeff:
+      Mesh(\mesh1).ping;
 
-3/28/17:
-
-  Fixed gui bug (look at defer)
-
-  Better ping for Jeff:
-    Mesh(\mesh1).ping;
-    I want everyone to see a line in the post window that says "codedoval pinged the mesh"
-
-3/27/17:
-  Quark Install Working (w/dependency on UnitTesting)
-  Making and unmaking Meshes
-  Pushing, Popping them
-  Monitoring other Hosts (online/offline) in a gui
-  Basic (stub) help files for all classes,
-  Basic (stub) Inline Documentation
-  Unit Tests (stub) for all classes/methods
-  Basic Readme and Guide files
+  3/27/17:
+    Quark Install Working (w/dependency on UnitTesting)
+    Making and unmaking Meshes
+    Pushing, Popping them
+    Monitoring other Hosts (online/offline) in a gui
+    Basic (stub) help files for all classes,
+    Basic (stub) Inline Documentation
+    Unit Tests (stub) for all classes/methods
+    Basic Readme and Guide files
 
 
 
 
-//////////////////
-Conceptual Note:
-//////////////////
+=======================
+Conceptual/Documentation Notes:
+=======================
 
 Mesh should emulate as closely as possible a broader method of communication protocol.
 While this is currently based on SC, I'd like to try to keep it abstract enough to use
@@ -277,3 +211,113 @@ eg Digital Music Orchestra
 ? Should Identify other ports with compatible Types for easy connection
 
 ? Patches could hold a transformation function (scaling/mapping) of some sort
+
+VertexServer: A Vertex that represents a Supercollider server node.
+  at least for version 0.0, the Server will be at the end of a signal path,
+  so essentially it determines the location of running synth nodes.
+  when any other node is created, in order for it to be played,
+  a server node with an audio out device should be connected
+
+	Instance Variables:
+		Host : A MeshHostAddr
+		Server: a Server (may be local OR remote)
+
++++++++++++
+
+Generic Object creation pseudocode:
+
+1. Artist issues Vertex(\vertexName, \vertexType, \hostName, \name);
+
+2. Vertex checks to be sure the mesh exists, then checks \name.vertexList
+   2a. if it exists (currently returns the Vertex)
+       Might want to extend functionality for updating in this syntax.
+
+   2b. if it does NOT exist, checks for vertexType in vertexTypeList.
+
+3. Messages vertexType.vertexRequestor, and passes:
+    a. ref to Mesh object,
+    b. ref to Host object from all,
+    c. any other Args as an array.
+
+4. VertexRequestor class method generates an OSC message and sends it to the named Host.
+
+       To:   Host Address
+       Path: /VertexType/request/new
+       Msg:  (vertexName, mesh.name, ...arguments);
+
+   A generic vertexRequestor method is inherited from VertexAbstract,
+   but could be overloaded by VertexType depending on specific needs.
+
+----------------------------
+- Machine/Process Boundary -
+----------------------------
+
+5a. OSCdef receives request and marshalls its arguments
+5b. Handles any preprocessing, eg. supplying default arguments,
+5c. Passes request off to VertexType.vertexRequestHandler
+
+6. vertexRequestHandler class method calls super.new.init and passes an unpacked array of arguments.
+   This step is necessary because the instance isn't created yet.
+
+   A generic vertexRequestHandler class method is inherited from VertexAbstract,
+   but could be overloaded by VertexType depending on specific needs.
+
+7. The VertexType.init method:
+   7a. sets the initial state of the VertexType object.
+   7b. adds the Vertex to the Mesh.vertexList
+ ----- stopped here -----
+   7c. tests the Success of adding the object,
+   7d. returns success status to vertexRequestHandler
+
+8a. If Creation succeeded, vertexRequestHandler calls VertexType.vertexProxyRequestor
+8b. If Creation failed, vertexRequestHandler returns an OSC Remoting Error Message to the invoking client
+
+9. vertexProxyRequestor
+
+General practices for Vertexes:
+
+- invocation process:
+
+On Requesting Host;
+ 1. Vertex.new(\name, \type, \args)
+ 2. VertexType.requestor, inherits from VertexAbstract
+ 3. sends OSC msg to Vertex Host
+
+---
+On Vertex Host
+ 4. OSCdef VertexTypeRequestVertex
+ 5. VertexType.tryMakeVertex
+ 6. checks Mesh for vertex,
+    7. makes proxy and initializes it.
+    8. puts name -> this vertex into Mesh(\thisMesh).vertexes
+    9. sendVertexConfirmation back to Requesting Host
+    10. sendProxyRequest to Broadcast address (all hosts)
+
+   b. makes new server, stores reference somewhere?
+   c. returns notification or exceptions
+6. Broadcast proxy requestor with reference to 5.b.
+7. Proxy Request Handler adds proxy to Mesh.Vertexes
+
+
+
+
+
+
+
+  /*loadLocalSynthdefLibrary{|host|
+		var folder = "../synthLib/*".resolveRelative.pathMatch;
+		"  Loading Synths".postln;
+		//for each file in the synthdef folder
+		folder.collect {|file|
+			var synth;
+			synth = file.load; // load the synthdef
+			this.addSynthdef(host, synth); // add the synth
+			($\t ++ file ++ "  loaded").postln
+		};
+		("  Synth Library Loaded: Success").postln;
+	}*/
+
+  var files = folder.collect{|file|
+  };
+
+  files.postln;

@@ -10,11 +10,14 @@ MeshPatchbay {
   }
 
   addVertex {|vertexName|
+//    should  update proxies
     vertexList.addLast(vertexName, MeshNamedList.new());
   }
 
   addPatch {|vertexOut, vertexIn|
     // TODO: add error catching and validation, eg. not VertexA == VertexB, etc.
+    //needs to update proxies
+
     if (this.hasVertex(vertexOut)){
       if (this.hasVertex(vertexIn)){
         (vertexList.at(vertexOut)).addLast(vertexIn, MeshPatch.new(vertexOut, vertexIn))
@@ -30,4 +33,5 @@ MeshPatchbay {
     ^ vertexList.includesKey(vertexName);
   }
 
+  patchList { ^ vertexList }
 }

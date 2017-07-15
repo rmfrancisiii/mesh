@@ -9,20 +9,51 @@ Vertex.test;
 MeshPatchbay.test;
 MeshHostsManager.test;
 
-// Sample Code:
-///////////////
+Vertex(\server1).boot;
 
-// create a mesh,
-//  other hosts should use the same mesh name.
-Mesh(\mesh1, true).push;
-Mesh.current.hosts.beacon.start;
-// add a server to the mesh
+VertexSynth.synthList[1].load;
+VertexSynth.synthList[1].play;
+
+
+VertexSynth.synthList.postln;
+VertexSynth.synthList.do({|path| path.fullPath.load})
+
+SynthDescLib.global.browse; //synthDescs.postln
+
+OSCdef.all.keys.postln;
+
+///////////////
+// LOCAL TESTING:
+
+VertexSynth.synthList.postln;
+
+VertexSynth.synthList[0].load;
+VertexSynth.synthList[1].stop;
+VertexSynth.synthList[0].class;
+VertexSynth.synthList[0].metadata.postln;
+
+
+VertexSynth.synthList.do({|file|
+     var synthdef = Object.readArchive(file);      synthdef.postln;
+    });
+
+
+VertexSynth.synthList.class.postln;
+
+VertexSynth.synthList.class.postln;
+
+Mesh(\mesh1, local: true).push;
 Vertex(\server1, \server, \rose, \mesh1);
 Vertex(\pattern1, \pattern, \rose, \mesh1);
+
+
+
 Vertex(\pattern1).patternDict.postln;
 
-Mesh(\mesh1).patchbay.addPatch(\pattern1, \server1);
+Vertex(\sinSynth, \instrument, \sin);
 
+Mesh(\mesh1).patchbay.addPatch(\pattern1, \server1);
+Mesh(\mesh1).patchbay.patchList;
 
 //boot the server
 Vertex(\server1).boot;

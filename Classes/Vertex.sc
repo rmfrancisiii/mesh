@@ -8,6 +8,16 @@ Vertex {
 	*new {| vertexName, vertexTypeName, vertexHostName, meshName ...args|
 		var vertex = this.at(vertexName, meshName);
 		if (vertex == List.new)
+			{	vertexTypeDict[vertexTypeName].sendNewVertex( vertexName, vertexTypeName, vertexHostName, meshName, args );
+				^ "Sent new vertex request";
+			};
+
+		^ vertex
+	}
+
+	/**new {| vertexName, vertexTypeName, vertexHostName, meshName ...args|
+		var vertex = this.at(vertexName, meshName);
+		if (vertex == List.new)
 			{	var mesh = this.getMesh(mesh);
 				var vertexHost = this.getHost(vertexHostName, mesh);
 				var vertexType = vertexTypeDict[vertexTypeName];
@@ -16,7 +26,7 @@ Vertex {
 			};
 
 		^ vertex
-	}
+	}*/
 
 	*at {|vertexName, meshName |
 		var mesh = try {this.getMesh(mesh)} {|error| error.postln};

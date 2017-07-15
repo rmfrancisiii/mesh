@@ -1,5 +1,24 @@
 VertexSynth : VertexAbstract {
+  classvar <>synthList;
   var <>synthDef;
+
+  *initClass{
+    synthList = this.loadSynthList;
+  }
+
+  *loadSynthList{
+    var path = PathName("".resolveRelative).parentLevelPath(2);
+    var folder = path +/+ PathName("SynthDefs/*");
+    var files = folder.pathMatch;
+    var synths = files.collectAs({|file|
+
+        this.extractSynth(file).name -> this.extractSynth(file) }, IdentityDictionary);
+
+    ^ synths;
+  }
+  *extractSynth{|file|
+    ^ Object.readArchive(file);
+  }
 
   *makeClassInterface {
     VertexTypeClassInterface.makeGenericClassInterfaces(this)

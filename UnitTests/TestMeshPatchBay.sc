@@ -13,8 +13,7 @@ TestMeshPatchbay : UnitTest {
 
 	test_meshPatchbay {
 		"Tests:".postln;
-		Mesh(\mesh1).push;
-		Mesh.broadcastAddr.addr = MeshHostAddr("127.0.0.1", 57120 + (0..7));
+		Mesh(\mesh1, local:true).push;
 		Mesh.current.hosts.beacon.start;
 		mesh = Mesh(\mesh1);
 		this.isPatchbay;
@@ -41,7 +40,6 @@ TestMeshPatchbay : UnitTest {
 		Mesh(\mesh1).patchbay.addPatch(\synth1, \server1);
 		Mesh(\mesh1).patchbay.addPatch(\pattern2, \synth2);
 		Mesh(\mesh1).patchbay.addPatch(\synth2, \server2);
-
 	}
 
 	isPatch {|patch|
