@@ -50,14 +50,10 @@ VertexPattern : VertexAbstract {
     Vertex(vertexIn).name.postln;
     Vertex(vertexIn).pdefnList.postln;
 
-    /*pbind = Pbind.new(
-      \instrument,     \sin,
-      * Vertex(vertexIn).pdefnList
+    pbind = Pbind.new(
+      \instrument, Vertex(vertexIn).synthDef.name,
+      //* Vertex(vertexIn).pdefnList
       );
-
-      /** );*/
-
-    pbind.postln;*/
 
   }
 

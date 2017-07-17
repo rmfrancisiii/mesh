@@ -9,9 +9,6 @@ Vertex.test;
 MeshPatchbay.test;
 MeshHostsManager.test;
 
-"hello".class.postln;
-"hello".firstToUpper;
-
 
 Mesh(\mesh1, local:true).push;
 Vertex(\localServer, \server, \rose, \mesh1);
@@ -24,6 +21,15 @@ Vertex(\sinPattern).pbind.play;//postln;
 
 Pdefn(\sinSynthFreq, Pseq([40, 50, 50, 60, 70].midicps, inf))
 Pdefn(\sinSynthAmp, Pseq([0.40, 0.50, 0.50, 0.60, 0.70].midicps, inf))
+
+
+
+
+
+Vertex(\sinSynth).name.postln;
+
+Vertex(\sinSynth).synthDef.name.postln;
+Vertex(\sinSynth).pdefnList.postln;
 
 Vertex(\sinPattern).patternDict.postln;
 Vertex(\sinPattern).play;
