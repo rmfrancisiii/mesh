@@ -2,8 +2,7 @@ MeshMessage {
   var <>path, <>name, <>type, <>vertexHost, <>requestingHost, <>mesh, <>methodName, <>args;
 
   *newVertexRequest {|name, type, host, mesh, args|
-    var upCaseType = this.upcaseFirst(type);
-    var path = "/Vertex" ++ upCaseType ++ "/interface";
+    var path = "/Vertex" ++ type.firstToUpper ++ "/interface";
     ^ super.newCopyArgs(path, name, type, Mesh(mesh)[host], Mesh.thisHost, Mesh(mesh), \newVertex, args)
   }
 
@@ -14,12 +13,6 @@ MeshMessage {
     var requestingHost = Mesh.thisHost;
     var vertexName = vertex.name;
     ^ super.newCopyArgs(path, vertexName, type, vertexHost, requestingHost, mesh, selector, args);
-  }
-
-  *upcaseFirst{|string|
-    string = string.asString;
-    string[0] = string[0].toUpper;
-    ^string
   }
 
   *decode {|host, msg|

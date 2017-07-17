@@ -22,7 +22,6 @@ VertexSynth
     * loads pdefnList on that server
 
   Other:
-    manually create pdefn?
 
 VertexPattern
   .pbind
@@ -36,6 +35,8 @@ VertexPattern
     * sets the VertexPattern.pdefnDict from the VertexSynth.pdefnList, (and default values fromt the synth file if possible?)
     * sets the target server and instrument for pattern from vertexSynth
     * constructs a pbind from the pdefnDict
+    * manually create pdefn
+
 
   Other
     * updating the pdefnDict updates the named pdefn on the remote server

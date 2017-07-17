@@ -1,5 +1,5 @@
 VertexPattern : VertexAbstract {
-  var <>patternDict;
+  var <>patternDict, <>pbind;
 
   *makeClassInterface {
     VertexTypeClassInterface.makeGenericClassInterfaces(this)
@@ -9,14 +9,13 @@ VertexPattern : VertexAbstract {
     VertexTypeInstanceInterface.makeInstanceInterface(this);
   }
 
-  *getVertexHost {
+  getVertexHost {
     ^ Mesh.thisHost;
   }
 
   initVertex{|msg|
     this.setInstanceVars(msg);
     isProxy = false;
-
       patternDict = IdentityDictionary.with(*[\name -> msg.name]);
   }
 
@@ -36,8 +35,30 @@ VertexPattern : VertexAbstract {
   freeHandler{
   }
 
+  playHandler{
+    "PLAYING".postln;
+  }
+
   patchOutput {|vertexIn|
     "PATCHING % TO %. \n".postf(this.name, vertexIn);
+    "Adding pattern pdefns to pbind:".postln;
+
+    vertexIn.postln;
+    vertexIn.class.postln;
+    vertexIn.postln;
+    Vertex(vertexIn).postln;
+    Vertex(vertexIn).name.postln;
+    Vertex(vertexIn).pdefnList.postln;
+
+    /*pbind = Pbind.new(
+      \instrument,     \sin,
+      * Vertex(vertexIn).pdefnList
+      );
+
+      /** );*/
+
+    pbind.postln;*/
+
   }
 
   patchInput {|vertexOut|

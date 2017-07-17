@@ -15,15 +15,9 @@ SynthDef(\sin, {
 },
 
 metadata: (
-	\vertexType: \PSynth,
-	\author: "james watkins",
-	\inBusAr: 0,
-	\outBusAr: 2,
-	\inBusKr: 0,
-	\outBusKr: 0,
 	\freq: (Pseq([0, 2, 4, 7, 9], inf) + 40).midicps,
 	\dur: Pshuf([1/4, 1/4, 1/8, 1/8], inf),
-	\amp: Pmeanrand(0.2, 0.3, inf),
+	\amp: Pmeanrand(0.2, 0.7, inf),
 	\pan: Pmeanrand(-0.5, 0.5, inf),
 	\att: Pmeanrand(0.1, 0.2, inf)
 ))

@@ -26,7 +26,7 @@ VertexSynth : VertexAbstract {
     VertexTypeInstanceInterface.makeInstanceInterface(this);
   }
 
-  *getVertexHost {
+  getVertexHost {
     ^ Mesh.thisHost;
   }
 
@@ -52,6 +52,7 @@ VertexSynth : VertexAbstract {
 
   patchOutput {|vertexIn|
     "PATCHING % TO %. \n".postf(this.name, vertexIn);
+    synthDef.load;
   }
 
   patchInput {|vertexOut|
@@ -63,9 +64,10 @@ VertexSynth : VertexAbstract {
     mesh = msg.mesh;
     synthDef = synthDict[msg.args[0]];
     pdefnList = synthDef.metadata.keysValuesDo({ |parameter, pattern|
-      parameter = parameter.asString;
-      parameter[0] = parameter.first.toUpper;
+      parameter = parameter.asString.firstToUpper;
       parameter = (name ++ parameter).asSymbol;
+      parameter.postln;
+      pattern.postln;
       Pdefn(parameter, pattern)
       })
   }

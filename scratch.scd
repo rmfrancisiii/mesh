@@ -9,12 +9,34 @@ Vertex.test;
 MeshPatchbay.test;
 MeshHostsManager.test;
 
+"hello".class.postln;
+"hello".firstToUpper;
+
 
 Mesh(\mesh1, local:true).push;
-Vertex(\server1, \server, \rose, \mesh1);
-Vertex(\server1).boot;
+Vertex(\localServer, \server, \rose, \mesh1);
+Vertex(\localServer).boot;
 Vertex(\sinSynth, \synth, \rose, \mesh1, \sin);
-Mesh(\mesh1).patchbay.addPatch(\sinSynth, \server1);
+Mesh(\mesh1).patchbay.addPatch(\sinSynth, \localServer);
+Vertex(\sinPattern, \pattern, \rose, \mesh1);
+Mesh(\mesh1).patchbay.addPatch(\sinPattern, \sinSynth);
+Vertex(\sinPattern).pbind.play;//postln;
+
+Pdefn(\sinSynthFreq, Pseq([40, 50, 50, 60, 70].midicps, inf))
+Pdefn(\sinSynthAmp, Pseq([0.40, 0.50, 0.50, 0.60, 0.70].midicps, inf))
+
+Vertex(\sinPattern).patternDict.postln;
+Vertex(\sinPattern).play;
+
+
+Vertex(\sinPattern).postln
+
+Pdefn(\sinSynthFreq).key.postln;
+Pdefn.methods.do({|method| method.name.postln});
+
+
+Pdefn.all.postln;
+PdefnAllGui();
 Vertex(\sinSynth).synthDef.play;
 
 
@@ -27,7 +49,7 @@ Vertex(\fmSynth1).synthDef.play;
 
 SynthDescLib.global.browse; //synthDescs.postln
 
-OSCdef.all.keys.postln;
+OSCdef.all.keys.postln
 
 ///////////////
 // LOCAL TESTING:
