@@ -1,10 +1,16 @@
 Development notes
 =======================
+NEXT:
+Change PdefnList in synth to pdefnDict
+
+
+
+
 
 Working On:
 ------------------
 VertexSynth
-  .pdefnList
+  .pdefnDict
   .synthDef
 
   Initialization:

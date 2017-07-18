@@ -1,6 +1,7 @@
 VertexSynth : VertexAbstract {
   classvar <>synthDict;
-  var <>synthDef, <>pdefnList;
+  var <>synthDef, <>pdefnDict;
+
 
   *initClass{
     synthDict = this.loadSynthDict;
@@ -63,13 +64,13 @@ VertexSynth : VertexAbstract {
     name = msg.name;
     mesh = msg.mesh;
     synthDef = synthDict[msg.args[0]];
-    pdefnList = synthDef.metadata.keysValuesDo({ |parameter, pattern|
-      parameter = parameter.asString.firstToUpper;
-      parameter = (name ++ parameter).asSymbol;
-      parameter.postln;
-      pattern.postln;
-      Pdefn(parameter, pattern)
-      })
+    pdefnDict = IdentityDictionary.new();
+
+    synthDef.metadata.keysValuesDo({ |parameter, pattern|
+        var pdefn = parameter.asString.firstToUpper;
+        pdefn = (name ++ pdefn).asSymbol;
+        pdefnDict.put(parameter, Pdefn(pdefn, pattern))
+        })
   }
 
 }

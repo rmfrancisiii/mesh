@@ -19,6 +19,8 @@ Vertex(\sinPattern, \pattern, \rose, \mesh1);
 Mesh(\mesh1).patchbay.addPatch(\sinPattern, \sinSynth);
 Vertex(\sinPattern).pbind.play;//postln;
 
+
+
 Pdefn(\sinSynthFreq, Pseq([40, 50, 50, 60, 70].midicps, inf))
 Pdefn(\sinSynthAmp, Pseq([0.40, 0.50, 0.50, 0.60, 0.70].midicps, inf))
 

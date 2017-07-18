@@ -40,20 +40,17 @@ VertexPattern : VertexAbstract {
   }
 
   patchOutput {|vertexIn|
-    "PATCHING % TO %. \n".postf(this.name, vertexIn);
+    var vertex = Vertex(vertexIn);
+    var pdefnArray = vertex.pdefnDict.getPairs;
+    "PATCHING % TO %. \n".postf(this.name, vertex.name);
     "Adding pattern pdefns to pbind:".postln;
-
-    vertexIn.postln;
-    vertexIn.class.postln;
-    vertexIn.postln;
-    Vertex(vertexIn).postln;
-    Vertex(vertexIn).name.postln;
-    Vertex(vertexIn).pdefnList.postln;
 
     pbind = Pbind.new(
       \instrument, Vertex(vertexIn).synthDef.name,
-      //* Vertex(vertexIn).pdefnList
-      );
+      * pdefnArray
+      // THIS HAS TO BE A DICT, NEEDS parameterName -> Pdefn
+    //  vertex.pdefnDict;
+            );
 
   }
 
