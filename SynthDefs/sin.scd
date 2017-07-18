@@ -5,7 +5,7 @@ SynthDef(\sin, {
   amp=0.25,
   pan=0,
 	att=0.15,
-  mod1=0.025,
+  mod1=0.25,
   mod2=0.01 |
 	var env = Env([0.001, 0.99, 0.001], [att, 1.0-att], [\sin, \sin]);
   var envGen = EnvGen.kr(Env.perc, doneAction: 2); //(env, doneAction: 0, timeScale: );
@@ -15,7 +15,7 @@ SynthDef(\sin, {
 },
 
 metadata: (
-	\freq: Pshuf([40, 42, 44, 47, 49].midicps, inf),
+	\freq: (Pseq([0, 2, 4, 7, 9], inf) + 40).midicps,
 	\dur: Pseq([1/4, 1/4, 1/8, 1/8], inf),
 	\amp: Pmeanrand(0.2, 0.7, inf),
 	\pan: Pmeanrand(-0.5, 0.5, inf),
