@@ -44,14 +44,9 @@ VertexPattern : VertexAbstract {
     var pdefnArray = vertex.pdefnDict.getPairs;
     "PATCHING % TO %. \n".postf(this.name, vertex.name);
     "Adding pattern pdefns to pbind:".postln;
-    pdefnArray.postln;
     pbind = Pbind.new(
       \instrument, Vertex(vertexIn).synthDef.name,
-      * pdefnArray
-      // THIS HAS TO BE A DICT, NEEDS parameterName -> Pdefn
-    //  vertex.pdefnDict;
-            );
-
+      * pdefnArray);
   }
 
   patchInput {|vertexOut|

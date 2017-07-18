@@ -22,11 +22,20 @@ Vertex(\sinPattern, \pattern, \rose, \mesh1);
 Mesh(\mesh1).patchbay.addPatch(\sawPattern, \sawSynth);
 Mesh(\mesh1).patchbay.addPatch(\sinPattern, \sinSynth);
 (
-Vertex(\sawPattern).pbind.play;
 Vertex(\sinPattern).pbind.play;
+Vertex(\sawPattern).pbind.play;
 )
 
-Pdefn(\sawSynthDur, Pshuf([1/4, 1/4, 1/8, 1/16, 1/16], inf))
+
+
+
+(
+Pdefn(\sawSynthDur, Pshuf([1/4, 1/4, 1/8, 1/8, 1/2, 1/2], inf));
+Pdefn(\sinSynthDur, Pshuf([1/4, 1/4, 1/8, 1/8, 1/2, 1/2], inf));
+Pdefn(\sawSynthFreq, Pseq([50, 52, 53, 55, 56].midicps, inf))
+)
+
+
 
 
 Pdefn(\sawSynthFreq, Pshuf([400, 800], inf))

@@ -18,7 +18,7 @@ metadata: (
 	\vertexType: \PSynth,
 	\author: "james watkins",
 	\outBusAr: 2,
-	\freq: (Pseq([0, 2, 4, 7, 9], inf) + 40).midicps,
+	\freq: (Pseq([0, 2, 4, 7, 9], inf) + 44).midicps,
 	\dur: Pshuf([1/4, 1/4, 1/8, 1/8], inf),
 	\amp: Pmeanrand(0.6, 0.8, inf),
 	\pan: Pmeanrand(-0.5, 0.5, inf),

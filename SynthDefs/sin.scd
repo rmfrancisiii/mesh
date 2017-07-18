@@ -19,5 +19,7 @@ metadata: (
 	\dur: Pseq([1/4, 1/4, 1/8, 1/8], inf),
 	\amp: Pmeanrand(0.2, 0.7, inf),
 	\pan: Pmeanrand(-0.5, 0.5, inf),
-	\att: Pmeanrand(0.1, 0.2, inf)
+	\att: Pmeanrand(0.1, 0.2, inf),
+  \mod1: Pmeanrand(0.1, 0.12, inf),
+  \mod2: Pmeanrand(0.1, 0.12, inf),
 ))

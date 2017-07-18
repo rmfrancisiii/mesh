@@ -1,66 +1,88 @@
 Development notes
 =======================
-NEXT:
-Change PdefnList in synth to pdefnDict
-
-
-
-
-
 Working On:
 ------------------
-VertexSynth
-  .pdefnDict
-  .synthDef
 
-  Initialization:
-    * Mesh loads list of synths from folder
+* thorough network testing:
+  need to look into remote server synthdef loading,
+  proxy updating for pdefns, etc.
+  create tests for Messaging, Interfaces, Patchbay, Synth, Pattern, refactor all tests for better timing and network control
 
-  Instantiation:
-    * creates vertex
-    * sets .synthDef
-    * creates pdefns in VertexSynth.pdefnList (on vertex and proxies) named as
-        (pdefn \vertexNameParameter)
+* SYNTAX: add method to update pdefn via Vertex.parameter, eg:
+  instead of: Pdefn(\sawSynthDur, Pshuf([1/4, 1/4, 1/8, 1/8, 1/2, 1/2], inf));
+  maybe either:
 
-  Patching out:
-    * loads synthdef to server (if necessary)
-    * moves vertex object to patched server, sets others to proxy
-    * loads pdefnList on that server
+  Vertex(\sawSynth).update(\dur, Pshuf([1/4, 1/4, 1/8, 1/8, 1/2, 1/2], inf));
+  or: Vertex(\sawSynth).dur(Pshuf([1/4, 1/4, 1/8, 1/8, 1/2, 1/2], inf));
 
-  Other:
+* update pdefns on proxies
 
-VertexPattern
-  .pbind
-  .pdefnDict
+* manually create pdefn
 
-  Initialization:
+* SYNTAX: add method to reevaluate existing pdefn (eg. pshuf) or all pdefn for a synth
+  Vertex(\sawSynth).update(\dur)
 
-  Instantiation:
+* add method to query for pdefns (and values?) by vertex
+  Vertex(\sawSynth).listPdefns;
 
-  Patching Out:
-    * sets the VertexPattern.pdefnDict from the VertexSynth.pdefnList, (and default values fromt the synth file if possible?)
-    * sets the target server and instrument for pattern from vertexSynth
-    * constructs a pbind from the pdefnDict
-    * manually create pdefn
+* add playhandler for pattern vertex
+  instead of: Vertex(\sinPattern).pbind.play;
+  just: Vertex(\sinPattern).play;
 
+* add patch method to vertex?
+  instead of Mesh(\mesh1).patchbay.addPatch(\sawPattern, \sawSynth);
+  maybe Vertex(\sawPattern).patch(\sawSynth);
 
-  Other
-    * updating the pdefnDict updates the named pdefn on the remote server
+* add some stuff to the gui window?
+
+* clocks
+
 
 OTHER:
   * add multiple in/out port possibility to patchbay process (will need to add vertex type class descriptor field/s to hold information) this is only necessary for effects...
   * final refactor/cleanup of messaging and interfaces.
-  * create tests for Messaging, Interfaces, Patchbay, refactor all tests for better timing and network control
+  *
   * use Preprocessor for command confirmation request? e.g. Create a 'Confirm' class. pass a fn into it, and only execute it if/when ' //**confirm or similar is executed.
   * use ServerTree to set up ordered groups for VertexTypes
   * should CmdPeriod remove host from mesh? could we add confirmation to cmd period? "you have N vertexes hosted on your machine. are you REALLY sure you want to kill the server?"
 
 
-
-
 =======================
 Completed:
 =======================
+  7/18/17:
+  VertexSynth
+    .pdefnDict
+    .synthDef
+
+    Initialization:
+      * Mesh loads list of synths from folder
+
+    Instantiation:
+      * creates vertex
+      * sets .synthDef
+      * creates pdefns in VertexSynth.pdefnList (on vertex and proxies) named as
+          (pdefn \vertexNameParameter)
+
+    Patching out:
+      * loads synthdef to server (if necessary)
+      * moves vertex object to patched server, sets others to proxy
+      * loads pdefnList on that server
+
+  VertexPattern
+    .pbind
+    .pdefnDict
+
+    Initialization:
+
+    Instantiation:
+
+    Patching Out:
+      * sets the VertexPattern.pdefnDict from the VertexSynth.pdefnList, (and default values fromt the synth file if possible?)
+      * sets the target server and instrument for pattern from vertexSynth
+      * constructs a pbind from the pdefnDict
+
+
   7/6/17:
     * added -Local flag to mesh creation, Mesh(\mesh1, true).push; will create a mesh, but switch the broadcast address to localhost. just makes it easier to do testing on the bus, etc.
     * added message forwarding for VertexType.patchInput and .patchOutput, so that creating a patch will update the vertex if necessary
@@ -304,27 +326,3 @@ On Vertex Host
    c. returns notification or exceptions
 6. Broadcast proxy requestor with reference to 5.b.
 7. Proxy Request Handler adds proxy to Mesh.Vertexes
-
-
-
-
-
-
-
-  /*loadLocalSynthdefLibrary{|host|
-		var folder = "../synthLib/*".resolveRelative.pathMatch;
-		"  Loading Synths".postln;
-		//for each file in the synthdef folder
-		folder.collect {|file|
-			var synth;
-			synth = file.load; // load the synthdef
-			this.addSynthdef(host, synth); // add the synth
-			($\t ++ file ++ "  loaded").postln
-		};
-		("  Synth Library Loaded: Success").postln;
-	}*/
-
-  var files = folder.collect{|file|
-  };
-
-  files.postln;
