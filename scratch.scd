@@ -21,6 +21,7 @@ Vertex(\sawPattern, \pattern, \rose, \mesh1);
 Vertex(\sinPattern, \pattern, \rose, \mesh1);
 Mesh(\mesh1).patchbay.addPatch(\sawPattern, \sawSynth);
 Mesh(\mesh1).patchbay.addPatch(\sinPattern, \sinSynth);
+
 (
 Vertex(\sinPattern).pbind.play;
 Vertex(\sawPattern).pbind.play;
