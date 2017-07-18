@@ -15,10 +15,10 @@ Vertex(\localServer, \server, \rose, \mesh1);
 Vertex(\localServer).boot;
 Vertex(\sinSynth, \synth, \rose, \mesh1, \sin);
 Vertex(\sawSynth, \synth, \rose, \mesh1, \saw);
-Mesh(\mesh1).patchbay.addPatch(\sinSynth, \localServer);
-Vertex(\sinPattern, \pattern, \rose, \mesh1);
-Mesh(\mesh1).patchbay.addPatch(\sinPattern, \sinSynth);
-Vertex(\sinPattern).pbind.play;//postln;
+Mesh(\mesh1).patchbay.addPatch(\sawSynth, \localServer);
+Vertex(\sawPattern, \pattern, \rose, \mesh1);
+Mesh(\mesh1).patchbay.addPatch(\sawPattern, \sawSynth);
+Vertex(\sawPattern).pbind.play;//postln;
 
 
 
