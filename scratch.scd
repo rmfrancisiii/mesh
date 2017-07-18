@@ -14,10 +14,25 @@ Mesh(\mesh1, local:true).push;
 Vertex(\localServer, \server, \rose, \mesh1);
 Vertex(\localServer).boot;
 Vertex(\sinSynth, \synth, \rose, \mesh1, \sin);
+Vertex(\sawSynth, \synth, \rose, \mesh1, \saw);
 Mesh(\mesh1).patchbay.addPatch(\sinSynth, \localServer);
 Vertex(\sinPattern, \pattern, \rose, \mesh1);
 Mesh(\mesh1).patchbay.addPatch(\sinPattern, \sinSynth);
 Vertex(\sinPattern).pbind.play;//postln;
+
+
+
+	\freq: (Pshuf([0, 2, 4, 7, 9], inf) + 40).midicps,
+	\dur: Pseq([1/4, 1/4, 1/8, 1/8], inf),
+	\amp: Pmeanrand(0.2, 0.7, inf),
+	\pan: Pmeanrand(-0.5, 0.5, inf),
+	\att: Pmeanrand(0.1, 0.2, inf)
+
+
+Pdefn(\sinSynthDur, Pshuf([1/4, 1/4, 1/8, 1/16, 1/16], inf))
+
+
+Pdefn(\sinSynthFreq, Pshuf([400, 800], inf))
 
 
 
