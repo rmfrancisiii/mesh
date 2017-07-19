@@ -25,10 +25,6 @@ Working On:
 * add method to query for pdefns (and values?) by vertex
   Vertex(\sawSynth).listPdefns;
 
-* add playhandler for pattern vertex
-  instead of: Vertex(\sinPattern).pbind.play;
-  just: Vertex(\sinPattern).play;
-
 * add patch method to vertex?
   instead of Mesh(\mesh1).patchbay.addPatch(\sawPattern, \sawSynth);
   maybe Vertex(\sawPattern).patch(\sawSynth);
@@ -50,7 +46,14 @@ OTHER:
 =======================
 Completed:
 =======================
-  7/18/17:
+  7/18:
+  * add playhandler for pattern vertex
+    instead of: Vertex(\sinPattern).pbind.play;
+    just: Vertex(\sinPattern).play;
+
+
+
+  7/17/17:
   VertexSynth
     .pdefnDict
     .synthDef

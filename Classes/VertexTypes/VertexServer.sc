@@ -23,6 +23,8 @@ VertexServer : VertexAbstract {
 		this.setInstanceVars(msg);
 		isProxy = true;
 		server = Server.remote(name, host);
+		this.makeInstanceInterfaces;
+
 	}
 
 	getVertexHost {

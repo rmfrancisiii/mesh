@@ -17,6 +17,7 @@ VertexPattern : VertexAbstract {
     this.setInstanceVars(msg);
     isProxy = false;
       patternDict = IdentityDictionary.with(*[\name -> msg.name]);
+    this.makeInstanceInterfaces;
   }
 
   initProxy {|msg|
@@ -37,6 +38,7 @@ VertexPattern : VertexAbstract {
 
   playHandler{
     "PLAYING".postln;
+    this.pbind.play;
   }
 
   patchOutput {|vertexIn|
