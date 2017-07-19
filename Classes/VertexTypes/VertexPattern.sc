@@ -24,10 +24,17 @@ VertexPattern : VertexAbstract {
     this.setInstanceVars(msg);
 		isProxy = true;
     this.makeInstanceInterfaces;
-
   }
 
   proxyUpdateHandler {|args|
+  }
+
+  setHandler{|parameter, pattern|
+    // working on this
+    patternDict[parameter].source.postcs;
+    patternDict[parameter].source = pattern;
+
+    "Updating".postln;
   }
 
   errorHandler {
@@ -44,6 +51,8 @@ VertexPattern : VertexAbstract {
   patchOutput {|vertexIn|
     var vertex = Vertex(vertexIn);
     var pdefnArray = vertex.pdefnDict.getPairs;
+    patternDict.putPairs(pdefnArray);
+
     "PATCHING % TO %. \n".postf(this.name, vertex.name);
     "Adding pattern pdefns to pbind:".postln;
     pbind = Pbind.new(

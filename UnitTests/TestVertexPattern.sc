@@ -7,7 +7,7 @@ TestVertexPattern : UnitTest {
 	Vertex(\localServer, \server, \rose, \mesh1);
 	0.5.wait;
 	Vertex(\localServer).boot;
-	3.0.wait;
+	2.0.wait;
 	Vertex(\sinSynth, \synth, \rose, \mesh1, \sin);
 	0.5.wait;
 	Vertex(\sawSynth, \synth, \rose, \mesh1, \saw);
