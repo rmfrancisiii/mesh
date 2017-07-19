@@ -12,7 +12,8 @@ MeshMessage {
     var type = vertex.class.name.asSymbol;
     var requestingHost = Mesh.thisHost;
     var vertexName = vertex.name;
-    ^ super.newCopyArgs(path, vertexName, type, vertexHost, requestingHost, mesh, selector, args);
+
+    ^ super.newCopyArgs(path, vertexName, type, vertexHost, requestingHost, mesh, selector, args.asCompileString);
   }
 
   *decode {|host, msg|

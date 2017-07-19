@@ -29,10 +29,17 @@ VertexPattern : VertexAbstract {
   proxyUpdateHandler {|args|
   }
 
-  setHandler{|parameter, pattern|
+  setHandler{|args|
+
+    args.class.postln;
+    args.size.postln;
+    //flatten(2).postln;
+    //|parameter, pattern|
     // working on this
-    patternDict[parameter].source.postcs;
-    patternDict[parameter].source = pattern;
+    //parameter[0].postln;
+    //pattern.postln;
+    //patternDict[parameter[0].asSymbol].source.postcs;
+    //patternDict[parameter[0].asSymbol].source = pattern;
 
     "Updating".postln;
   }

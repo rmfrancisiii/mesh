@@ -10,13 +10,20 @@ MeshPatchbay.test;
 MeshHostsManager.test;
 VertexPattern.test;
 
+Vertex(\sinPattern).set(\dur, Pshuf([1/14, 1/24, 1/18, 1/8, 1/2, 1/2], inf) );
+
+(Pshuf([1/4, 1/2], inf)).source.postcs;
+
+"hello".source.postcs;
+\test.source.postcs;
+
+
 Vertex(\sinPattern).patternDict.postln;
 Vertex(\sinPattern).patternDict[\dur].postln;
 Vertex(\sinPattern).patternDict[\dur].source.postcs
 
 Vertex(\sinPattern).patternDict[\dur].source = Pshuf([1/4, 1/4, 1/8, 1/8, 1/2, 1/2], inf);
 
-Vertex(\sinPattern).set(\dur, Pshuf([1/14, 1/24, 1/18, 1/8, 1/2, 1/2], inf) );
 
 
 

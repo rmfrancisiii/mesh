@@ -2,6 +2,14 @@ Development notes
 =======================
 Working On:
 ------------------
+issue in meshMessage, where Objects used as message arguments, eg. Pshuf([1/4, 1/2], inf) are getting lost.
+    should use something like: (Pshuf([1/4, 1/2], inf)).source.postcs;
+
+    using: MeshMessage.asOSCMsg{ *arga.asCompileString}
+
+    and something like
+    Object.readArchive(compileString) on the other end.
+
 
 * thorough network testing:
   need to look into remote server synthdef loading,
