@@ -10,7 +10,15 @@ MeshPatchbay.test;
 MeshHostsManager.test;
 VertexPattern.test;
 
-Vertex(\sinPattern).set(\dur, Pshuf([1/14, 1/24, 1/18, 1/8, 1/2, 1/2], inf) );
+Vertex(\sinPattern).set(\dur, Pshuf([1/4, 1/4, 1/8, 1/8, 1/2, 1/2], inf) );
+
+Vertex(\sawPattern).set(\dur, Pshuf([1/4, 1/4, 1/8, 1/8, 1/2, 1/2], inf) );
+
+Vertex(\sawPattern).set(\freq, Pshuf([200, 300], inf) );
+Vertex(\sinPattern).set(\freq, Pshuf([200, 300, 400, 500, 600, 800, 1000], inf) );
+
+Pdefn(\sinSynthDur).source.class.postln;
+Pdefn(\test).source.class.postln;//postcs;
 
 (Pshuf([1/4, 1/2], inf)).source.postcs;
 

@@ -2,13 +2,6 @@ Development notes
 =======================
 Working On:
 ------------------
-issue in meshMessage, where Objects used as message arguments, eg. Pshuf([1/4, 1/2], inf) are getting lost.
-    should use something like: (Pshuf([1/4, 1/2], inf)).source.postcs;
-
-    using: MeshMessage.asOSCMsg{ *arga.asCompileString}
-
-    and something like
-    Object.readArchive(compileString) on the other end.
 
 
 * thorough network testing:
@@ -54,6 +47,22 @@ OTHER:
 =======================
 Completed:
 =======================
+
+  7/20
+  fixed issue in meshMessage, where Objects used as message arguments, eg. Pshuf([1/4, 1/2], inf) are getting lost.
+
+      using in MeshMessage: 
+
+      args = args.collect({|item|
+        if (item.isKindOf(Symbol))
+        {item} {item.asCompileString};
+        });
+
+      and in VertexPattern:
+
+      pattern = patternString.interpret;
+      on the receiving end.
+
   7/18:
   * add playhandler for pattern vertex
     instead of: Vertex(\sinPattern).pbind.play;

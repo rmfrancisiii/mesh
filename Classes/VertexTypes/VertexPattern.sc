@@ -30,18 +30,13 @@ VertexPattern : VertexAbstract {
   }
 
   setHandler{|args|
+    var parameterName = args[0];
+    var patternString = args[1].asString;
+    var pattern = patternString.interpret;
+    var pdefnName = patternDict.at(parameterName).key;
+    "Updating %\n".postf(pdefnName);
 
-    args.class.postln;
-    args.size.postln;
-    //flatten(2).postln;
-    //|parameter, pattern|
-    // working on this
-    //parameter[0].postln;
-    //pattern.postln;
-    //patternDict[parameter[0].asSymbol].source.postcs;
-    //patternDict[parameter[0].asSymbol].source = pattern;
-
-    "Updating".postln;
+    Pdefn(pdefnName, pattern);
   }
 
   errorHandler {
@@ -58,6 +53,7 @@ VertexPattern : VertexAbstract {
   patchOutput {|vertexIn|
     var vertex = Vertex(vertexIn);
     var pdefnArray = vertex.pdefnDict.getPairs;
+//    patternDict.put(\vertexName, vertexIn);
     patternDict.putPairs(pdefnArray);
 
     "PATCHING % TO %. \n".postf(this.name, vertex.name);

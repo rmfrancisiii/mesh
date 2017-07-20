@@ -13,7 +13,12 @@ MeshMessage {
     var requestingHost = Mesh.thisHost;
     var vertexName = vertex.name;
 
-    ^ super.newCopyArgs(path, vertexName, type, vertexHost, requestingHost, mesh, selector, args.asCompileString);
+    args = args.collect({|item|
+      if (item.isKindOf(Symbol))
+      {item} {item.asCompileString};
+      });
+
+    ^ super.newCopyArgs(path, vertexName, type, vertexHost, requestingHost, mesh, selector, args);
   }
 
   *decode {|host, msg|
