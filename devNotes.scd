@@ -1,17 +1,7 @@
 Development notes
 =======================
-Working On:
+Working On before show:
 ------------------
-
-
-* thorough network testing:
-  need to look into remote server synthdef loading,
-  proxy updating for pdefns, etc.
-  create tests for Messaging, Interfaces, Patchbay, Synth, Pattern, refactor all tests for better timing and network control
-
-* update pdefns on proxies
-
-* manually create pdefn
 
 * SYNTAX: add method to reevaluate existing pdefn (eg. pshuf) or all pdefn for a synth
   Vertex(\sawSynth).update(\dur)
@@ -19,19 +9,35 @@ Working On:
 * add method to query for pdefns (and values?) by vertex
   Vertex(\sawSynth).listPdefns;
 
+* thorough network testing:
+  * remote server synthdef loading,
+  * proxy updating for pdefns, etc.
+  * tests for:
+      . Messaging
+      . Interfaces
+      . Patchbay
+      . Synth
+      . Pattern
+
+* final refactor/cleanup/documentation/diagrams of codebase, esp. messaging and interfaces.
+
+* More synths, eg grancloud, fm, etc.
+
+* manually create/patch a single pdefn, or patch one pdefn from a pattern to two synths.
+
 * add patch method to vertex?
   instead of Mesh(\mesh1).patchbay.addPatch(\sawPattern, \sawSynth);
   maybe Vertex(\sawPattern).patch(\sawSynth);
 
 * add some stuff to the gui window?
 
-* clocks
+* clocks?
+
+* knobs?
 
 
 OTHER:
   * add multiple in/out port possibility to patchbay process (will need to add vertex type class descriptor field/s to hold information) this is only necessary for effects...
-  * final refactor/cleanup of messaging and interfaces.
-  *
   * use Preprocessor for command confirmation request? e.g. Create a 'Confirm' class. pass a fn into it, and only execute it if/when ' //**confirm or similar is executed.
   * use ServerTree to set up ordered groups for VertexTypes
   * should CmdPeriod remove host from mesh? could we add confirmation to cmd period? "you have N vertexes hosted on your machine. are you REALLY sure you want to kill the server?"
@@ -64,7 +70,7 @@ Completed:
       on the receiving end.
 
   7/18:
-  * add playhandler for pattern vertex
+  * added playhandler for pattern vertex
     instead of: Vertex(\sinPattern).pbind.play;
     just: Vertex(\sinPattern).play;
 
