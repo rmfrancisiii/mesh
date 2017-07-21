@@ -60,7 +60,6 @@ VertexPattern : VertexAbstract {
     "PATCHING % TO %. \n".postf(this.name, vertex.name);
     this.makePatternDict(vertex);
     this.makePbind(vertex);
-
   }
 
   makePatternDict {|vertex|
