@@ -7,8 +7,8 @@ SynthDef(\sin, {
 	att=0.15,
   mod1=0.25,
   mod2=0.01 |
-	var env = Env([0.001, 0.99, 0.001], [att, 1.0-att], [\sin, \sin]);
-  var envGen = EnvGen.kr(Env.perc, doneAction: 2); //(env, doneAction: 0, timeScale: );
+	var env = Env([0.001, 0.99, 0.001], [att, 1.0-att], [-2, 2]);
+  var envGen = EnvGen.kr(env, doneAction: 2, timeScale: dur);
 	var modulate = SinOsc.ar(XLine.kr((mod1*2000)+0.001, (mod2*2000)+0.001, dur), 0, 2pi);
 	var sin = SinOsc.ar(freq, modulate, amp); //phase modulation by sin between -2pi and 2pi
 	Out.ar(outBus, Pan2.ar(sin * envGen, pan))
