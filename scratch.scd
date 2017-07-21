@@ -10,29 +10,31 @@ MeshPatchbay.test;
 MeshHostsManager.test;
 VertexPattern.test;
 
+	Vertex(\sinPattern).stopPat;
+	Vertex(\sawPattern).stopPat;
+
+	Vertex(\sinPattern).play;
+	Vertex(\sawPattern).play;
+
 Vertex(\sinPattern).set(\dur, Pshuf([1/4, 1/4, 1/8, 1/8, 1/2, 1/2], inf) );
+
+Vertex(\sinPattern).set(\dur, Pshuf([1/14, 1/14, 1/18, 1/18, 1/12, 1/12]*4, inf) );
+
+Vertex(\sinPattern).set(\mod1, Pmeanrand(0,0.0051, inf) );
+Vertex(\sinPattern).set(\mod2, Pmeanrand(0,0.0051, inf) );
+
+Vertex(\sinPattern).set(\freq, Pshuf([100, 150, 200, 250, 275, 300], inf) );
+
+
+Vertex(\sinPattern).set(\amp, Pmeanrand(0,1.5, inf));
 
 Vertex(\sawPattern).set(\dur, Pshuf([1/4, 1/4, 1/8, 1/8, 1/2, 1/2], inf) );
 
-Vertex(\sawPattern).set(\freq, Pshuf([200, 300], inf) );
+Vertex(\sawPattern).set(\freq, Pshuf([100, 150, 200, 250, 275, 300], inf) );
+Vertex(\sinPattern).set(\freq, Pshuf([100, 150, 200, 250, 275, 300], inf) );
 Vertex(\sinPattern).set(\freq, Pshuf([200, 300, 400, 500, 600, 800, 1000], inf) );
 
-Pdefn(\sinSynthDur).source.class.postln;
-Pdefn(\test).source.class.postln;//postcs;
-
-(Pshuf([1/4, 1/2], inf)).source.postcs;
-
-"hello".source.postcs;
-\test.source.postcs;
-
-
-Vertex(\sinPattern).patternDict.postln;
-Vertex(\sinPattern).patternDict[\dur].postln;
-Vertex(\sinPattern).patternDict[\dur].source.postcs
-
-Vertex(\sinPattern).patternDict[\dur].source = Pshuf([1/4, 1/4, 1/8, 1/8, 1/2, 1/2], inf);
-
-
+Vertex(\sinPattern).stop
 
 
 Mesh(\mesh1, local:true).push;

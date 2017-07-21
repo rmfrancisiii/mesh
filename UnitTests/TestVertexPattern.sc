@@ -36,6 +36,16 @@ TestVertexPattern : UnitTest {
 
 	Vertex(\sinPattern).play;
 	Vertex(\sawPattern).play;
+	5.0.wait;
+
+	Vertex(\sinPattern).set(\dur, Pshuf([1/4, 1/4, 1/8, 1/8, 1/2, 1/2], inf) );
+	5.0.wait;
+
+	Vertex(\sawPattern).set(\dur, Pshuf([1/4, 1/4, 1/8, 1/8, 1/2, 1/2], inf) );
+	5.0.wait;
+
+//	Vertex(\sinPattern).stopPat;
+//	Vertex(\sawPattern).stopPat;
 
 		"Tests Completed!".postln
 	}

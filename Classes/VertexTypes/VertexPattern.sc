@@ -47,20 +47,34 @@ VertexPattern : VertexAbstract {
 
   playHandler{
     "PLAYING".postln;
-    this.pbind.play;
+    pbind = this.pbind.play;
+  }
+
+  stopPatHandler{
+    "Stopping".postln;
+    pbind.stop;
   }
 
   patchOutput {|vertexIn|
     var vertex = Vertex(vertexIn);
-    var pdefnArray = vertex.pdefnDict.getPairs;
-//    patternDict.put(\vertexName, vertexIn);
-    patternDict.putPairs(pdefnArray);
-
     "PATCHING % TO %. \n".postf(this.name, vertex.name);
+    this.makePatternDict(vertex);
+    this.makePbind(vertex);
+
+  }
+
+  makePatternDict {|vertex|
+    var pdefnArray = vertex.pdefnDict.getPairs;
+    patternDict.putPairs(pdefnArray);
+  }
+
+  makePbind {|vertex|
+    var pdefnArray = vertex.pdefnDict.getPairs;
     "Adding pattern pdefns to pbind:".postln;
     pbind = Pbind.new(
-      \instrument, Vertex(vertexIn).synthDef.name,
+      \instrument, vertex.synthDef.name,
       * pdefnArray);
+
   }
 
   patchInput {|vertexOut|

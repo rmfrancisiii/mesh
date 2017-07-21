@@ -9,13 +9,6 @@ Working On:
   proxy updating for pdefns, etc.
   create tests for Messaging, Interfaces, Patchbay, Synth, Pattern, refactor all tests for better timing and network control
 
-* SYNTAX: add method to update pdefn via Vertex.parameter, eg:
-  instead of: Pdefn(\sawSynthDur, Pshuf([1/4, 1/4, 1/8, 1/8, 1/2, 1/2], inf));
-  maybe either:
-
-  Vertex(\sawSynth).update(\dur, Pshuf([1/4, 1/4, 1/8, 1/8, 1/2, 1/2], inf));
-  or: Vertex(\sawSynth).dur(Pshuf([1/4, 1/4, 1/8, 1/8, 1/2, 1/2], inf));
-
 * update pdefns on proxies
 
 * manually create pdefn
@@ -49,9 +42,16 @@ Completed:
 =======================
 
   7/20
+  * SYNTAX: add method to update pdefn via Vertex.parameter, eg:
+    instead of: Pdefn(\sawSynthDur, Pshuf([1/4, 1/4, 1/8, 1/8, 1/2, 1/2], inf));
+    maybe either:
+
+    Vertex(\sawSynth).update(\dur, Pshuf([1/4, 1/4, 1/8, 1/8, 1/2, 1/2], inf));
+    or: Vertex(\sawSynth).dur(Pshuf([1/4, 1/4, 1/8, 1/8, 1/2, 1/2], inf));
+
   fixed issue in meshMessage, where Objects used as message arguments, eg. Pshuf([1/4, 1/2], inf) are getting lost.
 
-      using in MeshMessage: 
+      using in MeshMessage:
 
       args = args.collect({|item|
         if (item.isKindOf(Symbol))
